@@ -10,6 +10,8 @@ class Game
 private:
   static Game* instance;
   static SDL_Renderer* renderer;
+  static SDL_Window* window;
+  static State* state;
 
   Game(const std::string &title, int width, int height);
 
