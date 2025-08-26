@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -Wall -I/opt/homebrew/include/SDL2 -Iinclude
 LDFLAGS = -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
-main ?= src/Game.cpp src/Main.cpp
+main ?= src/State.cpp src/Game.cpp src/Main.cpp
 extra ?=
 
 BIN = game

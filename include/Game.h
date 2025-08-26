@@ -1,13 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "SDL_include.h"
+#include "SDL_render.h"
+#include "State.h"
 #include <string>
 
 class Game
 {
 private:
   static Game* instance;
+  static SDL_Renderer* renderer;
 
   Game(const std::string &title, int width, int height);
 
@@ -15,6 +17,12 @@ public:
   ~Game();
 
   static Game& GetInstance(const std::string &title = "", int width = 0, int height = 0);
+
+  State& GetState();
+
+  SDL_Renderer *GetRenderer();
+
+  void Run();
 };
 
 #endif
