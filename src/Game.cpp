@@ -1,6 +1,7 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "Game.h"
+#include "Log.h"
 #include <string>
 #include <stdexcept>
 
@@ -11,7 +12,7 @@ State* Game::state = nullptr;
 
 SDL_Window* init_window(const std::string &title, int width, int height)
 {
-  printf("INFO - Creating window: %s (%dx%d)\n", title.c_str(), width, height);
+  Log::info("Creating window: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
 
   SDL_Window *window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr)
@@ -24,7 +25,7 @@ SDL_Window* init_window(const std::string &title, int width, int height)
 
 SDL_Renderer* init_renderer(SDL_Window* window)
 {
-  printf("INFO - Creating renderer\n");
+  Log::info("Creating renderer");
 
   SDL_Renderer *initialized_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   if (initialized_renderer == nullptr)
@@ -37,7 +38,7 @@ SDL_Renderer* init_renderer(SDL_Window* window)
 
 void init_sdl_libs()
 {
-  printf("INFO - Initializing SDL and its dependencies\n");
+  Log::info("Initializing SDL and its dependencies");
 
   int sdlInitResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
   if (sdlInitResult != 0)
@@ -63,12 +64,12 @@ void init_sdl_libs()
     throw std::runtime_error("Failed to open audio: " + std::string(Mix_GetError()));
   }
 
-  printf("INFO - SDL and its dependencies initialized successfully.\n");
+  Log::info("SDL and its dependencies initialized successfully.");
 }
 
 Game::Game(const std::string &title, int width, int height)
 {
-  printf("INFO - Initializing game: %s (%dx%d)\n", title.c_str(), width, height);
+  Log::info("Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
   if (instance != nullptr)
   {
     throw std::runtime_error("Game instance already exists!");
@@ -91,7 +92,7 @@ Game::Game(const std::string &title, int width, int height)
 
 Game::~Game()
 {
-  printf("INFO - Cleaning up game resources\n");
+  Log::info("Cleaning up game resources");
 
   instance = nullptr;
   state = nullptr;
@@ -102,12 +103,12 @@ Game::~Game()
   SDL_DestroyWindow(window);
   SDL_Quit();
 
-  printf("INFO - Game resources cleaned up successfully.\n");
+  Log::info("Game resources cleaned up successfully.");
 }
 
 Game& Game::GetInstance(const std::string &title, int width, int height)
 {
-  printf("INFO - Creating game instance\n");
+  Log::info("Creating game instance");
   if (instance == nullptr) {
     instance = new Game(title, width, height);
   }
@@ -127,17 +128,17 @@ SDL_Renderer *Game::GetRenderer()
 
 void Game::Run()
 {
-  printf("INFO - Starting game loop\n");
+  Log::info("Starting game loop");
   State& state = GetState();
 
   while (!state.QuitRequested())
   {
-    printf("INFO - Game loop iteration\n");
+    Log::info("Game loop iteration");
     state.Update(0);
     state.Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33);
   }
 
-  printf("INFO - Exiting game loop\n");
+  Log::info("Exiting game loop");
 }
