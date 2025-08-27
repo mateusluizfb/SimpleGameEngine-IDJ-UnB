@@ -29,19 +29,27 @@ void Sprite::Open(const std::string &file)
 {
   Log::info("Opening sprite: " + file);
 
-  if (texture != nullptr) return;
-
-  SDL_Texture *loadedTexture = IMG_LoadTexture(Game::GetRenderer(), file.c_str());
-
-  if (loadedTexture == nullptr)
+  if (texture != nullptr)
   {
-    throw std::runtime_error("Failed open texture: " + std::string(SDL_GetError()));
+    Log::warning("Sprite already opened, skipping: " + file);
+    return;
+  };
+
+  texture = IMG_LoadTexture(Game::GetRenderer(), file.c_str());
+
+  if (texture == nullptr)
+  {
+    throw std::runtime_error("Failed open texture: " + std::string(IMG_GetError()));
   }
 
   Log::info("Successfully opened sprite: " + file);
 
-  texture = loadedTexture;
-  SDL_QueryTexture(loadedTexture, nullptr, nullptr, &width, &height);
+  int result = SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+
+  if (result != 0) {
+    throw std::runtime_error("Failed to query texture: " + std::string(SDL_GetError()));
+  }
+  
   SetClip(0, 0, width, height);
 }
 
@@ -52,10 +60,15 @@ void Sprite::SetClip(int x, int y, int w, int h)
 
 void Sprite::Render(int x, int y)
 {
-  Log::info("Rendering sprite at: (" + std::to_string(x) + ", " + std::to_string(y) + ")");
-
   SDL_Rect dsRect = {x, y, clipRect.w, clipRect.h};
-  SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
+
+  Log::info("Rendering sprite at: (" + std::to_string(dsRect.x) + ", " + std::to_string(dsRect.y) + ", " + std::to_string(dsRect.w) + ", " + std::to_string(dsRect.h) + ")");
+
+  int result = SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
+
+  if (result != 0) {
+    throw std::runtime_error("Failed to render sprite: " + std::string(SDL_GetError()));
+  }
 }
 
 int Sprite::GetWidth() {

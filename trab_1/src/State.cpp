@@ -1,11 +1,12 @@
 #include "State.h"
 #include "Sprite.h"
 #include "SDL.h"
+#include "Log.h"
 
 State::State()
 {
   quitRequested = false;
-  bg = Sprite("./assets/img/Background.png");
+  bg = Sprite("assets/img/Background.png");
 }
 
 bool State::QuitRequested()
@@ -20,7 +21,11 @@ void State::LoadAssets()
 
 void State::Update(float dt)
 {
-  // TODO
+  if (SDL_QuitRequested() == SDL_TRUE)
+  {
+    Log::info("Quit requested via SDL event");
+    quitRequested = true;
+  }
 }
 
 void State::Render()

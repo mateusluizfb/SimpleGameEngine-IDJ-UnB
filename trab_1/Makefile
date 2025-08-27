@@ -7,11 +7,14 @@ extra ?=
 
 BIN = game
 
-compile:
+build:
 	$(CXX) $(CXXFLAGS) $(main) $(extra) -o $(BIN) $(LDFLAGS)
 
-compile-dry:
+build-dry:
 	$(CXX) $(CXXFLAGS) -c $(main) $(extra)
+
+build-run: build
+	./$(BIN)
 
 clean:
 	rm -f $(BIN)

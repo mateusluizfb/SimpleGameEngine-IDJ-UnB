@@ -132,15 +132,16 @@ void Game::Run()
 {
   Log::info("Starting game loop");
   State& state = GetState();
-
+  
   while (!state.QuitRequested())
   {
     Log::info("Game loop iteration");
     state.Update(0);
     state.Render();
     SDL_RenderPresent(renderer);
-    SDL_Delay(33);
+    SDL_Delay(33); // Force ~30 FPS
   }
 
   Log::info("Exiting game loop");
+  Game::~Game();
 }
