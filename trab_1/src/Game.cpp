@@ -76,18 +76,20 @@ Game::Game(const std::string &title, int width, int height)
   } else {
     instance = this;
   }
-
-  // TODO: Temporary state for now
-  if (state != nullptr) {
-    throw std::runtime_error("State instance already exists!");
-  } else {
-    state = new State();
-  }
   
-
   init_sdl_libs();
   window = init_window(title, width, height);
   renderer = init_renderer(window);
+
+  // TODO: Temporary state for now
+  if (state != nullptr)
+  {
+    throw std::runtime_error("State instance already exists!");
+  }
+  else
+  {
+    state = new State();
+  }
 }
 
 Game::~Game()

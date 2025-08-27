@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 
   game.Run();
 
-  game.~Game();
+  // game.~Game();
 
   return 0;
 }

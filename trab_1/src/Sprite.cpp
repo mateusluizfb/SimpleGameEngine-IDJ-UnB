@@ -42,6 +42,7 @@ void Sprite::Open(const std::string &file)
 
   texture = loadedTexture;
   SDL_QueryTexture(loadedTexture, nullptr, nullptr, &width, &height);
+  SetClip(0, 0, width, height);
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)

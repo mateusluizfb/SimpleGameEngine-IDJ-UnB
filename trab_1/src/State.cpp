@@ -1,8 +1,11 @@
 #include "State.h"
+#include "Sprite.h"
+#include "SDL.h"
 
 State::State()
 {
   quitRequested = false;
+  bg = Sprite("./assets/img/Background.png");
 }
 
 bool State::QuitRequested()
@@ -17,10 +20,10 @@ void State::LoadAssets()
 
 void State::Update(float dt)
 {
-  // Update game state based on delta time
+  // TODO
 }
 
 void State::Render()
 {
-  // Render the current state
+  bg.Render(0, 0);
 }
