@@ -18,6 +18,10 @@ class Log
     static void error(const std::string &message) {
         std::cerr << "\033[31mERROR\033[0m: " << message << std::endl; // red
     }
+
+    static void debug(const std::string &message) {
+        std::cout << "\033[32mDEBUG\033[0m: " << message << std::endl; // green
+    }
 };
 
 #endif

@@ -20,6 +20,8 @@ Sprite::~Sprite()
 {
   if (texture != nullptr)
   {
+    Log::warning("Destroying sprite texture");
+
     SDL_DestroyTexture(texture);
     texture = nullptr;
   }
@@ -31,7 +33,7 @@ void Sprite::Open(const std::string &file)
 
   if (texture != nullptr)
   {
-    Log::warning("Sprite already opened, skipping: " + file);
+    Log::debug("Sprite already opened, skipping: " + file);
     return;
   };
 
@@ -62,7 +64,7 @@ void Sprite::Render(int x, int y)
 {
   SDL_Rect dsRect = {x, y, clipRect.w, clipRect.h};
 
-  Log::info("Rendering sprite at: (" + std::to_string(dsRect.x) + ", " + std::to_string(dsRect.y) + ", " + std::to_string(dsRect.w) + ", " + std::to_string(dsRect.h) + ")");
+  Log::debug("Rendering sprite at: (" + std::to_string(dsRect.x) + ", " + std::to_string(dsRect.y) + ", " + std::to_string(dsRect.w) + ", " + std::to_string(dsRect.h) + ")");
 
   int result = SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
 

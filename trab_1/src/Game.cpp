@@ -135,7 +135,7 @@ void Game::Run()
   
   while (!state.QuitRequested())
   {
-    Log::info("Game loop iteration");
+    Log::debug("Game loop iteration");
     state.Update(0);
     state.Render();
     SDL_RenderPresent(renderer);
