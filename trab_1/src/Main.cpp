@@ -2,11 +2,9 @@
 
 int main(int argc, char **argv)
 {
-  Game &game = Game::GetInstance("My Game", 1200, 900);  
+  Game &game = Game::GetInstance("Mateus Luiz - 150140801", 1200, 900);  
 
   game.Run();
-
-  // game.~Game();
 
   return 0;
 }
