@@ -19,10 +19,10 @@ public:
   ~Game();
 
   static Game& GetInstance(const std::string &title = "", int width = 0, int height = 0);
+  static SDL_Renderer *GetRenderer();
 
   State& GetState();
 
-  SDL_Renderer *GetRenderer();
 
   void Run();
 };
