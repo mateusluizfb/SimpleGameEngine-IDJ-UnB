@@ -1,6 +1,6 @@
-.vscode
-.github
-game
-/game.*/**
-*.0
-.DS_Store
+/**/.vscode
+/**/.github
+/**/game
+/**/*.*/
+/**/.o
+/**/.DS_Store
