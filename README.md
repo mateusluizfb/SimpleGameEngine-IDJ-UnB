@@ -1,3 +1,5 @@
+__OBS: This project is running on mac, so you may need to adjust the `CXXFLAGS` to point to your SDL2 headers and lib folders.__
+
 ## Instructions:
 
 1. Make sure you have g++ and all sdl2 libs installed
