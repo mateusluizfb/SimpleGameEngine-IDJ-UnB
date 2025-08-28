@@ -1,7 +1,8 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include <SDL_render.h>
+#include "SDL_image.h"
+#include "SDL_render.h"
 #include <string>
 
 class Sprite

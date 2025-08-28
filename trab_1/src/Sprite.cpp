@@ -1,7 +1,5 @@
 #include "Sprite.h"
 
-#include "SDL_image.h"
-#include "SDL_render.h"
 #include "Game.h"
 #include "Log.h"
 
@@ -18,13 +16,12 @@ Sprite::Sprite(const std::string &file)
 
 Sprite::~Sprite()
 {
-  if (texture != nullptr)
-  {
-    Log::warning("Destroying sprite texture");
+  if (texture == nullptr) return;
 
-    SDL_DestroyTexture(texture);
-    texture = nullptr;
-  }
+  Log::warning("Destroying sprite texture");
+
+  SDL_DestroyTexture(texture);
+  texture = nullptr;
 }
 
 void Sprite::Open(const std::string &file)
@@ -53,6 +50,8 @@ void Sprite::Open(const std::string &file)
   }
   
   SetClip(0, 0, width, height);
+
+  Log::debug("Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)
@@ -63,8 +62,6 @@ void Sprite::SetClip(int x, int y, int w, int h)
 void Sprite::Render(int x, int y)
 {
   SDL_Rect dsRect = {x, y, clipRect.w, clipRect.h};
-
-  Log::debug("Rendering sprite at: (" + std::to_string(dsRect.x) + ", " + std::to_string(dsRect.y) + ", " + std::to_string(dsRect.w) + ", " + std::to_string(dsRect.h) + ")");
 
   int result = SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
 

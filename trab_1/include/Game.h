@@ -2,6 +2,8 @@
 #define GAME_H
 
 #include "SDL_render.h"
+#include "SDL_image.h"
+#include "SDL_mixer.h"
 #include "State.h"
 #include <string>
 

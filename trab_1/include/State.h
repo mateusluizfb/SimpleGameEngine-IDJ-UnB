@@ -2,13 +2,14 @@
 #define STATE_H
 
 #include <Sprite.h>
+#include <Music.h>
 #include <string>
 
 class State
 {
 private:
   Sprite bg;
-  // Music music;
+  Music music;
   bool quitRequested;
 
 public:

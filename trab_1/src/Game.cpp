@@ -1,5 +1,3 @@
-#include "SDL_image.h"
-#include "SDL_mixer.h"
 #include "Game.h"
 #include "Log.h"
 #include <string>
@@ -130,18 +128,17 @@ SDL_Renderer *Game::GetRenderer()
 
 void Game::Run()
 {
-  Log::info("Starting game loop");
+  Log::info("GAME - Starting game loop");
   State& state = GetState();
   
   while (!state.QuitRequested())
   {
-    Log::debug("Game loop iteration");
     state.Update(0);
     state.Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33); // Force ~30 FPS
   }
 
-  Log::info("Exiting game loop");
+  Log::info("GAME -Exiting game loop");
   Game::~Game();
 }

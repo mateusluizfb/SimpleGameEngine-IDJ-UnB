@@ -1,11 +1,13 @@
 #include "State.h"
 #include "Sprite.h"
-#include "SDL.h"
 #include "Log.h"
 
-State::State() : bg("assets/img/Background.png") // CORRECT WAY: constructed in place and owns its texture for its entire lifetime, with no temporary or copy involved
+State::State()
+    : bg("assets/img/Background.png"), // CORRECT WAY: constructed in place and owns its texture for its entire lifetime, with no temporary or copy involved
+      music("audio/BGM.wav")
 {
   quitRequested = false;
+  music.Play();
   // bg = Sprite("assets/img/Background.png"); THIS IS WRONG: double free on bg.texture, it's temporarily created and destroyed in the ~Sprite()
 }
 
@@ -24,6 +26,7 @@ void State::Update(float dt)
   if (SDL_QuitRequested() == SDL_TRUE)
   {
     Log::debug("Quit requested via SDL event");
+    music.Stop();
     quitRequested = true;
   }
 }
