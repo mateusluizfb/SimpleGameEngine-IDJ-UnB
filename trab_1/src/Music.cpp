@@ -19,7 +19,7 @@ Music::~Music()
 {
   if (music == nullptr) return;
 
-  Log::warning("Destroying music");
+  Log::warning("MUSIC - Destroying music");
 
   Mix_FreeMusic(music);
   music = nullptr;
@@ -40,22 +40,22 @@ void Music::Play(int times)
 
 void Music::Stop(int msToStop)
 {
-  Log::info("Fadding out song");
-  
+  Log::info("MUSIC - Fadding out song");
+
   int result = Mix_FadeOutMusic(msToStop);
 
   if (result == 0)
   {
-    Log::warning("No song playing to fade out");
+    Log::warning("MUSIC - No song playing to fade out");
   }
 }
 
 void Music::Open(const std::string &file)
 {
-  Log::info("Opening song: " + file);
+  Log::info("MUSIC - Opening song: " + file);
 
   if (music != nullptr) {
-    Log::debug("Song already opened, skipping: " + file);
+    Log::debug("MUSIC - Song already opened, skipping: " + file);
   }
 
   music = Mix_LoadMUS(file.c_str());
@@ -65,7 +65,7 @@ void Music::Open(const std::string &file)
     throw std::runtime_error("Failed to open song: " + std::string(Mix_GetError()));
   }
 
-  Log::info("Successfully opened song: " + file);
+  Log::info("MUSIC - Successfully opened song: " + file);
 }
 
 bool Music::IsOpen()

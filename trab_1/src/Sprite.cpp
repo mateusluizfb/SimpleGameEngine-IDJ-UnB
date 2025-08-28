@@ -18,7 +18,7 @@ Sprite::~Sprite()
 {
   if (texture == nullptr) return;
 
-  Log::warning("Destroying sprite texture");
+  Log::warning("SPRITE - Destroying sprite texture");
 
   SDL_DestroyTexture(texture);
   texture = nullptr;
@@ -26,11 +26,11 @@ Sprite::~Sprite()
 
 void Sprite::Open(const std::string &file)
 {
-  Log::info("Opening sprite: " + file);
+  Log::info("SPRITE - Opening sprite: " + file);
 
   if (texture != nullptr)
   {
-    Log::debug("Sprite already opened, skipping: " + file);
+    Log::debug("SPRITE - Sprite already opened, skipping: " + file);
     return;
   };
 
@@ -41,7 +41,7 @@ void Sprite::Open(const std::string &file)
     throw std::runtime_error("Failed open texture: " + std::string(IMG_GetError()));
   }
 
-  Log::info("Successfully opened sprite: " + file);
+  Log::info("SPRITE - Successfully opened sprite: " + file);
 
   int result = SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
 
@@ -51,7 +51,7 @@ void Sprite::Open(const std::string &file)
   
   SetClip(0, 0, width, height);
 
-  Log::debug("Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
+  Log::debug("SPRITE - Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)

@@ -10,7 +10,7 @@ State* Game::state = nullptr;
 
 SDL_Window* init_window(const std::string &title, int width, int height)
 {
-  Log::info("Creating window: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
+  Log::info("GAME - Creating window: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
 
   SDL_Window *window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr)
@@ -23,7 +23,7 @@ SDL_Window* init_window(const std::string &title, int width, int height)
 
 SDL_Renderer* init_renderer(SDL_Window* window)
 {
-  Log::info("Creating renderer");
+  Log::info("GAME - Creating renderer");
 
   SDL_Renderer *initialized_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   if (initialized_renderer == nullptr)
@@ -36,7 +36,7 @@ SDL_Renderer* init_renderer(SDL_Window* window)
 
 void init_sdl_libs()
 {
-  Log::info("Initializing SDL and its dependencies");
+  Log::info("GAME - Initializing SDL and its dependencies");
 
   int sdlInitResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
   if (sdlInitResult != 0)
@@ -62,12 +62,12 @@ void init_sdl_libs()
     throw std::runtime_error("Failed to open audio: " + std::string(Mix_GetError()));
   }
 
-  Log::info("SDL and its dependencies initialized successfully.");
+  Log::info("GAME - SDL and its dependencies initialized successfully.");
 }
 
 Game::Game(const std::string &title, int width, int height)
 {
-  Log::info("Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
+  Log::info("GAME - Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
   if (instance != nullptr)
   {
     throw std::runtime_error("Game instance already exists!");
@@ -92,7 +92,7 @@ Game::Game(const std::string &title, int width, int height)
 
 Game::~Game()
 {
-  Log::info("Cleaning up game resources");
+  Log::info("GAME - Cleaning up game resources");
 
   instance = nullptr;
   state = nullptr;
@@ -103,7 +103,7 @@ Game::~Game()
   SDL_DestroyWindow(window);
   SDL_Quit();
 
-  Log::info("Game resources cleaned up successfully.");
+  Log::info("GAME - Game resources cleaned up successfully.");
 }
 
 Game& Game::GetInstance(const std::string &title, int width, int height)
@@ -139,6 +139,6 @@ void Game::Run()
     SDL_Delay(33); // Force ~30 FPS
   }
 
-  Log::info("GAME -Exiting game loop");
+  Log::info("GAME - Exiting game loop");
   Game::~Game();
 }
