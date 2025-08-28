@@ -1,10 +1,10 @@
+## Instructions:
+
+1. Make sure you have g++ and all sdl2 libs installed
+2. Run `make build`
+3. Run `./game`
+
 ## Perguntas:
 
 - `src/State.cpp`
-  - Não preciso instanciar o Sprite no construtor?
-
-- `src/Game.cpp`
-  - Estou inicializando um State hard coded no construtor. Está certo isso?
-
-- `src/Main.cpp`
-  - Quando e onde chamar o `game.~Game()`?
+  - Do I need to instantiate the Sprite in the state's constructor?
