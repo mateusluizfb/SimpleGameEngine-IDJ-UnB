@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -g -Wall -I/opt/homebrew/include/SDL2 -Iinclude
 LDFLAGS = -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
-main ?= src/Sprite.cpp src/State.cpp src/Game.cpp src/Main.cpp
+main ?= src/Music.cpp src/Sprite.cpp src/State.cpp src/Game.cpp src/Main.cpp
 extra ?=
 
 BIN = game
@@ -19,3 +19,7 @@ build-run: build
 clean:
 	rm -f $(BIN)
 	rm -f *.o src/*.o
+	rm -rf minimal_sdl2_**
+	rm -rf game.**
+
+build-dry-clean: build-dry clean
