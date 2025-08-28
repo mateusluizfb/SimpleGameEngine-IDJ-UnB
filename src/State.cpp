@@ -2,15 +2,21 @@
 #include "Sprite.h"
 #include "Log.h"
 
+/*
+Notes:
+
+- Can't assign `bg = Sprite("assets/img/Background.png")` inside the constructor. Because once the method ends, the Sprite is deleted and bg points to nothing
+  the correct way should be in the initalized list like `bg("assets/img/Background.png")`
+*/
+
 State::State()
-    : bg("assets/img/Background.png"), // CORRECT WAY: constructed in place and owns its texture for its entire lifetime, with no temporary or copy involved
+    : bg("assets/img/Background.png"),
       music("audio/BGM.wav")
 {
   Log::info("STATE - Initializing state");
 
   quitRequested = false;
   music.Play();
-  // bg = Sprite("assets/img/Background.png"); THIS IS WRONG: double free on bg.texture, it's temporarily created and destroyed in the ~Sprite()
 }
 
 bool State::QuitRequested()
