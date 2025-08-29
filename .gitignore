@@ -1,7 +1,10 @@
 /**/.vscode
 /**/.github
 /**/game
+/**/JOGO
 /**/*.*/
 /**/**.o
 /**/.DS_Store
 docs/
+test/
+dep/**
