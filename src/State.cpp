@@ -19,6 +19,18 @@ State::State()
   music.Play();
 }
 
+State::~State()
+{
+  Log::info("STATE - Destroying state");
+
+  objectArray.clear();
+}
+
+void State::AddObject(GameObject *go)
+{
+  objectArray.emplace_back(std::unique_ptr<GameObject>(go));
+}
+
 bool State::QuitRequested()
 {
   return quitRequested;
@@ -37,9 +49,26 @@ void State::Update(float dt)
     music.Stop();
     quitRequested = true;
   }
+
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    objectArray[i]->Update(0);
+  }
+
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    if (objectArray[i]->IsDead()) {
+      objectArray.erase(objectArray.begin() + i);
+    }
+  }
 }
 
 void State::Render()
-{
+{ 
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    objectArray[i]->Render();
+  }
+  
   bg.Render(0, 0);
 }

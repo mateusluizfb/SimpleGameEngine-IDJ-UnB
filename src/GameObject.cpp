@@ -12,9 +12,8 @@ Notes:
 GameObject::~GameObject() {
   Log::info("GAME_OBJECT - Destroying game object");
 
-  for (auto it = components.rbegin(); it != components.rend(); ++it)
-  {
-    delete *it;
+  for (int i = components.size() - 1; i >= 0; --i) {
+    delete components[i];
   }
 
   components.clear();
