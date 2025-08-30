@@ -79,15 +79,8 @@ Game::Game(const std::string &title, int width, int height)
   window = init_window(title, width, height);
   renderer = init_renderer(window);
 
-  // TODO: Temporary state for now
-  if (state != nullptr)
-  {
-    throw std::runtime_error("State instance already exists!");
-  }
-  else
-  {
-    state = new State();
-  }
+  // Temporary state for now:
+  state = new State();
 }
 
 Game::~Game()
