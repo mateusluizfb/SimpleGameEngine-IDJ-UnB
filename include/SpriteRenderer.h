@@ -15,6 +15,7 @@ public:
   void Open(std::string file);
   void SetFrameCount(int frameCountW, int frameCountH);
   void SetFrame(int frame);
+  void SetPosition(int x, int y);
 
   // Notes: override flags that these methods override virtual methods in the base class
   void Update(float dt) override;

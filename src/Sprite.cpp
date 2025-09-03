@@ -47,10 +47,6 @@ void Sprite::Open(const std::string &file)
   if (result != 0) {
     throw std::runtime_error("Failed to query texture: " + std::string(SDL_GetError()));
   }
-  
-  // SetClip(0, 0, width, height);
-
-  // Log::debug("SPRITE - Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)
