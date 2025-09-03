@@ -55,7 +55,6 @@ void Sprite::Open(const std::string &file)
 
 void Sprite::SetClip(int x, int y, int w, int h)
 {
-  Log::debug("Setting Clip");
   clipRect = {x, y, w, h};
 }
 
