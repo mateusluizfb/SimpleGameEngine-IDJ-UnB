@@ -1,5 +1,4 @@
 #include "Sprite.h"
-
 #include "Game.h"
 #include "Log.h"
 
@@ -8,7 +7,7 @@ Sprite::Sprite()
   texture = nullptr;
 }
 
-Sprite::Sprite(const std::string &file)
+Sprite::Sprite(const std::string &file, int frameCountW, int frameCountH)
 {
   texture = nullptr;
   Open(file);
@@ -49,17 +48,18 @@ void Sprite::Open(const std::string &file)
     throw std::runtime_error("Failed to query texture: " + std::string(SDL_GetError()));
   }
   
-  SetClip(0, 0, width, height);
+  // SetClip(0, 0, width, height);
 
-  Log::debug("SPRITE - Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
+  // Log::debug("SPRITE - Rendering sprite at: (" + std::to_string(clipRect.x) + ", " + std::to_string(clipRect.y) + ", " + std::to_string(clipRect.w) + ", " + std::to_string(clipRect.h) + ")");
 }
 
 void Sprite::SetClip(int x, int y, int w, int h)
 {
+  Log::debug("Setting Clip");
   clipRect = {x, y, w, h};
 }
 
-void Sprite::Render(int x, int y)
+void Sprite::Render(int x, int y, int w, int h)
 {
   SDL_Rect dsRect = {x, y, clipRect.w, clipRect.h};
 
@@ -71,13 +71,45 @@ void Sprite::Render(int x, int y)
 }
 
 int Sprite::GetWidth() {
+  // Atenção: Talvez a largura do frame não tenha sido
+  // definida ainda se não tiver sido chamado SetFrame
   return clipRect.w;
 }
 
 int Sprite::GetHeight() {
+  // Atenção: Talvez a altura do frame não tenha sido
+  // definida ainda se não tiver sido chamado SetFrame
   return clipRect.h;
 }
 
 bool Sprite::IsOpen() {
   return texture != nullptr;
+}
+
+void Sprite::SetFrame(int frame) {
+  /*
+    Exemplo: Sprite sheet com 5 frames em 1 linha (500x100 px)
+    frameCountW = 5, frameCountH = 1
+    frameWidth = 500 / 5 = 100
+    frameHeight = 100 / 1 = 100
+    Para frame 3 (índice 2): row = 2 / 5 = 0, col = 2 % 5 = 2
+    x = 2 * 100 = 200, y = 0 * 100 = 0
+    SetClip(200, 0, 100, 100);
+  */
+
+  int row = frame / frameCountW; // Qual linha da sprite sheet
+  int col = frame % frameCountW; // Qual coluna da sprite sheet
+
+  int frameWidth = width / frameCountW; // Largura de cada frame na sprite sheet
+  int frameHeight = height / frameCountH;  // Altura de cada frame na sprite sheet
+
+  int x = col * frameWidth; // Posição x do frame na sprite sheet, considerando a coluna onde está
+  int y = row * frameHeight; // Posição y do frame na sprite sheet, considerando a linha
+
+  SetClip(x, y, frameWidth, frameHeight);
+}
+
+void Sprite::SetFrameCount(int frameCountW, int frameCountH) {
+  this->frameCountW = frameCountW;
+  this->frameCountH = frameCountH;
 }

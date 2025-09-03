@@ -7,7 +7,7 @@ public:
   int frameEnd;
   float frameTime;
 
-  Animation(int frameStart, int frameEnd, float frameTime) {}
+  Animation(int frameStart, int frameEnd, float frameTime);
 };
 
 #endif
