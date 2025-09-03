@@ -1,13 +1,12 @@
 #include "State.h"
 #include "Log.h"
 
-State::State()
-    //   music("audio/BGM.wav")
+State::State() : music("audio/BGM.wav")
 {
   Log::info("STATE - Initializing state");
 
   quitRequested = false;
-  // music.Play();
+  music.Play();
 }
 
 State::~State()
@@ -37,7 +36,7 @@ void State::Update(float dt)
   if (SDL_QuitRequested() == SDL_TRUE)
   {
     Log::debug("STATE - Quit requested via SDL event");
-    // music.Stop();
+    music.Stop();
     quitRequested = true;
   }
 
