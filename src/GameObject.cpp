@@ -21,8 +21,6 @@ GameObject::~GameObject() {
 
 void GameObject::Update(float dt)
 {
-  Log::info("GAME_OBJECT - Updating game object");
-
   for(Component *component : components)
   {
     component->Update(dt);
@@ -31,8 +29,6 @@ void GameObject::Update(float dt)
 
 void GameObject::Render()
 {
-  Log::info("GAME_OBJECT - Rendering game object");
-
   for (Component *component : components)
   {
     component->Render();

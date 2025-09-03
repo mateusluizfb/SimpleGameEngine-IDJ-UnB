@@ -2,6 +2,8 @@
 #include "Log.h"
 #include <string>
 #include <stdexcept>
+#include "SpriteRenderer.h"
+#include "GameObject.h"
 
 Game* Game::instance = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
@@ -79,8 +81,11 @@ Game::Game(const std::string &title, int width, int height)
   window = init_window(title, width, height);
   renderer = init_renderer(window);
 
-  // Temporary state for now:
+  // Temporary State Initializing for now:
   state = new State();
+  GameObject* go = new GameObject();
+  go->AddComponent(new SpriteRenderer(*go, "assets/img/Background.png"));
+  state->AddObject(go);
 }
 
 Game::~Game()
