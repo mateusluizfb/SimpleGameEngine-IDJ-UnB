@@ -24,7 +24,7 @@ public:
   void RemoveComponent(Component* cpt);
 
   template <typename T>
-  T GameObject::*GetComponent()
+  T *GetComponent()
   {
     long unsigned int index;
     for (index = 0; index < components.size(); index++)

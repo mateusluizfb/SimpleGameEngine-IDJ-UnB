@@ -1,7 +1,7 @@
 #include "State.h"
 #include "Log.h"
 
-State::State() : music("audio/BGM.wav")
+State::State() : zombie(*(new GameObject())) , music("audio/BGM.wav")
 {
   Log::info("STATE - Initializing state");
 
@@ -51,6 +51,9 @@ void State::Update(float dt)
       objectArray.erase(objectArray.begin() + i);
     }
   }
+
+  // TODO: Remove, for testing purposes only:
+  zombie.Update(0);
 }
 
 void State::Render()
@@ -59,4 +62,7 @@ void State::Render()
   {
     objectArray[i]->Render();
   }
+
+  // TODO: Remove, for testing purposes only:
+  zombie.Render();
 }

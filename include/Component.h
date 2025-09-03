@@ -15,6 +15,8 @@ protected:
   GameObject& associated;
 
 public:
+  // Notes: Child classes must define their own constructor, but they must call this
+  // base constructor in the initialization list. In C++, constructors are not inherited.
   Component(GameObject &associated);
   virtual ~Component();
 
