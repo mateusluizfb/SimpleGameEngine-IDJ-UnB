@@ -10,7 +10,6 @@
 class State
 {
 private:
-  Zombie zombie;
   Music music;
   bool quitRequested;
   std::vector<std::unique_ptr<GameObject>> objectArray;
