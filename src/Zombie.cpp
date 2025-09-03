@@ -21,6 +21,10 @@ void Zombie::Damage(int damage) {
   }
 }
 
+int Zombie::GetHitPoints() {
+  return hitPoints;
+}
+
 void Zombie::Update(float dt) {
   this->Damage(1);
 }
