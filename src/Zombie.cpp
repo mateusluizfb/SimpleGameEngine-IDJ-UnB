@@ -8,8 +8,6 @@ Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100) {
   associated.AddComponent(spriteRenderer);
   spriteRenderer->SetPosition(600, 450);
   spriteRenderer->SetFrame(0);
-
-  Log::debug("ZOMBIE - Zombie created with 100 HP");
 }
 
 void Zombie::Damage(int damage) {
@@ -28,6 +26,4 @@ void Zombie::Update(float dt) {
 }
 
 void Zombie::Render() {
-  SpriteRenderer *spriteRenderer = associated.GetComponent<SpriteRenderer>();
-  spriteRenderer->Render();
 }

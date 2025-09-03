@@ -83,9 +83,19 @@ Game::Game(const std::string &title, int width, int height)
 
   // Temporary State Initializing for now:
   state = new State();
-  GameObject* go = new GameObject();
-  go->AddComponent(new SpriteRenderer(*go, "assets/img/Background.png"));
-  state->AddObject(go);
+  
+  Log::debug("GAME - Starting background game object");
+  GameObject* bgGameObject = new GameObject();
+  bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
+  state->AddObject(bgGameObject);
+  Log::debug("GAME - Background game object loaded");
+
+  Log::debug("GAME - Starting background game object");
+  GameObject* zombieGameObject = new GameObject();
+  Zombie* zombie = new Zombie(*zombieGameObject);
+  zombieGameObject->AddComponent(zombie);
+  state->AddObject(zombieGameObject);
+  Log::debug("GAME - Zombie game object loaded");
 }
 
 Game::~Game()
