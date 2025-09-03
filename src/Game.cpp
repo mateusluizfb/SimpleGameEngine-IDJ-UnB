@@ -103,6 +103,7 @@ Game::~Game()
   Log::info("GAME - Cleaning up game resources");
 
   instance = nullptr;
+  delete state;
   state = nullptr;
   Mix_CloseAudio();
   Mix_Quit();
