@@ -1,6 +1,9 @@
 #ifndef REACT_H
 #define REACT_H
 
+#include "Vec2.h"
+#include <tuple>
+
 class Rect {
 public:
   float x, y, w, h;
@@ -8,7 +11,12 @@ public:
   Rect();
   Rect(float x, float y, float w, float h);
 
-  // TODO: Implement the other operations
+  Rect operator+(const Vec2 &other) const;
+  Rect operator-(const Vec2 &other) const;
+
+  Vec2 GetCenter() const;
+  float Distance(const Rect &other) const;
+  bool IsVec2Inside(const Vec2 &vec) const;
 };
 
 #endif
