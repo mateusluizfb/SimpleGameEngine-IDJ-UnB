@@ -1,13 +1,22 @@
 #include "Zombie.h"
 #include "GameObject.h"
 #include "SpriteRenderer.h"
+#include "Animator.h"
 #include "Log.h"
 
 Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100) {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Enemy.png", 3, 2);
+  Animator *animator = new Animator(associated);
+  
   associated.AddComponent(spriteRenderer);
+  associated.AddComponent(animator);
+
   spriteRenderer->SetPosition(600, 450);
-  spriteRenderer->SetFrame(0);
+
+  animator->AddAnimation("walk", Animation(0, 3, 10));
+  animator->AddAnimation("dead", Animation(5, 5, 0));
+
+  animator->SetAnimation("walk");
 }
 
 void Zombie::Damage(int damage) {
@@ -16,8 +25,14 @@ void Zombie::Damage(int damage) {
   hitPoints -= damage;
 
   if (hitPoints <= 0) {
-    SpriteRenderer *spriteRenderer = associated.GetComponent<SpriteRenderer>();
-    spriteRenderer->SetFrame(5);
+    Animator *animator = associated.GetComponent<Animator>();
+
+    if (animator == nullptr)
+    {
+      throw std::runtime_error("Zombie::Damage(): No Animator component found in associated GameObject.");
+    }
+
+    animator->SetAnimation("dead");
   }
 }
 

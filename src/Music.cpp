@@ -19,7 +19,7 @@ Music::~Music()
 {
   if (music == nullptr) return;
 
-  Log::warning("MUSIC - Destroying music");
+  Log::info("MUSIC - Destroying music");
 
   Mix_FreeMusic(music);
   music = nullptr;
