@@ -32,12 +32,31 @@ TEST(RectTest, SubtractVect)
 
 TEST(RectTest, GetCenter)
 {
-  Rect *rect = new Rect(1, 1, 1, 1);
+  Rect *rect = new Rect(1, 1, 2, 2);
 
   Vec2 centerVec = rect->GetCenter();
 
   EXPECT_EQ(centerVec.x, 2);
   EXPECT_EQ(centerVec.y, 2);
 
+  delete rect;
+}
+
+TEST(RectTest, IsVec2Inside)
+{
+  Rect *rect = new Rect(1, 1, 2, 2);
+  Vec2 *vec1 = new Vec2(2, 2);
+  Vec2 *vec2 = new Vec2(4, 4);
+
+  bool isInside = rect->IsVec2Inside(*vec1);
+
+  EXPECT_EQ(isInside, true);
+  
+  isInside = rect->IsVec2Inside(*vec2);
+  
+  EXPECT_EQ(isInside, false);
+
+  delete vec2;
+  delete vec1;
   delete rect;
 }
