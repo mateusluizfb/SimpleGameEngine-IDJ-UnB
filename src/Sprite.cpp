@@ -8,6 +8,7 @@ Sprite::Sprite()
 }
 
 Sprite::Sprite(const std::string &file, int frameCountW, int frameCountH)
+: frameCountW(frameCountW), frameCountH(frameCountH)
 {
   texture = nullptr;
   Open(file);
@@ -17,7 +18,7 @@ Sprite::~Sprite()
 {
   if (texture == nullptr) return;
 
-  Log::warning("SPRITE - Destroying sprite texture");
+  Log::info("SPRITE - Destroying sprite texture");
 
   SDL_DestroyTexture(texture);
   texture = nullptr;
@@ -107,4 +108,8 @@ void Sprite::SetFrame(int frame) {
 void Sprite::SetFrameCount(int frameCountW, int frameCountH) {
   this->frameCountW = frameCountW;
   this->frameCountH = frameCountH;
+}
+
+int Sprite::GetFrameCount() {
+  return this->frameCountW * this->frameCountH;
 }
