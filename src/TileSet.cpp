@@ -15,7 +15,7 @@ TileSet::TileSet(int tileWidth, int tileHeight, std::string file)
 };
 
 void TileSet::RenderTile (unsigned index, float x, float y) {
-  if (index < 0 || index >= tileSet.GetFrameCount())
+  if (index >= static_cast<unsigned>(tileSet.GetFrameCount()))
   {
     throw std::runtime_error("Tile index out of bounds: " + std::to_string(index) +
                  " (max: " + std::to_string(tileSet.GetFrameCount() - 1) + ")");
