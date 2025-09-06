@@ -106,6 +106,9 @@ void TileMap::RenderLayer() {
     return;
   }
 
+  // Reminder Note: The layer 0 will be draw below the next layer,
+  // because because we will rerender the x y coordinates without
+  // taking into account the z index.
   for (int z = 0; z < mapDepth; ++z) {
     for (int y = 0; y < mapHeight; ++y)
     {

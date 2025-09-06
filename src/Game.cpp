@@ -1,7 +1,7 @@
-#include "Game.h"
-#include "Log.h"
 #include <string>
 #include <stdexcept>
+#include "Log.h"
+#include "Game.h"
 #include "SpriteRenderer.h"
 #include "GameObject.h"
 
@@ -82,6 +82,7 @@ Game::Game(const std::string &title, int width, int height)
   renderer = init_renderer(window);
 
   // Temporary State Initializing for now:
+  Log::debug("GAME - Starting temporary state.");
   state = new State();
   
   Log::debug("GAME - Starting background game object");
@@ -90,9 +91,17 @@ Game::Game(const std::string &title, int width, int height)
   state->AddObject(bgGameObject);
   Log::debug("GAME - Background game object loaded");
 
-  Log::debug("GAME - Starting background game object");
-  GameObject* zombieGameObject = new GameObject();
-  Zombie* zombie = new Zombie(*zombieGameObject);
+  Log::debug("GAME - Starting TileMap game object");
+  GameObject *tileMapGameObject = new GameObject();
+  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
+  TileMap *tileMap = new TileMap(*tileMapGameObject, "assets/map/map.txt", tileSet);
+  tileMapGameObject->AddComponent(tileMap);
+  state->AddObject(tileMapGameObject);
+  Log::debug("GAME - TileMap game object loaded");
+
+  Log::debug("GAME - Starting zombie game object");
+  GameObject *zombieGameObject = new GameObject();
+  Zombie *zombie = new Zombie(*zombieGameObject);
   zombieGameObject->AddComponent(zombie);
   state->AddObject(zombieGameObject);
   Log::debug("GAME - Zombie game object loaded");

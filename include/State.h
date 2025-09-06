@@ -3,14 +3,15 @@
 
 #include <string>
 #include <GameObject.h>
-#include <Sprite.h>
 #include <Music.h>
+#include <TileMap.h>
 #include <Zombie.h>
 
 class State
 {
 private:
   Music music;
+
   bool quitRequested;
   std::vector<std::unique_ptr<GameObject>> objectArray;
 

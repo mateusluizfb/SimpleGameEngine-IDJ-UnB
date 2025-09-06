@@ -1,5 +1,7 @@
 #include "State.h"
 #include "Log.h"
+#include "TileSet.h"
+#include "TileMap.h"
 
 State::State() : music("audio/BGM.wav")
 {
@@ -35,7 +37,7 @@ void State::Update(float dt)
 {
   if (SDL_QuitRequested() == SDL_TRUE)
   {
-    Log::debug("STATE - Quit requested via SDL event");
+    Log::warning("STATE - Quit requested via SDL event");
     music.Stop();
     quitRequested = true;
   }
