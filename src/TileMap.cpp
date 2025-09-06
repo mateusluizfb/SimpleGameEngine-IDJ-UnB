@@ -1,3 +1,4 @@
+#include "GameObject.h"
 #include "TileMap.h"
 #include "Log.h"
 #include <fstream>
@@ -97,11 +98,34 @@ int& TileMap::At(int x, int y, int z)
   return tileMatrix[col + row + layer];
 }
 
-void TileMap::Render() {}
+
+
+void TileMap::RenderLayer() {
+  if (!tileSet) {
+    Log::error("TileMap::RenderLayer: No TileSet associated with TileMap.");
+    return;
+  }
+
+  for (int z = 0; z < mapDepth; ++z) {
+    for (int y = 0; y < mapHeight; ++y)
+    {
+      for (int x = 0; x < mapWidth; ++x)
+      {
+        int tileIndex = At(x, y, z);
+
+        tileSet->RenderTile(tileIndex,
+                            associated.box.x + x * tileSet->GetTileWidth(),
+                            associated.box.y + y * tileSet->GetTileHeight());
+      }
+    }
+  }
+}
+
+void TileMap::Render() {
+  RenderLayer();
+}
 
 void TileMap::Update(float dt) {}
-
-void TileMap::RenderLayer() {}
 
 int TileMap::GetWidth() {
   return this->mapWidth;

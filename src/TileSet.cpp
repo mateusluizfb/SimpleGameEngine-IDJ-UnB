@@ -7,19 +7,18 @@ TileSet::TileSet(int tileWidth, int tileHeight, std::string file)
 {
   Log::info("TileSet::TileSet - Initing TileSet from: " + file);
 
-  // Reminder note: Should I set the setclip here?
-  tileSet.SetClip(0, 0, tileWidth, tileHeight);
-
   int cols = tileSet.GetWidth() / tileWidth;
   int rows = tileSet.GetHeight() / tileHeight;
 
+  this->tileCount = cols * rows;
   tileSet.SetFrameCount(cols, rows);
 };
 
 void TileSet::RenderTile (unsigned index, float x, float y) {
   if (index < 0 || index >= tileSet.GetFrameCount())
   {
-    throw std::runtime_error("Tile index out of bounds: " + std::to_string(index));
+    throw std::runtime_error("Tile index out of bounds: " + std::to_string(index) +
+                 " (max: " + std::to_string(tileSet.GetFrameCount() - 1) + ")");
   }
 
   tileSet.SetFrame(index);
