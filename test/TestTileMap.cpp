@@ -51,3 +51,19 @@ TEST(TileMapTest, At)
   delete tileSet;
   delete game;
 }
+
+TEST(TileMapTest, RenderLayer) 
+{
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+
+  Log::debug(" --- TileMapTest RenderLayer Method Logs ----");
+  GameObject *obj = new GameObject();
+  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
+  TileMap *tileMap = new TileMap(*obj, "assets/map/map.txt", tileSet);
+
+  EXPECT_NO_THROW(tileMap->RenderLayer());
+
+  delete obj;
+  delete tileSet;
+  delete game;
+}

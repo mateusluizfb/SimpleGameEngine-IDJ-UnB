@@ -21,9 +21,9 @@ public:
   void SetTileSet(TileSet *tileSet);
   int& At(int x, int y, int z = 0);
 
-  void Update(float dt) override;
-  void Render() override;
   void RenderLayer();
+  void Render() override;
+  void Update(float dt) override;
 
   int GetWidth();
   int GetHeight();

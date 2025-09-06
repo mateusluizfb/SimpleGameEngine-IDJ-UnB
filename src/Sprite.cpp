@@ -67,15 +67,11 @@ void Sprite::Render(int x, int y, int w, int h)
 }
 
 int Sprite::GetWidth() {
-  // Atenção: Talvez a largura do frame não tenha sido
-  // definida ainda se não tiver sido chamado SetFrame
-  return clipRect.w;
+  return width;
 }
 
 int Sprite::GetHeight() {
-  // Atenção: Talvez a altura do frame não tenha sido
-  // definida ainda se não tiver sido chamado SetFrame
-  return clipRect.h;
+  return height;
 }
 
 bool Sprite::IsOpen() {
