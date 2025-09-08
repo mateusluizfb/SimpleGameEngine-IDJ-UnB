@@ -28,3 +28,28 @@ TEST(ZombieTest, InitZombie)
   delete obj;
   delete game;
 }
+
+TEST(ZombieTest, DamageZombie)
+{
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+
+  Log::debug(" --- ZombieTest Logs ----");
+
+  GameObject* obj = new GameObject();
+  Zombie *zombie = new Zombie(*obj);
+
+  zombie->Damage(30);
+  EXPECT_EQ(zombie->GetHitPoints(), 70);
+
+  zombie->Damage(50);
+  EXPECT_EQ(zombie->GetHitPoints(), 20);
+
+  EXPECT_NO_THROW(zombie->Damage(20));
+  EXPECT_EQ(zombie->GetHitPoints(), 0);
+
+  zombie->Damage(10);
+  EXPECT_EQ(zombie->GetHitPoints(), 0);
+
+  delete obj;
+  delete game;
+}

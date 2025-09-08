@@ -1,10 +1,10 @@
+#include "Log.h"
 #include "Zombie.h"
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "Animator.h"
-#include "Log.h"
 
-Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100) {
+Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100), deathSound("audio/Dead.wav") {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Enemy.png", 3, 2);
   Animator *animator = new Animator(associated);
   
@@ -20,11 +20,11 @@ Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100) {
 }
 
 void Zombie::Damage(int damage) {
-  if (damage == 0) return;
+  if (hitPoints == 0) return;
 
   hitPoints -= damage;
 
-  if (hitPoints <= 0) {
+  if (hitPoints == 0) {
     Animator *animator = associated.GetComponent<Animator>();
 
     if (animator == nullptr)
@@ -33,6 +33,7 @@ void Zombie::Damage(int damage) {
     }
 
     animator->SetAnimation("dead");
+    deathSound.Play(1);
   }
 }
 
