@@ -17,7 +17,7 @@ SDL_Window* init_window(const std::string &title, int width, int height)
   SDL_Window *window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
   if (window == nullptr)
   {
-    throw std::runtime_error("Failed to create SDL window: " + std::string(SDL_GetError()));
+    throw std::runtime_error("GAME - Failed to create SDL window: " + std::string(SDL_GetError()));
   }
 
   return window;
@@ -30,7 +30,7 @@ SDL_Renderer* init_renderer(SDL_Window* window)
   SDL_Renderer *initialized_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   if (initialized_renderer == nullptr)
   {
-    throw std::runtime_error("Failed to create SDL renderer: " + std::string(SDL_GetError()));
+    throw std::runtime_error("GAME - Failed to create SDL renderer: " + std::string(SDL_GetError()));
   }
 
   return initialized_renderer;
@@ -43,25 +43,32 @@ void init_sdl_libs()
   int sdlInitResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
   if (sdlInitResult != 0)
   {
-    throw std::runtime_error("Failed to initialize SDL: " + std::string(SDL_GetError()));
+    throw std::runtime_error("GAME - Failed to initialize SDL: " + std::string(SDL_GetError()));
   }
 
   int imgInitResult = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
   if ((imgInitResult & (IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF)) == 0)
   {
-    throw std::runtime_error("Failed to initialize SDL_image: " + std::string(IMG_GetError()));
+    throw std::runtime_error("GAME - Failed to initialize SDL_image: " + std::string(IMG_GetError()));
   }
 
   int mixInitResult = Mix_Init(MIX_INIT_MP3);
   if ((mixInitResult & MIX_INIT_MP3) == 0)
   {
-    throw std::runtime_error("Failed to initialize SDL_mixer: " + std::string(Mix_GetError()));
+    throw std::runtime_error("GAME - Failed to initialize SDL_mixer: " + std::string(Mix_GetError()));
   }
 
   int mixOpenResult = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024);
+  
   if (mixOpenResult != 0)
   {
-    throw std::runtime_error("Failed to open audio: " + std::string(Mix_GetError()));
+    throw std::runtime_error("GAME - Failed to open audio: " + std::string(Mix_GetError()));
+  }
+
+  int allocateChannelsResult = Mix_AllocateChannels(32);
+  if (allocateChannelsResult != 32)
+  {
+    throw std::runtime_error("GAME - Failed to allocate mixing channels: " + std::string(Mix_GetError()));
   }
 
   Log::info("GAME - SDL and its dependencies initialized successfully.");
