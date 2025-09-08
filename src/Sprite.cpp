@@ -2,10 +2,7 @@
 #include "Game.h"
 #include "Log.h"
 
-Sprite::Sprite()
-{
-  texture = nullptr;
-}
+Sprite::Sprite() : texture(nullptr) {}
 
 Sprite::Sprite(const std::string &file, int frameCountW, int frameCountH)
 : frameCountW(frameCountW), frameCountH(frameCountH)
