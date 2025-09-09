@@ -75,6 +75,47 @@ void init_sdl_libs()
   Log::info("GAME - SDL and its dependencies initialized successfully.");
 }
 
+void createTemporaryStateObjects(State* state) {
+  Log::debug("GAME - Starting background game object");
+  GameObject *bgGameObject = new GameObject();
+  bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
+  state->AddObject(bgGameObject);
+  Log::debug("GAME - Background game object loaded");
+
+  Log::debug("GAME - Starting TileMap game object");
+  GameObject *tileMapGameObject = new GameObject();
+  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
+  TileMap *tileMap = new TileMap(*tileMapGameObject, "assets/map/map.txt", tileSet);
+  tileMapGameObject->AddComponent(tileMap);
+  state->AddObject(tileMapGameObject);
+  Log::debug("GAME - TileMap game object loaded");
+
+  Log::debug("GAME - Starting zombie game object");
+  GameObject *zombieGameObject1 = new GameObject();
+  Zombie *zombie1 = new Zombie(*zombieGameObject1);
+  zombieGameObject1->AddComponent(zombie1);
+  state->AddObject(zombieGameObject1);
+  Log::debug("GAME - Zombie game object loaded");
+
+  Log::debug("GAME - Starting zombie game object");
+  GameObject *zombieGameObject2 = new GameObject();
+  Zombie *zombie2 = new Zombie(*zombieGameObject2);
+  zombieGameObject2->AddComponent(zombie2);
+  SpriteRenderer* spriteRenderer2 = zombieGameObject2->GetComponent<SpriteRenderer>();
+  spriteRenderer2->SetPosition(300, 450);
+  state->AddObject(zombieGameObject2);
+  Log::debug("GAME - Zombie game object loaded");
+  
+  Log::debug("GAME - Starting zombie game object");
+  GameObject *zombieGameObject3 = new GameObject();
+  Zombie *zombie3 = new Zombie(*zombieGameObject3);
+  zombieGameObject3->AddComponent(zombie3);
+  SpriteRenderer *spriteRenderer3 = zombieGameObject3->GetComponent<SpriteRenderer>();
+  spriteRenderer3->SetPosition(900, 450);
+  state->AddObject(zombieGameObject3);
+  Log::debug("GAME - Zombie game object loaded");
+}
+
 Game::Game(const std::string &title, int width, int height)
 {
   Log::info("GAME - Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
@@ -89,30 +130,9 @@ Game::Game(const std::string &title, int width, int height)
   window = init_window(title, width, height);
   renderer = init_renderer(window);
 
-  // Temporary State Initializing for now:
   Log::debug("GAME - Starting temporary state.");
   state = new State();
-  
-  Log::debug("GAME - Starting background game object");
-  GameObject* bgGameObject = new GameObject();
-  bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
-  state->AddObject(bgGameObject);
-  Log::debug("GAME - Background game object loaded");
-
-  Log::debug("GAME - Starting TileMap game object");
-  GameObject *tileMapGameObject = new GameObject();
-  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
-  TileMap *tileMap = new TileMap(*tileMapGameObject, "assets/map/map.txt", tileSet);
-  tileMapGameObject->AddComponent(tileMap);
-  state->AddObject(tileMapGameObject);
-  Log::debug("GAME - TileMap game object loaded");
-
-  Log::debug("GAME - Starting zombie game object");
-  GameObject *zombieGameObject = new GameObject();
-  Zombie *zombie = new Zombie(*zombieGameObject);
-  zombieGameObject->AddComponent(zombie);
-  state->AddObject(zombieGameObject);
-  Log::debug("GAME - Zombie game object loaded");
+  createTemporaryStateObjects(state);
 }
 
 Game::~Game()
