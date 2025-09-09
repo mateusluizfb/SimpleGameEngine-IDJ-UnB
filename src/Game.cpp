@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "SpriteRenderer.h"
 #include "GameObject.h"
+#include "Resources.h"
 
 Game* Game::instance = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
@@ -117,6 +118,10 @@ Game::Game(const std::string &title, int width, int height)
 Game::~Game()
 {
   Log::info("GAME - Cleaning up game resources");
+
+  Resources::ClearImages();
+  Resources::ClearSounds();
+  Resources::ClearMusics();
 
   instance = nullptr;
   delete state;

@@ -15,7 +15,7 @@ SpriteRenderer::SpriteRenderer(GameObject &associated, std::string file, int fra
 
 void SpriteRenderer::Open(std::string file)
 {
-  Log::info("SpriteRenderer - Opening sprite file: " + file);
+  Log::info("SPRITE_RENDERER - Opening sprite file: " + file);
 
   sprite->Open(file);
   associated.box.w = sprite->GetWidth();
@@ -38,9 +38,7 @@ void SpriteRenderer::SetPosition(int x, int y) {
   associated.box.y = y;
 }
 
-void SpriteRenderer::Update(float dt) {
-  // No update logic for static sprites
-}
+void SpriteRenderer::Update(float dt) {}
 
 void SpriteRenderer::Render() {
   sprite->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h);
