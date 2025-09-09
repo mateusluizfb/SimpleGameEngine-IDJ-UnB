@@ -5,7 +5,7 @@
 TileSet::TileSet(int tileWidth, int tileHeight, std::string file)
 : tileSet(file), tileWidth(tileWidth), tileHeight(tileHeight)
 {
-  Log::info("TileSet::TileSet - Initing TileSet from: " + file);
+  Log::info("TILE_SET - Initing TileSet from: " + file);
 
   int cols = tileSet.GetWidth() / tileWidth;
   int rows = tileSet.GetHeight() / tileHeight;

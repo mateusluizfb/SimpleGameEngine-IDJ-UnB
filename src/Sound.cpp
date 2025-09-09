@@ -1,4 +1,6 @@
+#include "Log.h"
 #include "Sound.h"
+#include "Resources.h"
 
 Sound::Sound() : chunk(nullptr) {}
 
@@ -28,7 +30,8 @@ void Sound::Open(std::string file) {
     throw std::runtime_error("SOUND - Can't open a sound that is already open.");
   }
 
-  chunk = Mix_LoadWAV(file.c_str());
+  chunk = Resources::GetSound(file.c_str());
+
   if (chunk == nullptr)
   {
     throw std::runtime_error("SOUND - Failed to load sound file: " + file + " - " + Mix_GetError());
@@ -36,8 +39,7 @@ void Sound::Open(std::string file) {
 }
 
 Sound::~Sound() {
-  if (chunk != nullptr)
-  {
-    Mix_FreeChunk(chunk);
-  }
+  Log::info("SOUND - Destroying sound");
+
+  chunk = nullptr;
 }

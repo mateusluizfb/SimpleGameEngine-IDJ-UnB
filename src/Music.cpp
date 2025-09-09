@@ -1,8 +1,8 @@
+#include "Log.h"
 #include "Sprite.h"
-
 #include "Music.h"
 #include "Game.h"
-#include "Log.h"
+#include "Resources.h"
 
 Music::Music()
 {
@@ -17,11 +17,8 @@ Music::Music(const std::string &file)
 
 Music::~Music()
 {
-  if (music == nullptr) return;
-
   Log::info("MUSIC - Destroying music");
 
-  Mix_FreeMusic(music);
   music = nullptr;
 }
 
@@ -58,7 +55,7 @@ void Music::Open(const std::string &file)
     Log::debug("MUSIC - Song already opened, skipping: " + file);
   }
 
-  music = Mix_LoadMUS(file.c_str());
+  music = Resources::GetMusic(file.c_str());
 
   if (music == nullptr)
   {

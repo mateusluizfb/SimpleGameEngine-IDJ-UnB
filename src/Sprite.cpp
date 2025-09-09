@@ -1,6 +1,7 @@
+#include "Log.h"
 #include "Sprite.h"
 #include "Game.h"
-#include "Log.h"
+#include "Resources.h"
 
 Sprite::Sprite() : texture(nullptr) {}
 
@@ -17,7 +18,6 @@ Sprite::~Sprite()
 
   Log::info("SPRITE - Destroying sprite texture");
 
-  SDL_DestroyTexture(texture);
   texture = nullptr;
 }
 
@@ -31,7 +31,7 @@ void Sprite::Open(const std::string &file)
     return;
   };
 
-  texture = IMG_LoadTexture(Game::GetRenderer(), file.c_str());
+  texture = Resources::GetImage(file.c_str());
 
   if (texture == nullptr)
   {
