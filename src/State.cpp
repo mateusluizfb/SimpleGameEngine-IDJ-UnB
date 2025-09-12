@@ -2,6 +2,8 @@
 #include "Log.h"
 #include "TileSet.h"
 #include "TileMap.h"
+#include "InputManager.h"
+#include "SpriteRenderer.h"
 
 State::State() : music("audio/BGM.wav")
 {
@@ -35,11 +37,25 @@ void State::LoadAssets()
 
 void State::Update(float dt)
 {
-  if (SDL_QuitRequested() == SDL_TRUE)
+  InputManager& inputManager = InputManager::GetInstance();
+
+  if (inputManager.QuitRequested())
   {
     Log::warning("STATE - Quit requested via SDL event");
     music.Stop();
     quitRequested = true;
+  }
+
+  if (inputManager.KeyPress(SPACE_KEY))
+  {
+    Log::debug("STATE - Starting zombie game object");
+    GameObject *zombieGameObject1 = new GameObject();
+    Zombie *zombie1 = new Zombie(*zombieGameObject1);
+    zombieGameObject1->AddComponent(zombie1);
+    this->AddObject(zombieGameObject1);
+    SpriteRenderer *spriteRenderer1 = zombieGameObject1->GetComponent<SpriteRenderer>();
+    spriteRenderer1->SetPosition(inputManager.GetMouseX(), inputManager.GetMouseY());
+    Log::debug("STATE - Zombie game object loaded");
   }
 
   for (size_t i = 0; i < objectArray.size(); i++)
@@ -50,6 +66,7 @@ void State::Update(float dt)
   for (size_t i = 0; i < objectArray.size(); i++)
   {
     if (objectArray[i]->IsDead()) {
+      Log::info("STATE - Removing dead game object");
       objectArray.erase(objectArray.begin() + i);
     }
   }

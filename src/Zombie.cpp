@@ -3,11 +3,17 @@
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "Animator.h"
+#include "InputManager.h"
 
-Zombie::Zombie(GameObject &associated) : Component(associated), hitPoints(100), deathSound("audio/Dead.wav") {
+Zombie::Zombie(GameObject &associated)
+  : Component(associated),
+    hitPoints(100),
+    deathSound("audio/Dead.wav"),
+    hitSound("audio/Hit0.wav")
+{
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Enemy.png", 3, 2);
   Animator *animator = new Animator(associated);
-  
+
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
 
@@ -42,7 +48,24 @@ int Zombie::GetHitPoints() {
 }
 
 void Zombie::Update(float dt) {
-  this->Damage(1);
+  InputManager &inputManager = InputManager::GetInstance();
+
+  if (inputManager.MousePress(LEFT_MOUSE_BUTTON))
+  {
+    Log::debug("ZOMBIE - Left mouse button click received");
+
+    Vec2 mousePosition = Vec2(inputManager.GetMouseX(),
+                              inputManager.GetMouseY());
+
+    Rect zombieBox = associated.box;
+
+    if (zombieBox.IsVec2Inside(mousePosition))
+    {
+      Log::debug("ZOMBIE - Zombie clicked!");
+      hitSound.Play(1);
+      this->Damage(10);
+    }
+  }
 }
 
 void Zombie::Render() {
