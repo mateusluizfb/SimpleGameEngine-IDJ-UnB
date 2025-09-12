@@ -24,6 +24,7 @@ public:
   void LoadAssets();
   void Update(float dt);
   void Render();
+  void RequestQuit();
 };
 
 #endif

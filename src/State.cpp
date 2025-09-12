@@ -43,7 +43,7 @@ void State::Update(float dt)
   {
     Log::warning("STATE - Quit requested via SDL event");
     music.Stop();
-    quitRequested = true;
+    this->RequestQuit();
   }
 
   if (inputManager.KeyPress(SPACE_KEY))
@@ -60,7 +60,7 @@ void State::Update(float dt)
 
   for (size_t i = 0; i < objectArray.size(); i++)
   {
-    objectArray[i]->Update(0);
+    objectArray[i]->Update(dt);
   }
 
   for (size_t i = 0; i < objectArray.size(); i++)
@@ -78,4 +78,8 @@ void State::Render()
   {
     objectArray[i]->Render();
   }
+}
+
+void State::RequestQuit() {
+  this->quitRequested = true;
 }
