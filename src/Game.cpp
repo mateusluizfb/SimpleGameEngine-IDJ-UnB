@@ -92,7 +92,7 @@ void createTemporaryStateObjects(State* state) {
   Log::debug("GAME - TileMap game object loaded");
 }
 
-Game::Game(const std::string &title, int width, int height)
+Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(0.0)
 {
   Log::info("GAME - Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
   if (instance != nullptr)
@@ -109,6 +109,17 @@ Game::Game(const std::string &title, int width, int height)
   Log::debug("GAME - Starting temporary state.");
   state = new State();
   createTemporaryStateObjects(state);
+}
+
+void Game::CalculateDeltaTime() {
+  Uint32 currentTicks = SDL_GetTicks();
+
+  this->dt = (currentTicks - frameStart) / 1000.0f;
+  this->frameStart = currentTicks;
+}
+
+float Game::GetDeltaTime() {
+  return this->dt;
 }
 
 Game::~Game()
@@ -160,8 +171,9 @@ void Game::Run()
 
   while (!state.QuitRequested())
   {
+    Game::CalculateDeltaTime();
     inputManager.Update();
-    state.Update(0);
+    state.Update(Game::GetDeltaTime());
     state.Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33); // Force ~30 FPS
