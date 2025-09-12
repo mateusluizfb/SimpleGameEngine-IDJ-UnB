@@ -24,3 +24,7 @@ test-bench:
 	$(CXX) $(CXXFLAGS) ./TestBench.cpp -o test_bench $(LDFLAGS)
 	./test_bench
 	rm -f test_bench
+
+# ex: make test-file file=TestInputManager
+test-file: build-test
+	./$(BIN) --gtest_filter=$(file).*
