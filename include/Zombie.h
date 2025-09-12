@@ -8,6 +8,7 @@ class Zombie : public Component {
 private:
   int hitPoints;
   Sound deathSound;
+  Sound hitSound;
 
 public:
   Zombie(GameObject &associated);

@@ -5,6 +5,7 @@
 #include "SpriteRenderer.h"
 #include "GameObject.h"
 #include "Resources.h"
+#include "InputManager.h"
 
 Game* Game::instance = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
@@ -89,31 +90,6 @@ void createTemporaryStateObjects(State* state) {
   tileMapGameObject->AddComponent(tileMap);
   state->AddObject(tileMapGameObject);
   Log::debug("GAME - TileMap game object loaded");
-
-  Log::debug("GAME - Starting zombie game object");
-  GameObject *zombieGameObject1 = new GameObject();
-  Zombie *zombie1 = new Zombie(*zombieGameObject1);
-  zombieGameObject1->AddComponent(zombie1);
-  state->AddObject(zombieGameObject1);
-  Log::debug("GAME - Zombie game object loaded");
-
-  Log::debug("GAME - Starting zombie game object");
-  GameObject *zombieGameObject2 = new GameObject();
-  Zombie *zombie2 = new Zombie(*zombieGameObject2);
-  zombieGameObject2->AddComponent(zombie2);
-  SpriteRenderer* spriteRenderer2 = zombieGameObject2->GetComponent<SpriteRenderer>();
-  spriteRenderer2->SetPosition(300, 450);
-  state->AddObject(zombieGameObject2);
-  Log::debug("GAME - Zombie game object loaded");
-  
-  Log::debug("GAME - Starting zombie game object");
-  GameObject *zombieGameObject3 = new GameObject();
-  Zombie *zombie3 = new Zombie(*zombieGameObject3);
-  zombieGameObject3->AddComponent(zombie3);
-  SpriteRenderer *spriteRenderer3 = zombieGameObject3->GetComponent<SpriteRenderer>();
-  spriteRenderer3->SetPosition(900, 450);
-  state->AddObject(zombieGameObject3);
-  Log::debug("GAME - Zombie game object loaded");
 }
 
 Game::Game(const std::string &title, int width, int height)
@@ -180,9 +156,11 @@ void Game::Run()
 {
   Log::info("GAME - Starting game loop");
   State& state = GetState();
-  
+  InputManager& inputManager = InputManager::GetInstance();
+
   while (!state.QuitRequested())
   {
+    inputManager.Update();
     state.Update(0);
     state.Render();
     SDL_RenderPresent(renderer);
