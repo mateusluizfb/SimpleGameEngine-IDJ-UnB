@@ -7,6 +7,7 @@
 
 Zombie::Zombie(GameObject &associated)
   : Component(associated),
+    hit(false),
     hitPoints(100),
     deathSound("audio/Dead.wav"),
     hitSound("audio/Hit0.wav")
@@ -19,19 +20,20 @@ Zombie::Zombie(GameObject &associated)
 
   spriteRenderer->SetPosition(600, 450);
 
-  animator->AddAnimation("walk", Animation(0, 3, 10));
+  animator->AddAnimation("walk", Animation(0, 3, 0.5));
   animator->AddAnimation("dead", Animation(5, 5, 0));
+  animator->AddAnimation("hit", Animation(4, 4, 0));
 
   animator->SetAnimation("walk");
 }
 
 void Zombie::Damage(int damage) {
   if (hitPoints == 0) return;
-
+  
+  Animator *animator = associated.GetComponent<Animator>();
   hitPoints -= damage;
 
   if (hitPoints == 0) {
-    Animator *animator = associated.GetComponent<Animator>();
 
     if (animator == nullptr)
     {
@@ -40,6 +42,9 @@ void Zombie::Damage(int damage) {
 
     animator->SetAnimation("dead");
     deathSound.Play(1);
+  } else {
+    hit = true;
+    animator->SetAnimation("hit");
   }
 }
 
@@ -50,6 +55,35 @@ int Zombie::GetHitPoints() {
 void Zombie::Update(float dt) {
   InputManager &inputManager = InputManager::GetInstance();
 
+  Animator *animator = associated.GetComponent<Animator>();
+  Timer *hitTimer = &animator->hitTimer;
+  Timer *deathTimer = &animator->deathTimer;
+
+  // Hit Update
+  if (hit && hitPoints != 0 && hitTimer->Get() >= 0.5)
+  {
+    animator->SetAnimation("walk");
+    hit = false;
+    hitTimer->Restart();
+  }
+  
+  if (hit)
+  {
+    hitTimer->Update(dt);
+  }
+
+  // Death Update
+  if (hitPoints == 0) {
+    deathTimer->Update(dt);
+  }
+
+  if (deathTimer->Get() >= 5)
+  {
+    Log::debug("ZOMBIE - Deleting game object");
+    this->associated.RequestDelete();
+  }
+
+  // Buttons Update
   if (inputManager.MousePress(LEFT_MOUSE_BUTTON))
   {
     Log::debug("ZOMBIE - Left mouse button click received");

@@ -1,15 +1,25 @@
+#include "Log.h"
 #include "Animator.h"
 #include "Animation.h"
 #include "GameObject.h"
 #include "SpriteRenderer.h"
-#include "Log.h"
+#include "Timer.h"
 
-Animator::Animator(GameObject &associated) : Component(associated), frameStart(0), frameEnd(0), frameTime(0), currentFrame(0), timeElapsed(0) {}
+Animator::Animator(GameObject &associated)
+    : Component(associated),
+      frameStart(0),
+      frameEnd(0),
+      frameTime(0),
+      currentFrame(0),
+      timeElapsed(0),
+      hitTimer(Timer()),
+      deathTimer(Timer())
+      {}
 
 void Animator::Update(float dt) {
   if(frameTime == 0) return;
 
-  timeElapsed++;
+  timeElapsed += dt;
 
   if (timeElapsed < frameTime) return; // Frame didn't change yet
 

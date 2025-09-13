@@ -4,7 +4,7 @@
 Timer::Timer() : time(0) {}
 
 void Timer::Update(float dt) {
-  this->time = this->time + dt;
+  this->time += dt;
 }
 
 void Timer::Restart() {

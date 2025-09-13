@@ -14,16 +14,12 @@ void Sound::Play(int times) {
     throw std::runtime_error("SOUND - Can't play a sound that is not open.");
   }
 
-  Log::debug("SOUND - Starting to play sound");
-
   channel = Mix_PlayChannel(-1, chunk, 0);
 
   if (channel == -1)
   {
     throw std::runtime_error("SOUND - Failed to play sound: " + std::string(Mix_GetError()));
   }
-
-  Log::debug("SOUND - Sound is playing on channel " + std::to_string(channel));
 }
 
 void Sound::Stop() {
