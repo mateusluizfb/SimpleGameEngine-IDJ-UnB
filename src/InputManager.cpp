@@ -40,28 +40,21 @@ void InputManager::Update()
   switch (event->type)
   {
     case SDL_QUIT:
-      Log::info("INPUT_MANAGER - Quit requested");
       quitRequested = true;
       break;
     case SDL_MOUSEBUTTONDOWN:
-      Log::debug("INPUT_MANAGER - Mouse button " + std::to_string(event->button.button) + " down");
       mouseState[event->button.button] = true;
       mouseUpdate[event->button.button] = updateCounter;
       break;
     case SDL_MOUSEBUTTONUP:
-      Log::debug("INPUT_MANAGER - Mouse button " + std::to_string(event->button.button) + " up");
       mouseState[event->button.button] = false;
       mouseUpdate[event->button.button] = updateCounter;
       break;
     case SDL_KEYDOWN:
-      Log::debug("INPUT_MANAGER - Key " + std::to_string(event->key.keysym.sym) + " down");
-
       keyState[event->key.keysym.sym] = true;
       keyUpdate[event->key.keysym.sym] = updateCounter;
       break;
     case SDL_KEYUP:
-      Log::debug("INPUT_MANAGER - Key " + std::to_string(event->key.keysym.sym) + " up");
-
       keyState[event->key.keysym.sym] = false;
       keyUpdate[event->key.keysym.sym] = updateCounter;
       break;
@@ -69,7 +62,6 @@ void InputManager::Update()
       break;
   }
 
-  // Note Reminder: What happens if the updateCounter reaches the max int value?
   if (updateCounter < 0) {
     throw std::runtime_error("InputManager updateCounter overflow");
   }

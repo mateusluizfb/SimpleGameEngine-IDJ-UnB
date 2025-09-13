@@ -6,6 +6,7 @@
 
 class Zombie : public Component {
 private:
+  bool hit;
   int hitPoints;
   Sound deathSound;
   Sound hitSound;

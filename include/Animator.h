@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "Animation.h"
 #include "GameObject.h"
+#include "Timer.h"
 
 class Animator : public Component {
 private:
@@ -16,6 +17,10 @@ private:
   float timeElapsed;
 
 public:
+  // Temporary 
+  Timer hitTimer;
+  Timer deathTimer;
+
   Animator(GameObject &associated);
 
   void SetAnimation(std::string name);
