@@ -4,6 +4,7 @@
 #include "SpriteRenderer.h"
 #include "Animator.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 Zombie::Zombie(GameObject &associated)
   : Component(associated),
@@ -18,7 +19,7 @@ Zombie::Zombie(GameObject &associated)
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
 
-  spriteRenderer->SetPosition(600, 450);
+  // spriteRenderer->SetPosition(600, 450);
 
   animator->AddAnimation("walk", Animation(0, 3, 0.5));
   animator->AddAnimation("dead", Animation(5, 5, 0));
@@ -88,8 +89,7 @@ void Zombie::Update(float dt) {
   {
     Log::debug("ZOMBIE - Left mouse button click received");
 
-    Vec2 mousePosition = Vec2(inputManager.GetMouseX(),
-                              inputManager.GetMouseY());
+    Vec2 mousePosition = Vec2(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
 
     Rect zombieBox = associated.box;
 

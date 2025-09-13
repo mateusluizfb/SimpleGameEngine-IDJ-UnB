@@ -4,10 +4,14 @@
 #include "TileMap.h"
 #include "InputManager.h"
 #include "SpriteRenderer.h"
+#include "Camera.h"
 
 State::State() : music("audio/BGM.wav")
 {
   Log::info("STATE - Initializing state");
+
+  Camera::GetInstance().SetPosition(600, 450);
+  Camera::GetInstance().SetSpeed(100, 100);
 
   quitRequested = false;
   music.Play();
@@ -54,7 +58,7 @@ void State::Update(float dt)
     zombieGameObject1->AddComponent(zombie1);
     this->AddObject(zombieGameObject1);
     SpriteRenderer *spriteRenderer1 = zombieGameObject1->GetComponent<SpriteRenderer>();
-    spriteRenderer1->SetPosition(inputManager.GetMouseX(), inputManager.GetMouseY());
+    spriteRenderer1->SetPosition(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
     Log::debug("STATE - Zombie game object loaded");
   }
 
@@ -70,6 +74,8 @@ void State::Update(float dt)
       objectArray.erase(objectArray.begin() + i);
     }
   }
+
+  Camera::GetInstance().Update(dt);
 }
 
 void State::Render()

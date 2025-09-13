@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "Game.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 TEST(TestInputManager, Instance)
 {
@@ -21,4 +22,35 @@ TEST(TestInputManager, Update)
   EXPECT_NO_THROW(im.Update());
 
   delete game;
+}
+
+TEST(TestInputManager, KeyPressRelease)
+{
+  InputManager& im = InputManager::GetInstance();
+
+  int testKey = SDLK_LEFT;
+
+  im.Update();
+
+  EXPECT_FALSE(im.KeyPress(testKey));
+  EXPECT_FALSE(im.KeyRelease(testKey));
+  EXPECT_FALSE(im.IsKeyDown(testKey));
+
+  EXPECT_NO_THROW(im.KeyPress(testKey));
+  EXPECT_NO_THROW(im.KeyRelease(testKey));
+  EXPECT_NO_THROW(im.IsKeyDown(testKey));
+}
+
+TEST(TestInputManager, KeyGetMouseWorld)
+{
+  Camera &camera = Camera::GetInstance();
+  InputManager &im = InputManager::GetInstance();
+
+  camera.SetPosition(0, 0);
+
+  int mouseXWorld = im.GetMouseXWorld();
+  int mouseYWorld = im.GetMouseYWorld();
+
+  EXPECT_EQ(mouseXWorld, im.GetMouseX());
+  EXPECT_EQ(mouseYWorld, im.GetMouseY());
 }
