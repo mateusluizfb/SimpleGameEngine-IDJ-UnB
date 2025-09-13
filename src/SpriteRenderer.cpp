@@ -38,6 +38,10 @@ void SpriteRenderer::SetPosition(int x, int y) {
   associated.box.y = y;
 }
 
+void SpriteRenderer::SetCameraFollower(bool cameraFollower) {
+  sprite->cameraFollower = cameraFollower;
+}
+
 void SpriteRenderer::Update(float dt) {}
 
 void SpriteRenderer::Render() {

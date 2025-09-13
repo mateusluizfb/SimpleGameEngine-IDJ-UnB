@@ -11,10 +11,10 @@ State::State() : music("audio/BGM.wav")
   Log::info("STATE - Initializing state");
 
   Camera::GetInstance().SetPosition(600, 450);
-  Camera::GetInstance().SetSpeed(100, 100);
+  Camera::GetInstance().SetSpeed(200, 200);
 
   quitRequested = false;
-  music.Play();
+  music.Play();  
 }
 
 State::~State()

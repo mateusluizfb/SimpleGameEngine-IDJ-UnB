@@ -15,6 +15,8 @@ private:
   int frameCountW, frameCountH;
 
 public:
+  bool cameraFollower;
+
   Sprite();
   Sprite(const std::string &file, int frameCountW = 1, int frameCountH = 1);
   ~Sprite();

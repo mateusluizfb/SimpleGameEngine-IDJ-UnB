@@ -80,6 +80,8 @@ void createTemporaryStateObjects(State* state) {
   Log::debug("GAME - Starting background game object");
   GameObject *bgGameObject = new GameObject();
   bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
+  SpriteRenderer *bgSprite = bgGameObject->GetComponent<SpriteRenderer>();
+  bgSprite->SetCameraFollower(true);
   state->AddObject(bgGameObject);
   Log::debug("GAME - Background game object loaded");
 
