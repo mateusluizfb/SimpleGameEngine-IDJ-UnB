@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "Game.h"
 #include "Resources.h"
+#include "Camera.h"
 
 Sprite::Sprite() : texture(nullptr) {}
 
@@ -54,7 +55,13 @@ void Sprite::SetClip(int x, int y, int w, int h)
 
 void Sprite::Render(int x, int y, int w, int h)
 {
-  SDL_Rect dsRect = {x, y, clipRect.w, clipRect.h};
+  Camera &camera = Camera::GetInstance();
+  SDL_Rect dsRect = {
+    x - (int) camera.pos.x,
+    y - (int) camera.pos.y,
+    clipRect.w,
+    clipRect.h
+  };
 
   int result = SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
 

@@ -3,6 +3,7 @@
 
 #include "Log.h"
 #include "InputManager.h"
+#include "Camera.h"
 
 InputManager::InputManager() : quitRequested(false), updateCounter(0), mouseX(0), mouseY(0)
 {
@@ -78,7 +79,7 @@ bool InputManager::KeyRelease(int key)
 }
 
 bool InputManager::IsKeyDown(int key)
-{
+{  
   return keyState[key];
 }
 
@@ -104,6 +105,16 @@ int InputManager::GetMouseX()
 int InputManager::GetMouseY()
 {
   return mouseY;
+}
+
+int InputManager::GetMouseXWorld()
+{
+  return mouseX + Camera::GetInstance().GetPositionX();
+}
+
+int InputManager::GetMouseYWorld()
+{
+  return mouseY + Camera::GetInstance().GetPositionY();
 }
 
 bool InputManager::QuitRequested()

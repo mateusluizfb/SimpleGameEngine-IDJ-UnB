@@ -46,6 +46,9 @@ public:
   int GetMouseX();
   int GetMouseY();
 
+  int GetMouseXWorld();
+  int GetMouseYWorld();
+
   bool QuitRequested();
 };
 
