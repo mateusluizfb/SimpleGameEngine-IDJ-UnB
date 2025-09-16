@@ -14,7 +14,24 @@ State::State() : music("audio/BGM.wav")
   Camera::GetInstance().SetSpeed(200, 200);
 
   quitRequested = false;
-  // music.Play();  
+  music.Play();
+
+  // Init state objects:
+  Log::debug("STATE - Starting background game object");
+  GameObject *bgGameObject = new GameObject();
+  bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
+  SpriteRenderer *bgSprite = bgGameObject->GetComponent<SpriteRenderer>();
+  bgSprite->SetCameraFollower(true);
+  this->AddObject(bgGameObject);
+  Log::debug("STATE - Background game object loaded");
+
+  Log::debug("STATE - Starting TileMap game object");
+  GameObject *tileMapGameObject = new GameObject();
+  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
+  TileMap *tileMap = new TileMap(*tileMapGameObject, "assets/map/map.txt", tileSet);
+  tileMapGameObject->AddComponent(tileMap);
+  this->AddObject(tileMapGameObject);
+  Log::debug("STATE - TileMap game object loaded");
 }
 
 State::~State()
