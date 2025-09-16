@@ -1,3 +1,5 @@
+
+#include <cmath>
 #include <gtest/gtest.h>
 #include "Vec2.h"
 

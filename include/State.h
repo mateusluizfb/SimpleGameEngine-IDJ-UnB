@@ -5,6 +5,8 @@
 #include <GameObject.h>
 #include <Music.h>
 #include <TileMap.h>
+
+#include <memory>
 #include <Zombie.h>
 
 class State

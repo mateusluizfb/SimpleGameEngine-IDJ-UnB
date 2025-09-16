@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <Component.h>
+
+#include <memory>
 #include <TileSet.h>
 
 class TileMap : public Component {
