@@ -11,6 +11,7 @@ private:
 public:
   Vec2 pos;
   Vec2 speed;
+  float speedMultiplier = 1.0f;
 
   static Camera& GetInstance();
 
@@ -20,6 +21,8 @@ public:
 
   void SetPosition(float x, float y);
   void SetSpeed(float x, float y);
+  void SetSpeedMultiplier(float speedMultiplier);
+  void ResetSpeedMultiplier();
   float GetPositionX();
   float GetPositionY();
 };

@@ -57,8 +57,8 @@ void Sprite::Render(int x, int y, int w, int h)
   Camera &camera = Camera::GetInstance();
 
   SDL_Rect dsRect = {
-      x - (int)camera.pos.x,
-      y - (int)camera.pos.y,
+      x - (int) camera.GetPositionX(),
+      y - (int) camera.GetPositionY(),
       clipRect.w,
       clipRect.h
   };
