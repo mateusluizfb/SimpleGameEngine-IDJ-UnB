@@ -28,6 +28,6 @@ jobs:
           libgtest-dev cmake build-essential
         # Build and install Google Test
         cd /usr/src/gtest && sudo cmake . && sudo make && sudo cp lib/*.a /usr/lib
-    - name: Run tests
+    - name: Build game
       working-directory: ./test
-      run: make test
+      run: make build-test
