@@ -76,24 +76,6 @@ void init_sdl_libs()
   Log::info("GAME - SDL and its dependencies initialized successfully.");
 }
 
-void createTemporaryStateObjects(State* state) {
-  Log::debug("GAME - Starting background game object");
-  GameObject *bgGameObject = new GameObject();
-  bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
-  SpriteRenderer *bgSprite = bgGameObject->GetComponent<SpriteRenderer>();
-  bgSprite->SetCameraFollower(true);
-  state->AddObject(bgGameObject);
-  Log::debug("GAME - Background game object loaded");
-
-  Log::debug("GAME - Starting TileMap game object");
-  GameObject *tileMapGameObject = new GameObject();
-  TileSet *tileSet = new TileSet(64, 64, "assets/img/Tileset.png");
-  TileMap *tileMap = new TileMap(*tileMapGameObject, "assets/map/map.txt", tileSet);
-  tileMapGameObject->AddComponent(tileMap);
-  state->AddObject(tileMapGameObject);
-  Log::debug("GAME - TileMap game object loaded");
-}
-
 Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(0.0)
 {
   Log::info("GAME - Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
@@ -110,7 +92,6 @@ Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(
 
   Log::debug("GAME - Starting temporary state.");
   state = new State();
-  createTemporaryStateObjects(state);
 }
 
 void Game::CalculateDeltaTime() {
