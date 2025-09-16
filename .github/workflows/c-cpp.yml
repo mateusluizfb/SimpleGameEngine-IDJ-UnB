@@ -12,11 +12,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+          libgtest-dev cmake build-essential
+        # Build and install Google Test
+        cd /usr/src/gtest && sudo cmake . && sudo make && sudo cp lib/*.a /usr/lib
+    - name: Run tests
+      working-directory: ./test
+      run: make test
