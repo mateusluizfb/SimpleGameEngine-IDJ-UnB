@@ -1,6 +1,12 @@
 CXX = g++
-CXXFLAGS = -g -Wall -std=c++17 -I/opt/homebrew/include/SDL2 -I../include
-LDFLAGS = -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lgtest -lgtest_main -pthread
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CXXFLAGS = -g -Wall -std=c++17 -I/usr/include/SDL2 -I../include
+	LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lgtest -lgtest_main -pthread
+else
+	CXXFLAGS = -g -Wall -std=c++17 -I/opt/homebrew/include/SDL2 -I../include
+	LDFLAGS = -L/opt/homebrew/lib -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lgtest -lgtest_main -pthread
+endif
 
 main ?= $(wildcard ../src/*.cpp)
 test ?= $(wildcard ../test/*.cpp)
