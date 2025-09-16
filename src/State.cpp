@@ -4,6 +4,8 @@
 #include "TileMap.h"
 #include "InputManager.h"
 #include "SpriteRenderer.h"
+
+#include <memory>
 #include "Camera.h"
 
 State::State() : music("audio/BGM.wav")
