@@ -25,13 +25,21 @@ void Camera::SetSpeed(float x, float y) {
   speed.y = y;
 }
 
+void Camera::SetSpeedMultiplier(float speedMultiplier) {
+  this->speedMultiplier = speedMultiplier;
+}
+
+void Camera::ResetSpeedMultiplier() {
+  speedMultiplier = 1.0f;
+}
+
 float Camera::GetPositionX() {
-  return pos.x;
+  return pos.x * speedMultiplier;
 }
 
 float Camera::GetPositionY()
 {
-  return pos.y;
+  return pos.y * speedMultiplier;
 }
 
 void Camera::Update(float dt) {

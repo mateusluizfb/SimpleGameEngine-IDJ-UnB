@@ -14,7 +14,7 @@ State::State() : music("audio/BGM.wav")
   Camera::GetInstance().SetSpeed(200, 200);
 
   quitRequested = false;
-  music.Play();  
+  // music.Play();  
 }
 
 State::~State()

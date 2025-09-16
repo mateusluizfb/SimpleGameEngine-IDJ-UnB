@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "TileMap.h"
 #include "Log.h"
+#include "Camera.h"
 #include <fstream>
 #include <sstream>
 
@@ -106,10 +107,14 @@ void TileMap::RenderLayer() {
     return;
   }
 
-  // Reminder Note: The layer 0 will be draw below the next layer,
-  // because because we will rerender the x y coordinates without
-  // taking into account the z index.
+  float parallaxFactor = 0.0;
+  float parallaxIncrement = 1.0f / mapDepth;
+
   for (int z = 0; z < mapDepth; ++z) {
+    parallaxFactor += parallaxIncrement;
+
+    Camera::GetInstance().SetSpeedMultiplier(parallaxFactor);
+
     for (int y = 0; y < mapHeight; ++y)
     {
       for (int x = 0; x < mapWidth; ++x)
@@ -121,6 +126,8 @@ void TileMap::RenderLayer() {
                             associated.box.y + y * tileSet->GetTileHeight());
       }
     }
+
+    Camera::GetInstance().ResetSpeedMultiplier();
   }
 }
 
