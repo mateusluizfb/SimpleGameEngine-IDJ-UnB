@@ -1,7 +1,8 @@
+
 #include "Log.h"
 #include "GameObject.h"
-
 #include <iostream>
+#include <algorithm>
 
 GameObject::GameObject() : isDead(false) {}
 
