@@ -11,6 +11,8 @@ SpriteRenderer::SpriteRenderer(GameObject &associated, std::string file, int fra
   this->Open(file);
   sprite->SetFrameCount(frameCountW, frameCountH);
   sprite->SetFrame(0);
+  associated.box.w = sprite->GetFrameW();
+  associated.box.h = sprite->GetFrameH();
 }
 
 void SpriteRenderer::Open(std::string file)
@@ -18,8 +20,6 @@ void SpriteRenderer::Open(std::string file)
   Log::info("SPRITE_RENDERER - Opening sprite file: " + file);
 
   sprite->Open(file);
-  associated.box.w = sprite->GetWidth();
-  associated.box.h = sprite->GetHeight();
 }
 
 void SpriteRenderer::SetFrameCount(int frameCountW, int frameCountH)
@@ -33,7 +33,7 @@ void SpriteRenderer::SetFrame(int frame)
 }
 
 void SpriteRenderer::SetPosition(int x, int y) {
-  sprite->SetClip(x, y, sprite->GetWidth(), sprite->GetHeight());
+  sprite->SetPosition(x, y);
   associated.box.x = x;
   associated.box.y = y;
 }
