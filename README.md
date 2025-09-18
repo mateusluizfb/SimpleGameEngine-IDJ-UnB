@@ -6,7 +6,7 @@
 
 ### Known Bugs:
 
-1. `src/Zombie.cpp - row 88` - Clicking slightly outside of the zombie's hit box, still hits it.
+- N/A
 
 ### Possible Improvements:
 

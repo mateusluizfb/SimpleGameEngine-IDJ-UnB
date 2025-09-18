@@ -90,7 +90,6 @@ void Zombie::Update(float dt) {
     Log::debug("ZOMBIE - Left mouse button click received");
 
     Vec2 mousePosition = Vec2(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
-
     Rect zombieBox = associated.box;
 
     if (zombieBox.IsVec2Inside(mousePosition))

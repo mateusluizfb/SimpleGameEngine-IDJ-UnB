@@ -52,6 +52,12 @@ void Sprite::SetClip(int x, int y, int w, int h)
   clipRect = {x, y, w, h};
 }
 
+void Sprite::SetPosition(int x, int y)
+{
+  clipRect.x = x;
+  clipRect.y = y;
+}
+
 void Sprite::Render(int x, int y, int w, int h)
 {
   Camera &camera = Camera::GetInstance();
@@ -117,4 +123,12 @@ void Sprite::SetFrameCount(int frameCountW, int frameCountH) {
 
 int Sprite::GetFrameCount() {
   return this->frameCountW * this->frameCountH;
+}
+
+int Sprite::GetFrameW() {
+  return this->width / this->frameCountW;
+}
+
+int Sprite::GetFrameH() {
+  return this->height / this->frameCountH;
 }

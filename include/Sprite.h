@@ -23,6 +23,7 @@ public:
 
   void Open(const std::string &file);
   void SetClip(int x, int y, int w, int h);
+  void SetPosition(int x, int y);
   void Render(int x, int y, int w, int h);
   int GetWidth();
   int GetHeight();
@@ -30,6 +31,8 @@ public:
   void SetFrame(int frame);
   void SetFrameCount(int frameCountW, int frameCountH);
   int GetFrameCount();
+  int GetFrameW();
+  int GetFrameH();
 };
 
 #endif
