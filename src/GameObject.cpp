@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-GameObject::GameObject() : isDead(false) {}
+GameObject::GameObject() : started(false), isDead(false) {}
 
 /*
 Notes:
@@ -18,6 +18,18 @@ GameObject::~GameObject() {
   }
 
   components.clear();
+}
+
+void GameObject::Start()
+{
+  Log::info("GAME_OBJECT - Starting game object");
+  
+  for (size_t i = 0; i < components.size(); i++)
+  {
+    components[i]->Start();
+  }
+
+  started = true;
 }
 
 void GameObject::Update(float dt)
@@ -53,6 +65,10 @@ void GameObject::AddComponent(Component* component)
   Log::info("GAME_OBJECT - Adding component to game object");
 
   components.push_back(component);
+
+  if (started) {
+    component->Start();
+  }
 }
 
 void GameObject::RemoveComponent(Component *component)

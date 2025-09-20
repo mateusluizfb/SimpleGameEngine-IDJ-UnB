@@ -56,3 +56,12 @@ TEST(GameObjectTest, AddObjectAndComponent)
   delete state;
   delete game;
 }
+
+TEST(GameObjectTest, Start) {
+  GameObject *obj = new GameObject();
+  MockComponent *comp = new MockComponent(*obj);
+
+  obj->AddComponent(comp);
+
+  EXPECT_NO_THROW(obj->Start());
+}

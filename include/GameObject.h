@@ -7,6 +7,7 @@
 
 class GameObject {
 private:
+  bool started;
   bool isDead;
   std::vector<Component *> components;
 
@@ -16,6 +17,7 @@ public:
   GameObject();
   ~GameObject();
 
+  void Start();
   void Update(float dt);
   void Render();
   bool IsDead();
