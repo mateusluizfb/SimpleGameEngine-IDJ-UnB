@@ -90,7 +90,7 @@ Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(
   window = init_window(title, width, height);
   renderer = init_renderer(window);
 
-  Log::debug("GAME - Starting temporary state.");
+  Log::warning("GAME - Starting temporary state.");
   state = new State();
 }
 
@@ -128,8 +128,9 @@ Game::~Game()
 
 Game& Game::GetInstance(const std::string &title, int width, int height)
 {
-  Log::info("Creating game instance");
   if (instance == nullptr) {
+    Log::info("GAME - Creating game instance");
+
     instance = new Game(title, width, height);
   }
 
