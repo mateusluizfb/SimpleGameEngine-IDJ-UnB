@@ -13,7 +13,8 @@ Animator::Animator(GameObject &associated)
       currentFrame(0),
       timeElapsed(0),
       hitTimer(Timer()),
-      deathTimer(Timer())
+      deathTimer(Timer()),
+      current("")
       {}
 
 void Animator::Update(float dt) {
@@ -49,6 +50,8 @@ void Animator::Render() {
 }
 
 void Animator::SetAnimation(std::string name) {
+  if (name == current) return;
+  
   auto it = animations.find(name);
   
   if (it == animations.end()) {
@@ -74,6 +77,8 @@ void Animator::SetAnimation(std::string name) {
   {
     throw std::runtime_error("Animator::Update(): No SpriteRenderer component found in associated GameObject.");
   }
+
+  current = name;
 }
 
 void Animator::AddAnimation(std::string name, Animation anim) {
@@ -81,4 +86,8 @@ void Animator::AddAnimation(std::string name, Animation anim) {
   {
     animations.emplace(name, anim);
   }
+}
+
+std::string Animator::GetCurrent() {
+  return current;
 }
