@@ -18,7 +18,6 @@ public:
   void SetPosition(int x, int y);
   void SetCameraFollower(bool cameraFollower);
 
-  // Notes: override flags that these methods override virtual methods in the base class
   void Update(float dt) override;
   void Render() override;
 };

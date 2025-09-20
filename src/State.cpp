@@ -8,17 +8,72 @@
 #include <memory>
 #include "Camera.h"
 
-State::State() : music("audio/BGM.wav")
+State::State() : started(false), music("audio/BGM.wav"), quitRequested(false)
 {
   Log::info("STATE - Initializing state");
 
   Camera::GetInstance().SetPosition(600, 450);
   Camera::GetInstance().SetSpeed(200, 200);
 
-  quitRequested = false;
-  music.Play();
+  // music.Play();
+}
 
-  // Init state objects:
+State::~State()
+{
+  Log::info("STATE - Destroying state");
+
+  objectArray.clear();
+}
+
+void State::Start()
+{
+  Log::info("STATE - Starting state");
+
+  LoadAssets();
+
+  for (size_t i = 0; i < objectArray.size(); i++) {
+    objectArray[i]->Start();
+  }
+  
+  started = true;
+}
+
+std::weak_ptr<GameObject> State::AddObject(GameObject *go)
+{
+  std::shared_ptr<GameObject> go_shared_ptr = std::shared_ptr<GameObject>(go);
+  objectArray.push_back(go_shared_ptr);
+
+  if (started) {
+    go->Start();
+  }
+
+  return go_shared_ptr;
+}
+
+std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    if (objectArray[i].get() == go) {
+      std::weak_ptr<GameObject> goWeakPtr = objectArray[i];
+
+      return goWeakPtr;
+    }
+  }
+
+  return std::weak_ptr<GameObject>();
+}
+
+std::vector<std::shared_ptr<GameObject>> State::GetObjectArray() {
+  return objectArray;
+}
+
+bool State::QuitRequested()
+{
+  return quitRequested;
+}
+
+void State::LoadAssets()
+{
   Log::debug("STATE - Starting background game object");
   GameObject *bgGameObject = new GameObject();
   bgGameObject->AddComponent(new SpriteRenderer(*bgGameObject, "assets/img/Background.png"));
@@ -34,28 +89,6 @@ State::State() : music("audio/BGM.wav")
   tileMapGameObject->AddComponent(tileMap);
   this->AddObject(tileMapGameObject);
   Log::debug("STATE - TileMap game object loaded");
-}
-
-State::~State()
-{
-  Log::info("STATE - Destroying state");
-
-  objectArray.clear();
-}
-
-void State::AddObject(GameObject *go)
-{
-  objectArray.emplace_back(std::unique_ptr<GameObject>(go));
-}
-
-bool State::QuitRequested()
-{
-  return quitRequested;
-}
-
-void State::LoadAssets()
-{
-  // Load game assets here
 }
 
 void State::Update(float dt)
