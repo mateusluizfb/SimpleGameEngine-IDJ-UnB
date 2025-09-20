@@ -17,14 +17,15 @@ private:
   float timeElapsed;
 
 public:
-  // Temporary 
   Timer hitTimer;
   Timer deathTimer;
+  std::string current;
 
   Animator(GameObject &associated);
 
   void SetAnimation(std::string name);
   void AddAnimation(std::string name, Animation anim);
+  std::string GetCurrent();
 
   void Update(float dt);
   void Render();
