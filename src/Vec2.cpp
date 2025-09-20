@@ -31,7 +31,7 @@ float Vec2::Magnitude() const
   return std::sqrt(this->x * this->x + this->y * this->y);
 }
 
-// Reminder note: Normalized vector is when the norm is 1
+// Reminder note: Normalized vector is when the norm is 1 (aka length of 1)
 Vec2 Vec2::Normalize() const
 {
   float norm = Magnitude();
