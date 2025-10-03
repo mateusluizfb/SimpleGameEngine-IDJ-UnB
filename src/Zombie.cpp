@@ -19,8 +19,6 @@ Zombie::Zombie(GameObject &associated)
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
 
-  // spriteRenderer->SetPosition(600, 450);
-
   animator->AddAnimation("walk", Animation(0, 3, 0.5));
   animator->AddAnimation("dead", Animation(5, 5, 0));
   animator->AddAnimation("hit", Animation(4, 4, 0));
