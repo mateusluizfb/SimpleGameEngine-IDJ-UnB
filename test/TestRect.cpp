@@ -60,3 +60,21 @@ TEST(RectTest, IsVec2Inside)
   delete vec1;
   delete rect;
 }
+
+TEST(RectTest, SetCenter)
+{
+  Rect rect(1, 2, 3, 4);
+  Vec2 newCenter(10, 20);
+
+  rect.SetCenter(newCenter);
+
+  EXPECT_EQ(rect.x, 10);
+  EXPECT_EQ(rect.y, 20);
+  EXPECT_EQ(rect.w, 3);
+  EXPECT_EQ(rect.h, 4);
+
+  Vec2 center = rect.GetCenter();
+  
+  EXPECT_EQ(center.x, 10 + 3 / 2.0f);
+  EXPECT_EQ(center.y, 20 + 4 / 2.0f);
+}
