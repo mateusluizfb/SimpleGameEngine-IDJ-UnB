@@ -14,7 +14,7 @@ SDL_Texture* Resources::GetImage(const std::string &file)
 
   if (it != imageTable.end()) return it->second;
 
-  Log::info("RESOURCES - Image not found, loading image: " + file);
+  Log::warning("RESOURCES - Image not found, loading image: " + file);
 
   SDL_Texture *texture = IMG_LoadTexture(Game::GetRenderer(), file.c_str());
 

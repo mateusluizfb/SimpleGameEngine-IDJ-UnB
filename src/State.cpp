@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "InputManager.h"
 #include "SpriteRenderer.h"
+#include "Character.h"
 
 #include <memory>
 #include "Camera.h"
@@ -55,7 +56,7 @@ std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
   {
     if (objectArray[i].get() == go) {
       std::weak_ptr<GameObject> goWeakPtr = objectArray[i];
-
+      
       return goWeakPtr;
     }
   }
@@ -89,6 +90,15 @@ void State::LoadAssets()
   tileMapGameObject->AddComponent(tileMap);
   this->AddObject(tileMapGameObject);
   Log::debug("STATE - TileMap game object loaded");
+
+  Log::debug("STATE - Starting Character game object");
+  GameObject *characterGameObject = new GameObject();
+  Character *character = new Character(*characterGameObject, "assets/img/Player.png");
+  characterGameObject->AddComponent(character);
+  this->AddObject(characterGameObject);
+  SpriteRenderer *spriteRenderer1 = characterGameObject->GetComponent<SpriteRenderer>();
+  spriteRenderer1->SetPosition(1253, 901);
+  Log::debug("STATE - Character game object loaded");
 }
 
 void State::Update(float dt)
@@ -111,7 +121,7 @@ void State::Update(float dt)
     this->AddObject(zombieGameObject1);
     SpriteRenderer *spriteRenderer1 = zombieGameObject1->GetComponent<SpriteRenderer>();
     spriteRenderer1->SetPosition(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
-    Log::debug("STATE - Zombie game object loaded");
+    Log::debug("STATE - Zombie game object loaded at: " + std::to_string(inputManager.GetMouseXWorld()) + "x" + std::to_string(inputManager.GetMouseYWorld()));
   }
 
   for (size_t i = 0; i < objectArray.size(); i++)

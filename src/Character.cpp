@@ -18,14 +18,14 @@ Character::Character(GameObject &associated, std::string sprite)
     hp(100),
     deathTimer(Timer())
 {
-  SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, sprite, 3, 2);
+  SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, sprite, 3, 4);
   Animator *animator = new Animator(associated);
 
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
 
-  animator->AddAnimation("idle", Animation(6, 9, 0.5));
   animator->AddAnimation("walking", Animation(0, 5, 0));
+  animator->AddAnimation("idle", Animation(6, 9, 0.5));
   animator->AddAnimation("dead", Animation(10, 11, 0.5));
 
   animator->SetAnimation("idle");
@@ -44,12 +44,10 @@ void Character::Start() {
   State& currentState= game.GetState();
   
   GameObject *gunGO = new GameObject();
+  gun = currentState.AddObject(gunGO);
 
   Gun* gunComponent = new Gun(*gunGO, currentState.GetObjectPtr(&this->associated));
   gunGO->AddComponent(gunComponent);
-
-  std::weak_ptr<GameObject> gunPtr = currentState.AddObject(gunGO);
-  gun = gunPtr;
 }
 
 void Character::Update(float dt) {
@@ -102,6 +100,7 @@ void Character::Update(float dt) {
         }
 
         default: {
+          Log::debug("CHARACTER - Character idle");
           speed = Vec2(0, 0);
           animator->SetAnimation("idle");
           break;
