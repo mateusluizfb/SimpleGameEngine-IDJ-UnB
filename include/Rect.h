@@ -17,6 +17,7 @@ public:
   Vec2 GetCenter() const;
   float Distance(const Rect &other) const;
   bool IsVec2Inside(const Vec2 &vec) const;
+  void SetCenter(Vec2 newCenter);
 };
 
 #endif
