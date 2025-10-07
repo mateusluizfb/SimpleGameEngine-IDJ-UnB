@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "InputManager.h"
+#include "Game.h"
 #include "Log.h"
 
 Camera& Camera::GetInstance() {
@@ -43,7 +44,14 @@ float Camera::GetPositionY()
 }
 
 void Camera::Update(float dt) {
-  // TODO: Support focus following
+  if (focus != nullptr) {
+    Vec2 focusCenter = focus->box.GetCenter();
+    
+    pos.x = focusCenter.x - (Game::GetInstance().GetWindowWidth() / 2);
+    pos.y = focusCenter.y - (Game::GetInstance().GetWindowHeight() / 2);
+    
+    return;
+  }
 
   if (InputManager::GetInstance().IsKeyDown(LEFT_ARROW_KEY))
     pos.x -= speed.x * dt;

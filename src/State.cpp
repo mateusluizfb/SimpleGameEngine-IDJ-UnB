@@ -99,6 +99,8 @@ void State::LoadAssets()
   SpriteRenderer *spriteRenderer1 = characterGameObject->GetComponent<SpriteRenderer>();
   spriteRenderer1->SetPosition(1253, 901);
   Log::debug("STATE - Character game object loaded");
+
+  Camera::GetInstance().Follow(this->GetObjectPtr(characterGameObject).lock().get());
 }
 
 void State::Update(float dt)
