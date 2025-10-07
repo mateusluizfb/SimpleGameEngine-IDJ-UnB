@@ -31,6 +31,9 @@ public:
   State& GetState();
   float GetDeltaTime();
 
+  int GetWindowWidth();
+  int GetWindowHeight();
+
   void Run();
 };
 

@@ -147,6 +147,20 @@ SDL_Renderer *Game::GetRenderer()
   return renderer;
 }
 
+int Game::GetWindowWidth()
+{
+  int w;
+  SDL_GetWindowSize(window, &w, nullptr);
+  return w;
+}
+
+int Game::GetWindowHeight()
+{
+  int h;
+  SDL_GetWindowSize(window, nullptr, &h);
+  return h;
+}
+
 void Game::Run()
 {
   Log::info("GAME - Starting game loop");
