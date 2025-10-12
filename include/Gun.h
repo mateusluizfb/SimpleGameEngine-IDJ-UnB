@@ -1,6 +1,7 @@
 #ifndef GUN_H
 #define GUN_H
 
+#include <memory>
 #include "Component.h"
 #include "Sound.h"
 #include "Timer.h"
