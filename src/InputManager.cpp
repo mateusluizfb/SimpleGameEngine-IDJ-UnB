@@ -27,40 +27,36 @@ InputManager::~InputManager() {
 
 void InputManager::Update()
 {
-  SDL_Event* event = new SDL_Event();
-  int result = SDL_PollEvent(event);
-  
+  SDL_Event event;
   SDL_GetMouseState(&mouseX, &mouseY);
   quitRequested = false;
   updateCounter++;
-  
-  if (result == 0) {
-    return;
-  }
 
-  switch (event->type)
-  {
-    case SDL_QUIT:
-      quitRequested = true;
-      break;
-    case SDL_MOUSEBUTTONDOWN:
-      mouseState[event->button.button] = true;
-      mouseUpdate[event->button.button] = updateCounter;
-      break;
-    case SDL_MOUSEBUTTONUP:
-      mouseState[event->button.button] = false;
-      mouseUpdate[event->button.button] = updateCounter;
-      break;
-    case SDL_KEYDOWN:
-      keyState[event->key.keysym.sym] = true;
-      keyUpdate[event->key.keysym.sym] = updateCounter;
-      break;
-    case SDL_KEYUP:
-      keyState[event->key.keysym.sym] = false;
-      keyUpdate[event->key.keysym.sym] = updateCounter;
-      break;
-    default:
-      break;
+  while (SDL_PollEvent(&event)) {
+    switch (event.type)
+    {
+      case SDL_QUIT:
+        quitRequested = true;
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        mouseState[event.button.button] = true;
+        mouseUpdate[event.button.button] = updateCounter;
+        break;
+      case SDL_MOUSEBUTTONUP:
+        mouseState[event.button.button] = false;
+        mouseUpdate[event.button.button] = updateCounter;
+        break;
+      case SDL_KEYDOWN:
+        keyState[event.key.keysym.sym] = true;
+        keyUpdate[event.key.keysym.sym] = updateCounter;
+        break;
+      case SDL_KEYUP:
+        keyState[event.key.keysym.sym] = false;
+        keyUpdate[event.key.keysym.sym] = updateCounter;
+        break;
+      default:
+        break;
+    }
   }
 
   if (updateCounter < 0) {
