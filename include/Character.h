@@ -2,6 +2,8 @@
 #define CHARACTER_H
 
 #include <queue>
+#include <memory>
+#include <string>
 #include "Component.h"
 #include "GameObject.h"
 #include "Timer.h"
