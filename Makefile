@@ -47,12 +47,14 @@ UNAME_S := $(shell uname -s)
 
 # SE FOR MAC
 ifeq ($(UNAME_S), Darwin)
+	LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
+	SDL_INC_PATH += /opt/homebrew/include/SDL2
+	LINK_PATH += -L/opt/homebrew/lib
 
-LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
-
-SDL_INC_PATH += /opt/homebrew/include/SDL2
-LINK_PATH += -L/opt/homebrew/lib
-
+else
+# SE FOR LINUX
+	SDL_INC_PATH += /usr/include/SDL2
+	LINK_PATH += -L/usr/lib
 endif
 endif
 
