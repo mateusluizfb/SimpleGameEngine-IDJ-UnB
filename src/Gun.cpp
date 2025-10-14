@@ -85,14 +85,6 @@ void Gun::Update(float dt)
         }
         break;
   }
-
-  InputManager &inputManager = InputManager::GetInstance();
-
-  if (inputManager.MousePress(LEFT_MOUSE_BUTTON))
-  {
-    Vec2 target = Vec2(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
-    this->Shoot(target);
-  }
 }
 
 void Gun::Render() {
