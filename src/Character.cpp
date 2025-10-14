@@ -14,7 +14,7 @@ Character::Character(GameObject &associated, std::string sprite)
     // gun(),
     taskQueue(),
     speed(Vec2(0, 0)),
-    linearSpeed(1),
+    linearSpeed(100),
     hp(100),
     deathTimer(Timer())
 {

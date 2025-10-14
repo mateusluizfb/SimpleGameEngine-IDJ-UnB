@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "SpriteRenderer.h"
 #include "Character.h"
+#include "PlayerController.h"
 
 #include <memory>
 #include "Camera.h"
@@ -94,7 +95,9 @@ void State::LoadAssets()
   Log::debug("STATE - Starting Character game object");
   GameObject *characterGameObject = new GameObject();
   Character *character = new Character(*characterGameObject, "assets/img/Player.png");
+  PlayerController *playerController = new PlayerController(*characterGameObject);
   characterGameObject->AddComponent(character);
+  characterGameObject->AddComponent(playerController);
   this->AddObject(characterGameObject);
   SpriteRenderer *spriteRenderer1 = characterGameObject->GetComponent<SpriteRenderer>();
   spriteRenderer1->SetPosition(1253, 901);
