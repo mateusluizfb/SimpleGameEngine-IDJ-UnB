@@ -24,7 +24,7 @@ Character::Character(GameObject &associated, std::string sprite)
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
 
-  animator->AddAnimation("walking", Animation(0, 5, 0));
+  animator->AddAnimation("walking", Animation(0, 5, 0.2));
   animator->AddAnimation("idle", Animation(6, 9, 0.5));
   animator->AddAnimation("dead", Animation(10, 11, 0.5));
 
@@ -55,16 +55,22 @@ void Character::Update(float dt) {
 
   if (animator->GetCurrent() == "dead" && deathTimer.Get() > 1)
   {
-    Log::debug("CHARACTER - Character removal after death animation.");
+    Log::info("CHARACTER - Character removal after death animation.");
     associated.RequestDelete();
     return;
   }
 
   if (hp <= 0)
   {
-    Log::debug("CHARACTER - Character is dead.");
+    Log::info("CHARACTER - Character is dead.");
     animator->SetAnimation("dead");
     deathTimer.Update(dt);
+    return;
+  }
+
+  if (taskQueue.empty()) {
+    speed = Vec2(0, 0);
+    animator->SetAnimation("idle");
     return;
   }
 
@@ -96,13 +102,6 @@ void Character::Update(float dt) {
 
           Log::debug("CHARACTER - Character shooting");
           gun.lock()->GetComponent<Gun>()->Shoot(item.pos);
-          break;
-        }
-
-        default: {
-          Log::debug("CHARACTER - Character idle");
-          speed = Vec2(0, 0);
-          animator->SetAnimation("idle");
           break;
         }
       }
