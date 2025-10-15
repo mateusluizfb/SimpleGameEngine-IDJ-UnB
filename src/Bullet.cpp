@@ -1,0 +1,36 @@
+#include "Bullet.h"
+#include "SpriteRenderer.h"
+#include "GameObject.h"
+#include "Log.h"
+#include <cmath>
+
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance)
+  : Component(associated),
+  speed(Vec2(speed * std::cos(angle), speed * std::sin(angle))),
+  distanceLeft(maxDistance),
+  damage(damage)
+{
+  SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Bullet.png", 1, 1);
+
+  associated.AddComponent(spriteRenderer);
+}
+
+void Bullet::Update(float dt) {
+  if (distanceLeft <= 0) {
+    associated.RequestDelete();
+    return;
+  }
+
+  Vec2 displacement = speed * dt;
+  associated.box.x += displacement.x;
+  associated.box.y += displacement.y;
+
+  distanceLeft -= displacement.Magnitude();
+}
+
+void Bullet::Render() {
+}
+
+int Bullet::GetDamage() {
+  return damage;
+}

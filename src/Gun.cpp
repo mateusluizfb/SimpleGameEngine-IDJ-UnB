@@ -4,6 +4,9 @@
 #include "Log.h"
 #include "Character.h"
 #include "InputManager.h"
+#include "Bullet.h"
+#include "Game.h"
+#include "State.h"
 
 Gun::Gun(GameObject &associated, std::weak_ptr<GameObject> character)
   : Component(associated),
@@ -25,12 +28,24 @@ Gun::Gun(GameObject &associated, std::weak_ptr<GameObject> character)
 }
 
 void Gun::Shoot(Vec2 target) {
+  Log::info("GUN - Shooting at target: (" + std::to_string(target.x) + ", " + std::to_string(target.y) + ")");
+
   shootSound.Play();
 
   Vec2 direction = (target - associated.box.GetCenter()).Normalize();
   angle = std::atan2(direction.y, direction.x);
 
   cooldownState = 1;
+
+  Game &game = Game::GetInstance();
+  State &currentState = game.GetState();
+
+  GameObject *bulletGO = new GameObject();
+  Bullet *bullet = new Bullet(*bulletGO, angle, 500, 10, 400);
+  bulletGO->AddComponent(bullet);
+  bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
+
+  currentState.AddObject(bulletGO);
 }
 
 std::weak_ptr<GameObject> Gun::GetCharacter() {
