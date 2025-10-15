@@ -1,16 +1,19 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "SDL_image.h"
-#include "SDL_render.h"
 #include <string>
+#include <SDL_image.h>
+#include <SDL_render.h>
+#include "Vec2.h"
 
 class Sprite
 {
 private:
   SDL_Texture* texture;
   SDL_Rect clipRect;
+  SDL_RendererFlip flip;
 
+  Vec2 scale;
   int width, height;
   int frameCountW, frameCountH;
 
@@ -24,7 +27,7 @@ public:
   void Open(const std::string &file);
   void SetClip(int x, int y, int w, int h);
   void SetPosition(int x, int y);
-  void Render(int x, int y, int w, int h);
+  void Render(int x, int y, int w, int h, float angle = 0.0f);
   int GetWidth();
   int GetHeight();
   bool IsOpen();
@@ -33,6 +36,9 @@ public:
   int GetFrameCount();
   int GetFrameW();
   int GetFrameH();
+  void SetScale(float scaleX, float scaleY);
+  Vec2 GetScale();
+  void SetFlip(SDL_RendererFlip flip);
 };
 
 #endif

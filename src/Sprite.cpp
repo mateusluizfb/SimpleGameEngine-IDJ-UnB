@@ -2,12 +2,22 @@
 #include "Sprite.h"
 #include "Game.h"
 #include "Resources.h"
+#include "Vec2.h"
 #include "Camera.h"
 
-Sprite::Sprite() : texture(nullptr), cameraFollower(false) {}
+Sprite::Sprite() :
+  texture(nullptr),
+  flip(SDL_FLIP_NONE),
+  scale(Vec2(1.0f, 1.0f)),
+  cameraFollower(false) {}
 
 Sprite::Sprite(const std::string &file, int frameCountW, int frameCountH)
-  : texture(nullptr), frameCountW(frameCountW), frameCountH(frameCountH), cameraFollower(false)
+  : texture(nullptr),
+    flip(SDL_FLIP_NONE),
+    scale(Vec2(1.0f, 1.0f)),
+    frameCountW(frameCountW),
+    frameCountH(frameCountH),
+    cameraFollower(false)
 {
   Open(file);
 }
@@ -58,23 +68,36 @@ void Sprite::SetPosition(int x, int y)
   clipRect.y = y;
 }
 
-void Sprite::Render(int x, int y, int w, int h)
+void Sprite::Render(int x, int y, int w, int h, float angle)
 {
   Camera &camera = Camera::GetInstance();
 
   SDL_Rect dsRect = {
       x - (int) camera.GetPositionX(),
       y - (int) camera.GetPositionY(),
-      clipRect.w,
-      clipRect.h
+      clipRect.w * (int) scale.x,
+      clipRect.h * (int) scale.y
   };
 
   if (cameraFollower)
   {
-    dsRect = {x, y, w, h};
+    dsRect = {
+      x,
+      y,
+      w * (int) scale.x,
+      h * (int) scale.y
+    };
   }
 
-  int result = SDL_RenderCopy(Game::GetRenderer(), texture, &clipRect, &dsRect);
+  int result = SDL_RenderCopyEx(
+    Game::GetRenderer(),
+    texture,
+    &clipRect,
+    &dsRect,
+    angle,
+    nullptr,
+    flip
+  );
 
   if (result != 0) {
     throw std::runtime_error("Failed to render sprite: " + std::string(SDL_GetError()));
@@ -82,11 +105,11 @@ void Sprite::Render(int x, int y, int w, int h)
 }
 
 int Sprite::GetWidth() {
-  return width;
+  return width * scale.x;
 }
 
 int Sprite::GetHeight() {
-  return height;
+  return height * scale.y;
 }
 
 bool Sprite::IsOpen() {
@@ -131,4 +154,16 @@ int Sprite::GetFrameW() {
 
 int Sprite::GetFrameH() {
   return this->height / this->frameCountH;
+}
+
+Vec2 Sprite::GetScale() {
+  return scale;
+}
+
+void Sprite::SetScale(float scaleX, float scaleY) {
+  this->scale = Vec2(scaleX, scaleY);
+}
+
+void Sprite::SetFlip(SDL_RendererFlip flip) {
+  this->flip = flip;
 }
