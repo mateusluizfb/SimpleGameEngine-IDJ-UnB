@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Character.h"
 #include "Gun.h"
+#include "Bullet.h"
 
 TEST(GunTest, GunCharacterWeakPtrExpiredAfterDelete)
 {
@@ -28,3 +29,36 @@ TEST(GunTest, GunCharacterWeakPtrExpiredAfterDelete)
   delete go;
   delete game;
 }
+
+TEST(GunTest, GunShootCreatesBullet)
+{
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+  State &state = game->GetState();
+
+  auto characterPtr = std::make_shared<GameObject>();
+  auto characterComponent = new Character(*characterPtr, "assets/img/Player.png");
+  characterPtr->AddComponent(characterComponent);
+
+  auto gunPtr = std::make_shared<GameObject>();
+  auto gunComponent = new Gun(*gunPtr, characterPtr);
+  gunPtr->AddComponent(gunComponent);
+
+  // Initial object count
+  size_t initialCount = state.GetObjectArray().size();
+
+  // Call Shoot
+  Vec2 target(500, 500);
+  gunComponent->Shoot(target);
+
+  // After shooting, there should be one more object (the bullet)
+  auto objectArray = state.GetObjectArray();
+  EXPECT_EQ(objectArray.size(), initialCount + 1);
+
+  // The last object should be a Bullet
+  auto lastObj = objectArray.back();
+  auto bullet = lastObj->GetComponent<Bullet>();
+  EXPECT_NE(bullet, nullptr);
+
+  delete game;
+}
+
