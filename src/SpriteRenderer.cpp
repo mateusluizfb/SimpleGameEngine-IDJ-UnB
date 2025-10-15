@@ -27,8 +27,9 @@ void SpriteRenderer::SetFrameCount(int frameCountW, int frameCountH)
   sprite->SetFrameCount(frameCountW, frameCountH);
 }
 
-void SpriteRenderer::SetFrame(int frame)
+void SpriteRenderer::SetFrame(int frame, SDL_RendererFlip flip)
 {
+  sprite->SetFlip(flip);
   sprite->SetFrame(frame);
 }
 
@@ -45,5 +46,12 @@ void SpriteRenderer::SetCameraFollower(bool cameraFollower) {
 void SpriteRenderer::Update(float dt) {}
 
 void SpriteRenderer::Render() {
-  sprite->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h);
+  sprite->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, 0);
+}
+
+void SpriteRenderer::SetScale(float scaleX, float scaleY) {
+  sprite->SetScale(scaleX, scaleY);
+
+  associated.box.w = sprite->GetFrameW() * scaleX;
+  associated.box.h = sprite->GetFrameH() * scaleY;
 }
