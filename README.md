@@ -11,3 +11,4 @@
 ### Possible Improvements:
 
 1. Move the parallax factor out of the TileMap. Maybe it's possible to create a WorldMap/Background object that encapsulates the parallax factor, and which layer it corresponds.
+2. Implement the Z/Y Sorting from the 5th lesson.
