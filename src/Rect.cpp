@@ -16,7 +16,7 @@ Rect Rect::operator-(const Vec2 &other) const
 
 Vec2 Rect::GetCenter() const
 {
-  return Vec2(this->x + this->w / 2, this->y + this->h / 2);
+  return Vec2(this->x + this->w / 2.0f, this->y + this->h / 2.0f);
 }
 
 float Rect::Distance(const Rect &other) const
@@ -37,6 +37,6 @@ bool Rect::IsVec2Inside(const Vec2 &vec) const
 
 void Rect::SetCenter(Vec2 newCenter)
 {
-  this->x = newCenter.x - this->w / 2;
-  this->y = newCenter.y - this->h / 2;
+  this->x = newCenter.x - (this->w / 2.0f);
+  this->y = newCenter.y - (this->h / 2.0f);
 }

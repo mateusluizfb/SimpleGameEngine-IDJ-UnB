@@ -2,7 +2,7 @@
 #include "Vec2.h"
 #include "Rect.h"
 
-TEST(RectTest, AddVect)
+TEST(TestRect, AddVect)
 {
   Rect *rect = new Rect(1, 1, 1, 1);
   Vec2 *vec = new Vec2(1, 1);
@@ -16,7 +16,7 @@ TEST(RectTest, AddVect)
   delete rect;
 }
 
-TEST(RectTest, SubtractVect)
+TEST(TestRect, SubtractVect)
 {
   Rect *rect = new Rect(1, 1, 1, 1);
   Vec2 *vec = new Vec2(1, 1);
@@ -30,7 +30,7 @@ TEST(RectTest, SubtractVect)
   delete rect;
 }
 
-TEST(RectTest, GetCenter)
+TEST(TestRect, GetCenter)
 {
   Rect *rect = new Rect(1, 1, 2, 2);
 
@@ -42,7 +42,7 @@ TEST(RectTest, GetCenter)
   delete rect;
 }
 
-TEST(RectTest, IsVec2Inside)
+TEST(TestRect, IsVec2Inside)
 {
   Rect *rect = new Rect(1, 1, 2, 2);
   Vec2 *vec1 = new Vec2(2, 2);
@@ -61,20 +61,20 @@ TEST(RectTest, IsVec2Inside)
   delete rect;
 }
 
-TEST(RectTest, SetCenter)
+TEST(TestRect, SetCenter)
 {
   Rect rect(1, 2, 3, 4);
   Vec2 newCenter(10, 20);
 
   rect.SetCenter(newCenter);
 
-  EXPECT_EQ(rect.x, 10);
-  EXPECT_EQ(rect.y, 20);
+  EXPECT_EQ(rect.x, 8.5);
+  EXPECT_EQ(rect.y, 18);
   EXPECT_EQ(rect.w, 3);
   EXPECT_EQ(rect.h, 4);
 
   Vec2 center = rect.GetCenter();
   
-  EXPECT_EQ(center.x, 10 - (3 / 2.0f));
-  EXPECT_EQ(center.y, 20 - (4 / 2.0f));
+  EXPECT_EQ(center.x, 10);
+  EXPECT_EQ(center.y, 20);
 }
