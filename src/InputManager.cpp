@@ -1,6 +1,3 @@
-#include <SDL_events.h>
-#include <SDL_keycode.h>
-
 #include "Log.h"
 #include "InputManager.h"
 #include "Camera.h"

@@ -1,14 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "SDL_render.h"
-#include "SDL_image.h"
-#include "SDL_mixer.h"
-#include "SDL_timer.h"
+#define INCLUDE_SDL_IMAGE
+#define INCLUDE_SDL_MIXER
+#define INCLUDE_SDL_TTF
+#define INCLUDE_SDL
+#include "SDL_include.h"
+
 #include "State.h"
 #include <string>
 
-class Game
+    class Game
 {
 private:
   static Game* instance;

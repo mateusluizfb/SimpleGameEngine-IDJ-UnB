@@ -1,7 +1,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include <SDL_render.h>
+#define INCLUDE_SDL
+#include "SDL_include.h"
 
 class Animation {
 public:
