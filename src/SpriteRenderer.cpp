@@ -46,7 +46,7 @@ void SpriteRenderer::SetCameraFollower(bool cameraFollower) {
 void SpriteRenderer::Update(float dt) {}
 
 void SpriteRenderer::Render() {
-  sprite->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, 0);
+  sprite->Render(associated.box.x, associated.box.y, associated.box.w, associated.box.h, associated.angleDeg);
 }
 
 void SpriteRenderer::SetScale(float scaleX, float scaleY) {
@@ -54,4 +54,12 @@ void SpriteRenderer::SetScale(float scaleX, float scaleY) {
 
   associated.box.w = sprite->GetFrameW() * scaleX;
   associated.box.h = sprite->GetFrameH() * scaleY;
+}
+
+void SpriteRenderer::SetFlip(SDL_RendererFlip flip) {
+  sprite->SetFlip(flip);
+}
+
+SDL_RendererFlip SpriteRenderer::GetFlip() {
+  return sprite->GetFlip();
 }

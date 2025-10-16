@@ -19,6 +19,8 @@ public:
   void SetPosition(int x, int y);
   void SetCameraFollower(bool cameraFollower);
   void SetScale(float scaleX, float scaleY);
+  void SetFlip(SDL_RendererFlip flip);
+  SDL_RendererFlip GetFlip();
 
   void Update(float dt) override;
   void Render() override;

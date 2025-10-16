@@ -39,6 +39,7 @@ public:
   void SetScale(float scaleX, float scaleY);
   Vec2 GetScale();
   void SetFlip(SDL_RendererFlip flip);
+  SDL_RendererFlip GetFlip();
 };
 
 #endif

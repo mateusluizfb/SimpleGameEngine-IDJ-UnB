@@ -167,3 +167,7 @@ void Sprite::SetScale(float scaleX, float scaleY) {
 void Sprite::SetFlip(SDL_RendererFlip flip) {
   this->flip = flip;
 }
+
+SDL_RendererFlip Sprite::GetFlip() {
+  return this->flip;
+}

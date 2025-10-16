@@ -31,21 +31,21 @@ void Gun::Shoot(Vec2 target) {
   Log::info("GUN - Shooting at target: (" + std::to_string(target.x) + ", " + std::to_string(target.y) + ")");
 
   shootSound.Play();
+  cooldownState = 1;
 
   Vec2 direction = (target - associated.box.GetCenter()).Normalize();
-  angle = std::atan2(direction.y, direction.x);
-
-  cooldownState = 1;
+  float shootAngle = std::atan2(direction.y, direction.x);
 
   Game &game = Game::GetInstance();
   State &currentState = game.GetState();
 
   GameObject *bulletGO = new GameObject();
-  Bullet *bullet = new Bullet(*bulletGO, angle, 500, 10, 400);
+  Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, 10, 400);
   bulletGO->AddComponent(bullet);
   bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
-
   currentState.AddObject(bulletGO);
+
+  bulletGO->angleDeg = associated.angleDeg + 90; // Rotate bullet in the direction it's shooting
 }
 
 std::weak_ptr<GameObject> Gun::GetCharacter() {
@@ -62,17 +62,23 @@ void Gun::Update(float dt)
 
   std::shared_ptr<GameObject> characterPtr = character.lock();
 
-  // The angle rotates well, but the sprite is rendered on top of the 
-  // character's. so when it goes to the right of the character, we need to
-  // increase the offset, like an elipsis
-  Vec2 offset = Vec2(30, 0).Rotate(angle); 
-  Vec2 currentCenter = characterPtr->box.GetCenter();
-  Vec2 newCenter = (currentCenter + offset);
+  // Always point gun toward mouse position
+  Vec2 characterCenter = characterPtr->box.GetCenter();
+  int mouseWorldX = InputManager::GetInstance().GetMouseXWorld();
+  int mouseWorldY = InputManager::GetInstance().GetMouseYWorld();
+  angle = std::atan2(mouseWorldY - characterCenter.y, mouseWorldX - characterCenter.x);
+  
+  Vec2 offset = Vec2(90, 0).Rotate(angle);
+  associated.angleDeg = angle * (180.0 / M_PI); // Convert to degrees, it's used to rotate the sprite
 
-  associated.box.SetCenter(newCenter);
+  if (associated.angleDeg > 90 || associated.angleDeg < -90)
+    associated.GetComponent<SpriteRenderer>()->SetFlip(SDL_FLIP_VERTICAL);
+  else
+    associated.GetComponent<SpriteRenderer>()->SetFlip(SDL_FLIP_NONE);
+
+  associated.box.SetCenter(characterCenter + offset);
 
   Animator *animator = associated.GetComponent<Animator>();
-
   cdTimer.Update(dt);
 
   switch (cooldownState)

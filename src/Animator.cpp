@@ -71,7 +71,7 @@ void Animator::SetAnimation(std::string name) {
 
   if (spriteRenderer != nullptr)
   {
-    spriteRenderer->SetFrame(currentFrame);
+    spriteRenderer->SetFrame(currentFrame, spriteRenderer->GetFlip());
   }
   else
   {
