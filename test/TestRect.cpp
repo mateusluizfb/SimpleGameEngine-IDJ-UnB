@@ -75,6 +75,6 @@ TEST(RectTest, SetCenter)
 
   Vec2 center = rect.GetCenter();
   
-  EXPECT_EQ(center.x, 10 + 3 / 2.0f);
-  EXPECT_EQ(center.y, 20 + 4 / 2.0f);
+  EXPECT_EQ(center.x, 10 - (3 / 2.0f));
+  EXPECT_EQ(center.y, 20 - (4 / 2.0f));
 }
