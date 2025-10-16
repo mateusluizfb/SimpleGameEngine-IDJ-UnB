@@ -1,9 +1,10 @@
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 
+#define INCLUDE_SDL
+#include "SDL_include.h"
+
 #include <unordered_map>
-#include <SDL_keycode.h>
-#include <SDL_mouse.h>
 
 #define LEFT_ARROW_KEY SDLK_LEFT
 #define RIGHT_ARROW_KEY SDLK_RIGHT

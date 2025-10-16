@@ -1,8 +1,10 @@
 #ifndef SPRITE_RENDERER_H
 #define SPRITE_RENDERER_H
 
+#define INCLUDE_SDL
+#include "SDL_include.h"
+
 #include <string>
-#include <SDL_render.h>
 #include "Component.h"
 
 class SpriteRenderer : public Component {

@@ -1,9 +1,10 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#define INCLUDE_SDL
+#include "SDL_include.h"
+
 #include <string>
-#include <SDL_image.h>
-#include <SDL_render.h>
 #include "Vec2.h"
 
 class Sprite
