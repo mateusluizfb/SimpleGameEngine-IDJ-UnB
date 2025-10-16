@@ -9,11 +9,11 @@ class GameObject {
 private:
   bool started;
   bool isDead;
-  double angleDeg;
   std::vector<Component *> components;
 
 public:
   Rect box;
+  double angleDeg;
 
   GameObject();
   ~GameObject();

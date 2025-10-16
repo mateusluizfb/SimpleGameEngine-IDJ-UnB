@@ -88,9 +88,17 @@ void Character::Update(float dt) {
           // TODO test without normalize
           speed = item.pos.Normalize() * linearSpeed;
 
-          // TODO: SpriteRenderer has a SetPosition that could be used here:
+          SpriteRenderer* spriteRenderer = associated.GetComponent<SpriteRenderer>();
+
+          if (speed.x <= 0) {
+            spriteRenderer->SetFlip(SDL_FLIP_HORIZONTAL);
+          } else {
+            spriteRenderer->SetFlip(SDL_FLIP_NONE);
+          }
+
           associated.box.x += speed.x * dt;
           associated.box.y += speed.y * dt;
+
           break;
         }
 

@@ -37,6 +37,6 @@ bool Rect::IsVec2Inside(const Vec2 &vec) const
 
 void Rect::SetCenter(Vec2 newCenter)
 {
-  this->x = newCenter.x;
-  this->y = newCenter.y;
+  this->x = newCenter.x - this->w / 2;
+  this->y = newCenter.y - this->h / 2;
 }

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-GameObject::GameObject() : started(false), isDead(false) {}
+GameObject::GameObject() : started(false), isDead(false), angleDeg(0) {}
 
 /*
 Notes:
