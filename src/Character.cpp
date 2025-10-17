@@ -1,9 +1,10 @@
+#include "Log.h"
+#include "Game.h"
+#include "Gun.h"
 #include "Character.h"
 #include "SpriteRenderer.h"
 #include "Animator.h"
-#include "Gun.h"
-#include "Game.h"
-#include "Log.h"
+#include "Collider.h"
 
 Character::Command::Command(CommandType type, float x, float y)
   : type(type), pos(x, y) {}
@@ -20,9 +21,11 @@ Character::Character(GameObject &associated, std::string sprite)
 {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, sprite, 3, 4);
   Animator *animator = new Animator(associated);
+  Collider *collider = new Collider(associated, Vec2(1, 1), Vec2(1, 1));
 
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
+  associated.AddComponent(collider);
 
   animator->AddAnimation("walking", Animation(0, 5, 0.2));
   animator->AddAnimation("idle", Animation(6, 9, 0.5));
@@ -80,9 +83,7 @@ void Character::Update(float dt) {
       switch (item.type)
       {
         case CommandType::MOVE:
-        {
-          Log::debug("CHARACTER - Character moving");
-          
+        {          
           animator->SetAnimation("walking");
 
           // TODO test without normalize

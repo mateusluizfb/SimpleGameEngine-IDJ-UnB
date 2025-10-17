@@ -5,6 +5,7 @@
 #include "Animator.h"
 #include "InputManager.h"
 #include "Camera.h"
+#include "Collider.h"
 
 Zombie::Zombie(GameObject &associated)
   : Component(associated),
@@ -15,9 +16,11 @@ Zombie::Zombie(GameObject &associated)
 {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Enemy.png", 3, 2);
   Animator *animator = new Animator(associated);
+  Collider *collider = new Collider(associated, Vec2(1, 1), Vec2(1, 1));
 
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
+  associated.AddComponent(collider);
 
   animator->AddAnimation("walk", Animation(0, 3, 0.5));
   animator->AddAnimation("dead", Animation(5, 5, 0));
