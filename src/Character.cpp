@@ -163,6 +163,8 @@ int Character::GetHp() {
 }
 
 void Character::NotifyCollision(GameObject &other) {
+  if (other.IsDead() || this->associated.IsDead()) return;
+
   Bullet *bullet = other.GetComponent<Bullet>();
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
