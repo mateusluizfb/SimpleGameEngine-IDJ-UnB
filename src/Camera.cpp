@@ -46,7 +46,10 @@ float Camera::GetPositionY()
 Vec2 Camera::GetCenterPosition()
 {
   if (focus == nullptr) {
-    return Vec2(1253, 901);
+    return Vec2(
+      pos.x + (Game::GetInstance().GetWindowWidth() / 2),
+      pos.y + (Game::GetInstance().GetWindowHeight() / 2)
+    );
   }
 
   return focus->box.GetCenter();

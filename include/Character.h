@@ -43,6 +43,7 @@ public:
   Vec2 GetSpeed();
   int GetHp();
   void NotifyCollision(GameObject &other) override;
+  Vec2 GetCenterPosition();
 
 private:
   std::weak_ptr<GameObject> gun;

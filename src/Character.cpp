@@ -190,3 +190,7 @@ void Character::NotifyCollision(GameObject &other) {
 
   hit = true;
 }
+
+Vec2 Character::GetCenterPosition() {
+  return associated.box.GetCenter();
+}

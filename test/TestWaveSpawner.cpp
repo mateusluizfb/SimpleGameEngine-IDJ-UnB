@@ -5,6 +5,7 @@
 #include "Zombie.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Character.h"
 #include "Log.h"
 #include "State.h"
 #include "SpriteRenderer.h"
@@ -16,7 +17,14 @@ TEST(TestWaveSpawner, SpawnsZombieAfterCooldown) {
 
   Log::debug(" --- TestWaveSpawner Logs ----");
 
-  GameObject go;
+
+	// Add a Character GameObject to the State
+	GameObject* characterGameObject = new GameObject();
+	Character* character = new Character(*characterGameObject, "assets/img/Player.png");
+	characterGameObject->AddComponent(character);
+	game->GetState().AddObject(characterGameObject);
+
+	GameObject go;
 	WaveSpawner spawner(go);
 	float dt = 6.0f; // cooldown is 5.0f in default wave
 	spawner.Update(dt);
@@ -30,7 +38,14 @@ TEST(TestWaveSpawner, SpawnsCorrectZombieCount) {
 
   Log::debug(" --- TestWaveSpawner Logs ----");
 
-  GameObject go;
+
+	// Add a Character GameObject to the State
+	GameObject* characterGameObject = new GameObject();
+	Character* character = new Character(*characterGameObject, "assets/img/Player.png");
+	characterGameObject->AddComponent(character);
+	game->GetState().AddObject(characterGameObject);
+
+	GameObject go;
 	WaveSpawner spawner(go);
 	for (int i = 0; i < 10; ++i) {
 		spawner.Update(6.0f);
@@ -45,7 +60,14 @@ TEST(TestWaveSpawner, NextWaveTriggered) {
 
   Log::debug(" --- TestWaveSpawner Logs ----");
 
-  GameObject go;
+
+	// Add a Character GameObject to the State
+	GameObject* characterGameObject = new GameObject();
+	Character* character = new Character(*characterGameObject, "assets/img/Player.png");
+	characterGameObject->AddComponent(character);
+	game->GetState().AddObject(characterGameObject);
+
+	GameObject go;
 	WaveSpawner spawner(go);
 	for (int i = 0; i < 5; ++i) {
 		spawner.Update(6.0f);
