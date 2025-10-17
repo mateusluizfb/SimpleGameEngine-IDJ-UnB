@@ -12,6 +12,7 @@
 #include "Collider.h"
 #include "Collision.h"
 #include "Camera.h"
+#include "WaveSpawner.h"
 
 State::State() : started(false), music("audio/BGM.wav"), quitRequested(false)
 {
@@ -35,6 +36,10 @@ void State::Start()
   Log::info("STATE - Starting state");
 
   LoadAssets();
+
+  GameObject *waveSpawnerGameObject = new GameObject();
+  waveSpawnerGameObject->AddComponent(new WaveSpawner(*waveSpawnerGameObject));
+  this->AddObject(waveSpawnerGameObject);
 
   for (size_t i = 0; i < objectArray.size(); i++) {
     objectArray[i]->Start();
@@ -120,18 +125,6 @@ void State::Update(float dt)
     this->RequestQuit();
   }
 
-  if (inputManager.KeyPress(SPACE_KEY))
-  {
-    Log::debug("STATE - Starting zombie game object");
-    GameObject *zombieGameObject1 = new GameObject();
-    Zombie *zombie1 = new Zombie(*zombieGameObject1);
-    zombieGameObject1->AddComponent(zombie1);
-    this->AddObject(zombieGameObject1);
-    SpriteRenderer *spriteRenderer1 = zombieGameObject1->GetComponent<SpriteRenderer>();
-    spriteRenderer1->SetPosition(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
-    Log::debug("STATE - Zombie game object loaded at: " + std::to_string(inputManager.GetMouseXWorld()) + "x" + std::to_string(inputManager.GetMouseYWorld()));
-  }
-
   for (size_t i = 0; i < objectArray.size(); i++)
   {
     objectArray[i]->Update(dt);
@@ -173,6 +166,7 @@ void State::Update(float dt)
   }
 
   Camera::GetInstance().Update(dt);
+  
 }
 
 void State::Render()

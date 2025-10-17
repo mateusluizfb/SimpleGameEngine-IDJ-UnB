@@ -43,6 +43,15 @@ float Camera::GetPositionY()
   return pos.y * speedMultiplier;
 }
 
+Vec2 Camera::GetCenterPosition()
+{
+  if (focus == nullptr) {
+    return Vec2(1253, 901);
+  }
+
+  return focus->box.GetCenter();
+}
+
 void Camera::Update(float dt) {
   if (focus != nullptr) {
     Vec2 focusCenter = focus->box.GetCenter();
