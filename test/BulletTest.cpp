@@ -12,7 +12,7 @@ TEST(BulletTest, BulletUpdateMovesAndDeletesAfterMaxDistance)
   Log::debug(" --- GunTest Logs ----");
 
   GameObject *go = new GameObject();
-  Bullet *bullet = new Bullet(*go, 0.0f, 100.0f, 10, 150.0f); // angle 0 (right), speed 100, max distance 150
+  Bullet *bullet = new Bullet(*go, 0.0f, 100.0f, 10, 150.0f, false); // angle 0 (right), speed 100, max distance 150
   go->AddComponent(bullet);
 
   // Initial position

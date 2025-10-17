@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "Collider.h"
+#include "Bullet.h"
 
 Zombie::Zombie(GameObject &associated)
   : Component(associated),
@@ -45,7 +46,6 @@ void Zombie::Damage(int damage) {
     animator->SetAnimation("dead");
     deathSound.Play(1);
   } else {
-    hit = true;
     animator->SetAnimation("hit");
   }
 }
@@ -55,8 +55,6 @@ int Zombie::GetHitPoints() {
 }
 
 void Zombie::Update(float dt) {
-  InputManager &inputManager = InputManager::GetInstance();
-
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
   Timer *deathTimer = &animator->deathTimer;
@@ -84,23 +82,23 @@ void Zombie::Update(float dt) {
     Log::debug("ZOMBIE - Deleting game object");
     this->associated.RequestDelete();
   }
-
-  // Buttons Update
-  if (inputManager.MousePress(LEFT_MOUSE_BUTTON))
-  {
-    Log::debug("ZOMBIE - Left mouse button click received");
-
-    Vec2 mousePosition = Vec2(inputManager.GetMouseXWorld(), inputManager.GetMouseYWorld());
-    Rect zombieBox = associated.box;
-
-    if (zombieBox.IsVec2Inside(mousePosition))
-    {
-      Log::debug("ZOMBIE - Zombie clicked!");
-      hitSound.Play(1);
-      this->Damage(10);
-    }
-  }
 }
 
 void Zombie::Render() {
+}
+
+void Zombie::NotifyCollision(GameObject &other) {
+  Bullet *bullet = other.GetComponent<Bullet>();
+  
+  if (bullet == nullptr) return;
+  if (hit) return;
+
+  Animator *animator = associated.GetComponent<Animator>();
+  Timer *hitTimer = &animator->hitTimer;
+
+  this->Damage(bullet->GetDamage());
+  hitSound.Play(1);
+  hitTimer->Restart();
+
+  hit = true;
 }

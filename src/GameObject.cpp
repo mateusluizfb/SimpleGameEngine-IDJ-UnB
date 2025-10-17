@@ -1,8 +1,9 @@
 
-#include "Log.h"
-#include "GameObject.h"
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include "Log.h"
+#include "GameObject.h"
 
 GameObject::GameObject() : started(false), isDead(false), angleDeg(0) {}
 
@@ -79,7 +80,7 @@ void GameObject::RemoveComponent(Component *component)
 }
 
 float GameObject::GetAngleRad() {
-  return angleDeg * (3.14159265f / 180.0f);
+  return angleDeg * (M_PI / 180.0f);
 }
 
 void GameObject::NotifyCollision(GameObject& other) {

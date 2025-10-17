@@ -40,7 +40,8 @@ void Gun::Shoot(Vec2 target) {
   State &currentState = game.GetState();
 
   GameObject *bulletGO = new GameObject();
-  Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, 10, 400);
+  // TODO: Handle the case where the last param would be true (targeting player)
+  Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, 10, 400, false); 
   bulletGO->AddComponent(bullet);
   bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
   currentState.AddObject(bulletGO);

@@ -6,7 +6,16 @@
 
 class Bullet : public Component {
 public:
-  Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance);
+  bool targetsPlayer;
+
+  Bullet(
+    GameObject &associated,
+    float angle,
+    float speed,
+    int damage,
+    float maxDistance,
+    bool targetsPlayer
+  );
 
   void Update(float dt);
   void Render();
