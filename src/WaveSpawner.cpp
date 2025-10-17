@@ -9,6 +9,7 @@
 #include "Wave.h"
 #include "Camera.h"
 #include "Character.h"
+#include "Game.h"
 
 float RandomFloat(float lower, float upper)
 {
@@ -42,12 +43,10 @@ void WaveSpawner::Update(float dt) {
       zombieCounter++;
       zombieCooldownTimer.Restart();
 
-      Game &game = Game::GetInstance();
-      State &currentState = game.GetState();
-      std::shared_ptr<GameObject> playerPtr = currentState.GetPlayerPtr().lock();
+      State &state = Game::GetInstance().GetState();
 
       float distance = 500;
-      Vec2 playerPos = playerPtr->box.GetCenter();
+      Vec2 playerPos = state.GetPlayerPtr().lock()->box.GetCenter();
       Vec2 lowerBound = Vec2(playerPos.x - distance, playerPos.y - distance);
       Vec2 upperBound = Vec2(playerPos.x + distance, playerPos.y + distance);
       Vec2 zombieSpawnPos = Vec2(
@@ -59,7 +58,7 @@ void WaveSpawner::Update(float dt) {
       GameObject *zombieGameObject1 = new GameObject();
       Zombie *zombie1 = new Zombie(*zombieGameObject1);
       zombieGameObject1->AddComponent(zombie1);
-      currentState.AddObject(zombieGameObject1);
+      state.AddObject(zombieGameObject1);
       SpriteRenderer *spriteRenderer1 = zombieGameObject1->GetComponent<SpriteRenderer>();
       spriteRenderer1->SetPosition(zombieSpawnPos.x, zombieSpawnPos.y);
       Log::debug("WAVE_SPAWNER - Zombie game object loaded at: " + std::to_string(zombieSpawnPos.x) + "x" + std::to_string(zombieSpawnPos.y));

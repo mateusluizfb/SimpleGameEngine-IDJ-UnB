@@ -103,6 +103,7 @@ void State::LoadAssets()
   Log::debug("STATE - Starting Character game object");
   GameObject *characterGameObject = new GameObject();
   Character *character = new Character(*characterGameObject, "assets/img/Player.png");
+  character->player = character; // Is it correct to set itself as player?
   PlayerController *playerController = new PlayerController(*characterGameObject);
   characterGameObject->AddComponent(character);
   characterGameObject->AddComponent(playerController);
@@ -181,17 +182,18 @@ void State::RequestQuit() {
   this->quitRequested = true;
 }
 
+
 std::weak_ptr<GameObject> State::GetPlayerPtr()
 {
   for (size_t i = 0; i < objectArray.size(); i++)
   {
     Character *characterComponent = objectArray[i]->GetComponent<Character>();
 
-    if (characterComponent != nullptr && characterComponent->player == nullptr)
+    if (characterComponent != nullptr && characterComponent->player != nullptr)
     {
       return objectArray[i];
     }
   }
 
   return std::weak_ptr<GameObject>();
-}
+};

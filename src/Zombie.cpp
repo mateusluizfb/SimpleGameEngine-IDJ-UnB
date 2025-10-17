@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Collider.h"
 #include "Bullet.h"
+#include "Game.h"
+#include "State.h"
 
 Zombie::Zombie(GameObject &associated)
   : Component(associated),
@@ -59,6 +61,8 @@ void Zombie::Update(float dt) {
   Timer *hitTimer = &animator->hitTimer;
   Timer *deathTimer = &animator->deathTimer;
 
+  State &state = Game::GetInstance().GetState();
+
   // Hit Update
   if (hit && hitPoints != 0 && hitTimer->Get() >= 0.5)
   {
@@ -72,9 +76,9 @@ void Zombie::Update(float dt) {
     hitTimer->Update(dt);
   }
 
-  // Death Update
   if (hitPoints == 0) {
     deathTimer->Update(dt);
+    return;
   }
 
   if (deathTimer->Get() >= 5)
@@ -82,6 +86,26 @@ void Zombie::Update(float dt) {
     Log::debug("ZOMBIE - Deleting game object");
     this->associated.RequestDelete();
   }
+
+  std::weak_ptr<GameObject> player = state.GetPlayerPtr();
+
+  if (player.expired()) { return; }
+
+  Vec2 playerPos = player.lock()->box.GetCenter();
+  Vec2 zombiePos = associated.box.GetCenter();
+  float angleToPlayer = zombiePos.Angle(playerPos);
+  Vec2 speed = Vec2(
+    50 * std::cos(angleToPlayer),
+    50 * std::sin(angleToPlayer)
+  );
+  Vec2 displacement = speed * dt;
+  associated.box.x -= displacement.x;
+  associated.box.y -= displacement.y;
+
+  if (displacement.x > 0)
+    associated.GetComponent<SpriteRenderer>()->SetFlip(SDL_FLIP_HORIZONTAL);
+  else
+    associated.GetComponent<SpriteRenderer>()->SetFlip(SDL_FLIP_NONE);
 }
 
 void Zombie::Render() {
