@@ -180,3 +180,18 @@ void State::Render()
 void State::RequestQuit() {
   this->quitRequested = true;
 }
+
+std::weak_ptr<GameObject> State::GetPlayerPtr()
+{
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    Character *characterComponent = objectArray[i]->GetComponent<Character>();
+
+    if (characterComponent != nullptr && characterComponent->player == nullptr)
+    {
+      return objectArray[i];
+    }
+  }
+
+  return std::weak_ptr<GameObject>();
+}

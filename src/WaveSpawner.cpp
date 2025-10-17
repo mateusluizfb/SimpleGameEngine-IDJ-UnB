@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Wave.h"
 #include "Camera.h"
+#include "Character.h"
 
 float RandomFloat(float lower, float upper)
 {
@@ -43,12 +44,12 @@ void WaveSpawner::Update(float dt) {
 
       Game &game = Game::GetInstance();
       State &currentState = game.GetState();
-      Camera &camera = Camera::GetInstance();
+      std::shared_ptr<GameObject> playerPtr = currentState.GetPlayerPtr().lock();
 
       float distance = 500;
-      Vec2 cameraCenter = camera.GetCenterPosition();
-      Vec2 lowerBound = Vec2(cameraCenter.x - distance, cameraCenter.y - distance);
-      Vec2 upperBound = Vec2(cameraCenter.x + distance, cameraCenter.y + distance);
+      Vec2 playerPos = playerPtr->box.GetCenter();
+      Vec2 lowerBound = Vec2(playerPos.x - distance, playerPos.y - distance);
+      Vec2 upperBound = Vec2(playerPos.x + distance, playerPos.y + distance);
       Vec2 zombieSpawnPos = Vec2(
         RandomFloat(lowerBound.x, upperBound.x),
         RandomFloat(lowerBound.y, upperBound.y)

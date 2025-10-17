@@ -13,4 +13,3 @@
 1. Move the parallax factor out of the TileMap. Maybe it's possible to create a WorldMap/Background object that encapsulates the parallax factor, and which layer it corresponds.
 2. Implement the Z/Y Sorting from the 5th lesson.
 3. Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
-4. Get the actual center of the camera, its hardcoded here: src/Camera.cpp
