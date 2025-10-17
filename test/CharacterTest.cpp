@@ -112,3 +112,36 @@ TEST(CharacterTest, UpdateMove)
   delete go;
   delete game;
 }
+
+TEST(CharacterTest, NotifyCollision) {
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+
+  Log::debug(" --- CharacterTest Logs ----");
+
+  GameObject go;
+  Character character(go, "assets/img/Player.png");
+  character.Start();
+
+  EXPECT_EQ(character.GetHp(), 100);
+  EXPECT_EQ(character.GetSpeed().x, 0);
+  EXPECT_EQ(character.GetSpeed().y, 0);
+
+  // Simulate collision (should not reduce hp yet)
+  GameObject other;
+  character.NotifyCollision(other);
+  EXPECT_EQ(character.GetHp(), 100);
+
+  // Force hitTimer above threshold and collide again
+  Animator* animator = go.GetComponent<Animator>();
+  animator->hitTimer.Restart();
+  animator->hitTimer.Update(2.1f); // Force timer above threshold
+  character.NotifyCollision(other);
+
+  // After valid collision, hp should be reduced
+  EXPECT_EQ(character.GetHp(), 50);
+  EXPECT_LT(character.GetSpeed().x, 1e-5); // Still idle
+  EXPECT_EQ(character.GetSpeed().y, 0);
+
+  delete game;
+}
+
