@@ -30,6 +30,7 @@ public:
   void Update(float dt);
   void Render();
   void RequestQuit();
+
   std::weak_ptr<GameObject> GetPlayerPtr();
 };
 

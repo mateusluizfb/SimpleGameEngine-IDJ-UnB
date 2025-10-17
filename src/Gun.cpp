@@ -45,7 +45,6 @@ void Gun::Shoot(Vec2 target) {
   bulletGO->AddComponent(bullet);
   bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
   currentState.AddObject(bulletGO);
-
   bulletGO->angleDeg = associated.angleDeg + 90; // Rotate bullet in the direction it's shooting
 }
 
