@@ -1,3 +1,6 @@
+#include <memory>
+#include <algorithm>
+
 #include "State.h"
 #include "Log.h"
 #include "TileSet.h"
@@ -6,8 +9,8 @@
 #include "SpriteRenderer.h"
 #include "Character.h"
 #include "PlayerController.h"
-
-#include <memory>
+#include "Collider.h"
+#include "Collision.h"
 #include "Camera.h"
 
 State::State() : started(false), music("audio/BGM.wav"), quitRequested(false)
@@ -132,6 +135,33 @@ void State::Update(float dt)
   for (size_t i = 0; i < objectArray.size(); i++)
   {
     objectArray[i]->Update(dt);
+  }
+
+  std::vector<std::shared_ptr<GameObject>> colliderGameObjects;
+  std::copy_if(objectArray.begin(), objectArray.end(), std::back_inserter(colliderGameObjects),
+               [](const std::shared_ptr<GameObject>& go) { return go->GetComponent<Collider>() != nullptr; });
+
+  for (size_t i = 0; i < colliderGameObjects.size(); i++)
+  {
+    Collider* colliderA = colliderGameObjects[i]->GetComponent<Collider>();
+    if (colliderA == nullptr) continue;
+
+    for (size_t j = i + 1; j < colliderGameObjects.size(); j++)
+    {
+      Collider* colliderB = colliderGameObjects[j]->GetComponent<Collider>();
+      if (colliderB == nullptr) continue;
+
+      if (Collision::IsColliding(
+        colliderA->GetBox(),
+        colliderB->GetBox(),
+        colliderGameObjects[i]->GetAngleRad(),
+        colliderGameObjects[j]->GetAngleRad()
+      ))
+      {
+        colliderGameObjects[i]->NotifyCollision(*colliderGameObjects[j]);
+        colliderGameObjects[j]->NotifyCollision(*colliderGameObjects[i]);
+      }
+    } 
   }
 
   for (size_t i = 0; i < objectArray.size(); i++)

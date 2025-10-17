@@ -25,6 +25,8 @@ public:
   void RequestDelete();
   void AddComponent(Component* cpt);
   void RemoveComponent(Component* cpt);
+  float GetAngleRad();
+  void NotifyCollision(GameObject& other);
 
   template <typename T>
   T *GetComponent()

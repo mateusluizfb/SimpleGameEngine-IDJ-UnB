@@ -77,3 +77,16 @@ void GameObject::RemoveComponent(Component *component)
 
   components.erase(std::remove(components.begin(), components.end(), component), components.end());
 }
+
+float GameObject::GetAngleRad() {
+  return angleDeg * (3.14159265f / 180.0f);
+}
+
+void GameObject::NotifyCollision(GameObject& other) {
+  Log::debug("GAME_OBJECT - Notifying collision to components");
+
+  for (Component *component : components)
+  {
+    component->NotifyCollision(other);
+  }
+}

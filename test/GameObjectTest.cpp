@@ -65,3 +65,25 @@ TEST(GameObjectTest, Start) {
 
   EXPECT_NO_THROW(obj->Start());
 }
+
+
+TEST(GameObjectTest, NotifyCollisionCallsComponent)
+{
+  class CollisionMockComponent : public Component
+  {
+  public:
+    bool collisionNotified = false;
+    CollisionMockComponent(GameObject &go) : Component(go) {}
+    void NotifyCollision(GameObject &) override { collisionNotified = true; }
+    void Update(float) override {} // Provide empty implementation
+    void Render() override {}      // Provide empty implementation
+  };
+
+  GameObject objA, objB;
+  CollisionMockComponent *comp = new CollisionMockComponent(objA);
+  objA.AddComponent(comp);
+
+  objA.NotifyCollision(objB);
+
+  EXPECT_TRUE(comp->collisionNotified);
+}

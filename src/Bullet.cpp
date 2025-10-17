@@ -1,8 +1,9 @@
+#include <cmath>
+#include "Log.h"
+#include "GameObject.h"
 #include "Bullet.h"
 #include "SpriteRenderer.h"
-#include "GameObject.h"
-#include "Log.h"
-#include <cmath>
+#include "Collider.h"
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance)
   : Component(associated),
@@ -11,8 +12,10 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   damage(damage)
 {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, "assets/img/Bullet.png", 1, 1);
+  Collider *collider = new Collider(associated, Vec2(1, 1), Vec2(0, 0));
 
   associated.AddComponent(spriteRenderer);
+  associated.AddComponent(collider);
 }
 
 void Bullet::Update(float dt) {
