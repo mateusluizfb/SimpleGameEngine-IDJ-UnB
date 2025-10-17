@@ -55,6 +55,12 @@ float Vec2::Angle(const Vec2 &other) const
   return std::atan2(dy, dx);
 }
 
+float Vec2::AngleDeg(const Vec2 &other) const
+{
+  float angleRad = Angle(other);
+  return angleRad * (180.0 / M_PI);
+}
+
 Vec2 Vec2::Rotate(float angle) const
 {
   float x = (this->x * std::cos(angle)) - (this->y * std::sin(angle));
