@@ -108,6 +108,19 @@ TEST(Vec2Test, Angle)
   delete vec1;
 }
 
+TEST(Vec2Test, AngleDeg)
+{
+  Vec2 *vec1 = new Vec2(1, 3);
+  Vec2 *vec2 = new Vec2(5, 7);
+
+  float result = vec1->AngleDeg(*vec2);
+
+  EXPECT_NEAR(result, -135.0, 1e-5);
+
+  delete vec2;
+  delete vec1;
+}
+
 TEST(Vec2Test, Rotate)
 {
   Vec2 *vec1 = new Vec2(1, 1);

@@ -18,6 +18,7 @@ public:
   Vec2 Normalize() const;
   float Distance(const Vec2 &other) const;
   float Angle(const Vec2 &other) const;
+  float AngleDeg(const Vec2 &other) const;
   Vec2 Rotate(float angle) const;
 };
 
