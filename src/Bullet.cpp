@@ -8,7 +8,7 @@
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, bool targetsPlayer)
   : Component(associated),
-  targetsPlayer(false),
+  targetsPlayer(targetsPlayer),
   speed(Vec2(speed * std::cos(angle), speed * std::sin(angle))),
   distanceLeft(maxDistance),
   damage(damage)

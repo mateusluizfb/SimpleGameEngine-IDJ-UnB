@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
+#include "Log.h"
 #include "Game.h"
 #include "Character.h"
 #include "Animator.h"
-#include "Log.h"
+#include "Bullet.h"
 
 TEST(CharacterTest, Start)
 {
@@ -145,3 +146,30 @@ TEST(CharacterTest, NotifyCollision) {
   delete game;
 }
 
+TEST(CharacterTest, NotifyCollisionWithBullet)
+{
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+
+  Log::debug(" --- CharacterTest NotifyCollisionWithBullet Logs ----");
+
+  GameObject go;
+  Character character(go, "assets/img/Player.png");
+  character.Start();
+
+  GameObject bulletGO;
+  Bullet* bullet = new Bullet(bulletGO, 0, 0, 30, 100, true); // Bullet that targets player
+  bulletGO.AddComponent(bullet);
+
+  EXPECT_EQ(character.GetHp(), 100);
+
+  // Force hitTimer above threshold and collide with bullet
+  Animator* animator = go.GetComponent<Animator>();
+  animator->hitTimer.Restart();
+  animator->hitTimer.Update(2.1f); // Force timer above threshold
+  character.NotifyCollision(bulletGO);
+
+  // After valid collision with bullet, hp should be reduced
+  EXPECT_EQ(character.GetHp(), 70);
+
+  delete game;
+}

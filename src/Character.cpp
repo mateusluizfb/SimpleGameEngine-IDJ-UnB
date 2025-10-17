@@ -167,10 +167,10 @@ void Character::NotifyCollision(GameObject &other) {
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
 
-  if (bullet->targetsPlayer && hitTimer->Get() > 2.0)
+  if (bullet != nullptr && bullet->targetsPlayer && hitTimer->Get() > 2.0)
   {
     hp -= bullet->GetDamage();
-    Log::warning("CHARACTER - Character hit by bullet! HP: " + std::to_string(hp));
+    Log::info("CHARACTER - Character hit by bullet! HP: " + std::to_string(hp));
     hitSound.Play(1);
     hitTimer->Restart();
     return;
@@ -180,7 +180,7 @@ void Character::NotifyCollision(GameObject &other) {
 
   if (hitTimer->Get() > 2.0) {
     hp -= 50;
-    Log::warning("CHARACTER - Character hit! HP: " + std::to_string(hp));
+    Log::info("CHARACTER - Character hit! HP: " + std::to_string(hp));
     hitSound.Play(1);
     hitTimer->Restart();
     return;
