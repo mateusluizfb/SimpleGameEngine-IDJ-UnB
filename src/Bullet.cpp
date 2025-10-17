@@ -39,3 +39,7 @@ void Bullet::Render() {
 int Bullet::GetDamage() {
   return damage;
 }
+
+void Bullet::RequestDelete() {
+  associated.RequestDelete();
+}

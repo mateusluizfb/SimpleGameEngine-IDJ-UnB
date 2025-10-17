@@ -84,8 +84,6 @@ float GameObject::GetAngleRad() {
 }
 
 void GameObject::NotifyCollision(GameObject& other) {
-  Log::debug("GAME_OBJECT - Notifying collision to components");
-
   for (Component *component : components)
   {
     component->NotifyCollision(other);

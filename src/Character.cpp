@@ -13,7 +13,7 @@ Character::Command::Command(CommandType type, float x, float y)
 
 Character::Character(GameObject &associated, std::string sprite)
   : Component(associated),
-    // player(nullptr),
+    player(nullptr),
     hitSound("audio/Hit1.wav"),
     deathSound("audio/Dead.wav"),
     hit(false),
@@ -59,6 +59,8 @@ void Character::Start() {
 
 void Character::Update(float dt) {
   Animator* animator = associated.GetComponent<Animator>();
+
+  if (associated.IsDead()) return;
 
   if (hit) {
     Timer* hitTimer = &animator->hitTimer;
@@ -128,7 +130,8 @@ void Character::Update(float dt) {
         case CommandType::SHOOT:
         {
           if (gun.expired()) {
-            throw std::runtime_error("Character::Update(): Character's gun is null");
+            Log::warning("CHARACTER - Character's gun is expired");
+            return;
           }
 
           Log::debug("CHARACTER - Character shooting");
@@ -166,21 +169,26 @@ void Character::NotifyCollision(GameObject &other) {
   if (other.IsDead() || this->associated.IsDead()) return;
 
   Bullet *bullet = other.GetComponent<Bullet>();
+  Zombie *zombie = other.GetComponent<Zombie>();
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
 
-  if (bullet != nullptr && bullet->targetsPlayer && hitTimer->Get() > 2.0)
+  // Log hit timer:
+  
+  if (bullet && bullet->targetsPlayer)
   {
     hp -= bullet->GetDamage();
     Log::info("CHARACTER - Character hit by bullet! HP: " + std::to_string(hp));
     hitSound.Play(1);
     hitTimer->Restart();
+    bullet->RequestDelete();
     return;
   }
 
   if (hp <= 0) return;
 
-  if (hitTimer->Get() > 2.0) {
+  if (zombie != nullptr && hitTimer->Get() > 2.0)
+  {
     hp -= 50;
     Log::info("CHARACTER - Character hit! HP: " + std::to_string(hp));
     hitSound.Play(1);

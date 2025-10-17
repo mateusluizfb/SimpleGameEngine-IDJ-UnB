@@ -40,12 +40,15 @@ void Gun::Shoot(Vec2 target) {
   State &currentState = game.GetState();
 
   GameObject *bulletGO = new GameObject();
+
   // TODO: Handle the case where the last param would be true (targeting player)
-  Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, 10, 400, false); 
+  Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, 10, 400, true); 
   bulletGO->AddComponent(bullet);
   bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
   currentState.AddObject(bulletGO);
   bulletGO->angleDeg = associated.angleDeg + 90; // Rotate bullet in the direction it's shooting
+
+  angle = shootAngle;
 }
 
 std::weak_ptr<GameObject> Gun::GetCharacter() {
@@ -61,14 +64,20 @@ void Gun::Update(float dt)
   }
 
   std::shared_ptr<GameObject> characterPtr = character.lock();
+  Character *characterComp = characterPtr->GetComponent<Character>();
 
-  // Always point gun toward mouse position
   Vec2 characterCenter = characterPtr->box.GetCenter();
-  int mouseWorldX = InputManager::GetInstance().GetMouseXWorld();
-  int mouseWorldY = InputManager::GetInstance().GetMouseYWorld();
-  angle = std::atan2(mouseWorldY - characterCenter.y, mouseWorldX - characterCenter.x);
-  
-  Vec2 offset = Vec2(90, 0).Rotate(angle);
+
+  Vec2 offset = Vec2(90, 0); // Default offset
+
+  if (characterComp->player != nullptr) {
+    // Always point gun toward mouse position
+    int mouseWorldX = InputManager::GetInstance().GetMouseXWorld();
+    int mouseWorldY = InputManager::GetInstance().GetMouseYWorld();
+    angle = std::atan2(mouseWorldY - characterCenter.y, mouseWorldX - characterCenter.x);
+  }
+
+  offset = offset.Rotate(angle);
   associated.angleDeg = angle * (180.0 / M_PI); // Convert to degrees, it's used to rotate the sprite
 
   if (associated.angleDeg > 90 || associated.angleDeg < -90)
