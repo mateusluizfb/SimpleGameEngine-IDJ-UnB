@@ -92,6 +92,8 @@ Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(
 
   Log::warning("GAME - Starting temporary state.");
   state = new State();
+
+  srand(time(NULL));
 }
 
 void Game::CalculateDeltaTime() {

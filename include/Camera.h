@@ -25,6 +25,7 @@ public:
   void ResetSpeedMultiplier();
   float GetPositionX();
   float GetPositionY();
+  Vec2 GetCenterPosition();
 };
 
 #endif
