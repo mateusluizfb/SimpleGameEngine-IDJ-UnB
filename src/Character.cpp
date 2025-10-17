@@ -6,6 +6,7 @@
 #include "Animator.h"
 #include "Collider.h"
 #include "Camera.h"
+#include "Bullet.h"
 
 Character::Command::Command(CommandType type, float x, float y)
   : type(type), pos(x, y) {}
@@ -162,16 +163,26 @@ int Character::GetHp() {
 }
 
 void Character::NotifyCollision(GameObject &other) {
-  if (hp <= 0) return;
-
+  Bullet *bullet = other.GetComponent<Bullet>();
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
+
+  if (bullet->targetsPlayer && hitTimer->Get() > 2.0)
+  {
+    hp -= bullet->GetDamage();
+    Log::warning("CHARACTER - Character hit by bullet! HP: " + std::to_string(hp));
+    hitSound.Play(1);
+    hitTimer->Restart();
+    return;
+  }
+
+  if (hp <= 0) return;
 
   if (hitTimer->Get() > 2.0) {
     hp -= 50;
     Log::warning("CHARACTER - Character hit! HP: " + std::to_string(hp));
-    hitTimer->Restart();
     hitSound.Play(1);
+    hitTimer->Restart();
     return;
   }
 

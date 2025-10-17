@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "SpriteRenderer.h"
 #include "Log.h"
+#include "Bullet.h"
 
 TEST(ZombieTest, InitZombie)
 {
@@ -53,3 +54,36 @@ TEST(ZombieTest, DamageZombie)
   delete obj;
   delete game;
 }
+
+TEST(ZombieTest, NotifyCollisionWithBullet)
+{
+  Game *game = &Game::GetInstance("Test Game", 800, 600);
+
+  Log::debug(" --- ZombieTest NotifyCollision Logs ----");
+
+  GameObject* zombieObj = new GameObject();
+  Zombie *zombie = new Zombie(*zombieObj);
+
+  GameObject* bulletObj = new GameObject();
+  // Create a Bullet with damage 42
+  Bullet* bullet = new Bullet(*bulletObj, 0, 0, 42, 100, false);
+  bulletObj->AddComponent(bullet);
+
+  int initialHp = zombie->GetHitPoints();
+  EXPECT_EQ(initialHp, 100);
+
+  // Notify collision with bullet
+  zombie->NotifyCollision(*bulletObj);
+
+  // Should take damage
+  EXPECT_EQ(zombie->GetHitPoints(), 58); // 100 - 42
+
+  // Should not take damage again if already hit (hit flag)
+  zombie->NotifyCollision(*bulletObj);
+  EXPECT_EQ(zombie->GetHitPoints(), 58);
+
+  delete bulletObj;
+  delete zombieObj;
+  delete game;
+}
+

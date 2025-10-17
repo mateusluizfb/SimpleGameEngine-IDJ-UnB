@@ -19,6 +19,7 @@ public:
 
   void Update(float dt) override;
   void Render() override;
+  void NotifyCollision(GameObject &other) override;
 };
 
 #endif

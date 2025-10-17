@@ -4,9 +4,11 @@
 #include "Bullet.h"
 #include "SpriteRenderer.h"
 #include "Collider.h"
+#include "Character.h"
 
-Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance)
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, bool targetsPlayer)
   : Component(associated),
+  targetsPlayer(false),
   speed(Vec2(speed * std::cos(angle), speed * std::sin(angle))),
   distanceLeft(maxDistance),
   damage(damage)
