@@ -20,6 +20,7 @@ public:
   void Update(float dt);
   void Render();
   int GetDamage();
+  void RequestDelete();
 
 private:
   Vec2 speed;

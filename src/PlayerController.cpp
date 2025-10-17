@@ -1,6 +1,5 @@
 #include "Log.h"
 #include "Character.h"
-#include "Gun.h"
 #include "PlayerController.h"
 #include "InputManager.h"
 #include "Vec2.h"

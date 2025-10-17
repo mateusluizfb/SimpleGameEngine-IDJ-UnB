@@ -11,6 +11,7 @@ private:
   int zombieCounter;
   std::vector<Wave> waves;
   Timer zombieCooldownTimer;
+  Timer npcsCooldownTimer;
   int currentWave;
 
 public:
