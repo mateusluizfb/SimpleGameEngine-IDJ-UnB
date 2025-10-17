@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Timer.h"
 #include "Vec2.h"
+#include "Sound.h"
 
 enum CommandType
 {
@@ -27,6 +28,9 @@ public:
   };
 
   Character* player;
+  Sound hitSound;
+  Sound deathSound;
+  bool hit = false;
 
   Character(GameObject &associated, std::string sprite);
   ~Character();
@@ -37,6 +41,8 @@ public:
   void Issue(Command command);
   std::queue<Command> GetTaskQueue();
   Vec2 GetSpeed();
+  int GetHp();
+  void NotifyCollision(GameObject &other) override;
 
 private:
   std::weak_ptr<GameObject> gun;

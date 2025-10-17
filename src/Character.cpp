@@ -5,6 +5,7 @@
 #include "SpriteRenderer.h"
 #include "Animator.h"
 #include "Collider.h"
+#include "Camera.h"
 
 Character::Command::Command(CommandType type, float x, float y)
   : type(type), pos(x, y) {}
@@ -12,7 +13,9 @@ Character::Command::Command(CommandType type, float x, float y)
 Character::Character(GameObject &associated, std::string sprite)
   : Component(associated),
     // player(nullptr),
-    // gun(),
+    hitSound("audio/Hit1.wav"),
+    deathSound("audio/Dead.wav"),
+    hit(false),
     taskQueue(),
     speed(Vec2(0, 0)),
     linearSpeed(100),
@@ -56,6 +59,21 @@ void Character::Start() {
 void Character::Update(float dt) {
   Animator* animator = associated.GetComponent<Animator>();
 
+  if (hit) {
+    Timer* hitTimer = &animator->hitTimer;
+    hitTimer->Update(dt);
+
+    Log::debug("CHARACTER - Character is hit, time since last hit: " + std::to_string(hitTimer->Get()));
+
+    if (hitTimer->Get() > 0.2) {
+      hit = false;
+    }
+  }
+
+  if (animator->GetCurrent() == "dead") {
+    deathTimer.Update(dt);
+  }
+
   if (animator->GetCurrent() == "dead" && deathTimer.Get() > 1)
   {
     Log::info("CHARACTER - Character removal after death animation.");
@@ -63,15 +81,18 @@ void Character::Update(float dt) {
     return;
   }
 
-  if (hp <= 0)
+  if (hp <= 0 && animator->GetCurrent() != "dead")
   {
     Log::info("CHARACTER - Character is dead.");
+    Camera::GetInstance().Unfollow();
     animator->SetAnimation("dead");
-    deathTimer.Update(dt);
+    deathSound.Play(1);
+    gun.lock()->RequestDelete();
     return;
   }
 
-  if (taskQueue.empty()) {
+  if (taskQueue.empty() && animator->GetCurrent() != "dead")
+  {
     speed = Vec2(0, 0);
     animator->SetAnimation("idle");
     return;
@@ -134,4 +155,25 @@ std::queue<Character::Command> Character::GetTaskQueue()
 Vec2 Character::GetSpeed()
 {
   return speed;
+}
+
+int Character::GetHp() {
+  return hp;
+}
+
+void Character::NotifyCollision(GameObject &other) {
+  if (hp <= 0) return;
+
+  Animator *animator = associated.GetComponent<Animator>();
+  Timer *hitTimer = &animator->hitTimer;
+
+  if (hitTimer->Get() > 2.0) {
+    hp -= 50;
+    Log::warning("CHARACTER - Character hit! HP: " + std::to_string(hp));
+    hitTimer->Restart();
+    hitSound.Play(1);
+    return;
+  }
+
+  hit = true;
 }
