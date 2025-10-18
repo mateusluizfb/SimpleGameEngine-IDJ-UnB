@@ -126,10 +126,10 @@ void Zombie::NotifyCollision(GameObject &other) {
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
 
+  bullet->RequestDelete();
   this->Damage(bullet->GetDamage());
   hitSound.Play(1);
   hitTimer->Restart();
-  bullet->RequestDelete();
 
   hit = true;
 }
