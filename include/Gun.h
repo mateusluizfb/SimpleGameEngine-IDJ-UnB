@@ -7,6 +7,8 @@
 #include "Timer.h"
 #include "Vec2.h"
 
+#define BULLET_DAMAGE 10
+
 class Gun : public Component {
 private:
   Sound shootSound;
