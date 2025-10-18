@@ -49,22 +49,22 @@ void Gun::Shoot(Vec2 target) {
   shootSound.Play();
   cooldownState = 1;
 
-  Vec2 direction = (target - associated.box.GetCenter()).Normalize();
-  float shootAngle = std::atan2(direction.y, direction.x);
+  Vec2 firstProjectileDirection = (target - associated.box.GetCenter()).Normalize();
+  Vec2 secondProjectileDirection = firstProjectileDirection.Rotate(0.3); // Slightly up
+  Vec2 thirdProjectileDirection = firstProjectileDirection.Rotate(-0.3); // Slightly down
+
+  float firstShootAngle = std::atan2(firstProjectileDirection.y, firstProjectileDirection.x);
+  float secondShootAngle = std::atan2(secondProjectileDirection.y, secondProjectileDirection.x);
+  float thirdShootAngle = std::atan2(thirdProjectileDirection.y, thirdProjectileDirection.x);
 
   Game &game = Game::GetInstance();
   State &currentState = game.GetState();
 
-  // GameObject *bulletGO = new GameObject();
-  // // TODO: Handle the case where the last param would be true (targeting player)
-  // Bullet *bullet = new Bullet(*bulletGO, shootAngle, 500, BULLET_DAMAGE, 400, true);
-  // bulletGO->AddComponent(bullet);
-  // bulletGO->box.SetCenter(associated.box.GetCenter() + direction * 30);
-  // currentState.AddObject(bulletGO);
-  // bulletGO->angleDeg = associated.angleDeg + 90; // Rotate bullet in the direction it's shooting
-  CreateBullet(associated, currentState, associated.box.GetCenter(), direction, shootAngle);
+  CreateBullet(associated, currentState, associated.box.GetCenter(), firstProjectileDirection, firstShootAngle);
+  CreateBullet(associated, currentState, associated.box.GetCenter(), secondProjectileDirection, secondShootAngle);
+  CreateBullet(associated, currentState, associated.box.GetCenter(), thirdProjectileDirection, thirdShootAngle);
 
-  angle = shootAngle;
+  angle = firstShootAngle;
 }
 
 std::weak_ptr<GameObject> Gun::GetCharacter() {
