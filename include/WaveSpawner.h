@@ -8,10 +8,28 @@
 
 #define DEFAULT_DISTANCE 1000.0f
 
-#define WAVES_COUNT 2
-#define WAVE_ZOMBIES_COUNT 2
-#define ZOMBIE_SPAWN_COOLDOWN 5.0f
-#define NPC_SPAWN_COOLDOWN 10.0f
+#ifdef DEBUG
+
+#endif
+
+#ifdef DEBUG
+  #undef WAVES_COUNT
+  #define WAVES_COUNT 1
+
+  #undef WAVE_ZOMBIES_COUNT
+  #define WAVE_ZOMBIES_COUNT 1
+
+  #undef ZOMBIE_SPAWN_COOLDOWN
+  #define ZOMBIE_SPAWN_COOLDOWN 1.0f
+
+  #undef NPC_SPAWN_COOLDOWN
+  #define NPC_SPAWN_COOLDOWN 30.0f
+#else
+  #define WAVES_COUNT 2
+  #define WAVE_ZOMBIES_COUNT 2
+  #define ZOMBIE_SPAWN_COOLDOWN 5.0f
+  #define NPC_SPAWN_COOLDOWN 10.0f
+#endif
 
 class WaveSpawner : public Component {
 private:

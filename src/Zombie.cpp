@@ -52,8 +52,14 @@ void Zombie::Damage(int damage) {
   }
 }
 
-int Zombie::GetHitPoints() {
+int Zombie::GetHitPoints()
+{
   return hitPoints;
+}
+
+int Zombie::GetDamage()
+{
+  return damage;
 }
 
 void Zombie::Update(float dt) {
@@ -123,6 +129,8 @@ void Zombie::NotifyCollision(GameObject &other) {
   this->Damage(bullet->GetDamage());
   hitSound.Play(1);
   hitTimer->Restart();
+  bullet->RequestDelete();
 
   hit = true;
 }
+

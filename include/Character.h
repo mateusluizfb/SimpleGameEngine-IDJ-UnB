@@ -10,6 +10,12 @@
 #include "Vec2.h"
 #include "Sound.h"
 
+#ifdef DEBUG
+  #define IMMORTAL true
+#else
+  #define IMMORTAL false
+#endif
+
 enum CommandType
 {
   MOVE,
