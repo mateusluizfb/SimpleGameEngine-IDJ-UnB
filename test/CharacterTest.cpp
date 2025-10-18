@@ -119,30 +119,30 @@ TEST(CharacterTest, NotifyCollision) {
 
   Log::debug(" --- CharacterTest Logs ----");
 
-  GameObject go;
-  Character character(go, "assets/img/Player.png");
-  character.Start();
-
-  EXPECT_EQ(character.GetHp(), 100);
-  EXPECT_EQ(character.GetSpeed().x, 0);
-  EXPECT_EQ(character.GetSpeed().y, 0);
+  GameObject *go = new GameObject();
+  Character *character = new Character(*go, "assets/img/Player.png");
+  go->AddComponent(character);
+  character->Start();
 
   // Simulate collision (should not reduce hp yet)
-  GameObject other;
-  character.NotifyCollision(other);
-  EXPECT_EQ(character.GetHp(), 100);
+  GameObject *other = new GameObject();
+  character->NotifyCollision(*other);
+  EXPECT_EQ(character->GetHp(), 100);
 
   // Force hitTimer above threshold and collide again
-  Animator* animator = go.GetComponent<Animator>();
+  Zombie *zombie = new Zombie(*other);
+  other->AddComponent(zombie);
+  Animator* animator = go->GetComponent<Animator>();
   animator->hitTimer.Restart();
   animator->hitTimer.Update(2.1f); // Force timer above threshold
-  character.NotifyCollision(other);
+  character->NotifyCollision(*other);
 
   // After valid collision, hp should be reduced
-  EXPECT_EQ(character.GetHp(), 50);
-  EXPECT_LT(character.GetSpeed().x, 1e-5); // Still idle
-  EXPECT_EQ(character.GetSpeed().y, 0);
+  EXPECT_EQ(character->GetHp(), 90);
+  EXPECT_LT(character->GetSpeed().x, 1e-5); // Still idle
+  EXPECT_EQ(character->GetSpeed().y, 0);
 
+  delete go;
   delete game;
 }
 

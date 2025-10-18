@@ -189,7 +189,7 @@ void Character::NotifyCollision(GameObject &other) {
 
   if (zombie != nullptr && hitTimer->Get() > 2.0)
   {
-    hp -= 50;
+    hp -= 10;
     Log::info("CHARACTER - Character hit! HP: " + std::to_string(hp));
     hitSound.Play(1);
     hitTimer->Restart();

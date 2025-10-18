@@ -47,9 +47,11 @@ UNAME_S := $(shell uname -s)
 
 # SE FOR MAC
 ifeq ($(UNAME_S), Darwin)
+	BREW_PREFIX := $(shell brew --prefix)
+
 	LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
-	SDL_INC_PATH += /opt/homebrew/include/SDL2
-	LINK_PATH += -L/opt/homebrew/lib
+	SDL_INC_PATH += $(BREW_PREFIX)/include/SDL2
+	LINK_PATH += -L$(BREW_PREFIX)/lib
 
 else
 # SE FOR LINUX

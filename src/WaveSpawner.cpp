@@ -13,7 +13,7 @@
 #include "SpriteRenderer.h"
 #include "AiController.h"
 
-float RandomFloat(float lower, float upper)
+static float RandomFloat(float lower, float upper)
 {
   return lower + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (upper - lower);
 }
