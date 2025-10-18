@@ -2,7 +2,7 @@ COMPILER = g++
 RMDIR = rm -rdf
 RM = rm -f
 
-DEP_FLAGS = -M -MT $@ -MT $(BIN_PATH)/$(*F).o -MP -MF $@
+DEP_FLAGS = -M -MT $@ -MT $(BIN_PATH)/$(*F).o -MP -MF $@ -Wall
 LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 INC_PATHS = -I$(INC_PATH) $(addprefix -I,$(SDL_INC_PATH))
