@@ -50,9 +50,9 @@ TEST(GunTest, GunShootCreatesBullet)
   Vec2 target(500, 500);
   gunComponent->Shoot(target);
 
-  // After shooting, there should be one more object (the bullet)
+  // After shooting, there should be three more objects (the bullets)
   auto objectArray = state.GetObjectArray();
-  EXPECT_EQ(objectArray.size(), initialCount + 1);
+  EXPECT_EQ(objectArray.size(), initialCount + 3);
 
   // The last object should be a Bullet
   auto lastObj = objectArray.back();
