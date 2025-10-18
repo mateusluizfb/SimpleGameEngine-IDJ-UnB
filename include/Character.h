@@ -35,9 +35,9 @@ public:
   Character(GameObject &associated, std::string sprite);
   ~Character();
 
-  void Start();
-  void Update(float dt);
-  void Render();
+  void Start() override;
+  void Update(float dt) override;
+  void Render() override;
   void Issue(Command command);
   std::queue<Command> GetTaskQueue();
   Vec2 GetSpeed();

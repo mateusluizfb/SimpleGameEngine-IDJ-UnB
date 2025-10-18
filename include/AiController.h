@@ -5,6 +5,8 @@
 #include "Timer.h"
 #include "Vec2.h"
 
+#define DEFAULT_SHOOTING_DISTANCE 500.0f
+
 class AIController : public Component {
 private:
     enum AIState { MOVING, RESTING };

@@ -27,7 +27,8 @@ void AIController::Update(float dt) {
         Vec2 selfPos = associated.box.GetCenter();
         Vec2 direction = (playerPos - selfPos).Normalize();
 
-        if (selfPos.Distance(playerPos) < 400.0f) {
+        if (selfPos.Distance(playerPos) < DEFAULT_SHOOTING_DISTANCE)
+        {
           self->Issue(Character::Command(
             CommandType::SHOOT,
             playerPos.x,
@@ -36,14 +37,15 @@ void AIController::Update(float dt) {
 
           state = RESTING;
           restTimer.Restart();
-        } else  {
+        }
+        else
+        {
           self->Issue(Character::Command(
             CommandType::MOVE,
             direction.x,
             direction.y
           ));
         }
-
       } break;
 
       case RESTING: {
