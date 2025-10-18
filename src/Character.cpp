@@ -87,10 +87,12 @@ void Character::Update(float dt) {
   if (hp <= 0 && animator->GetCurrent() != "dead")
   {
     Log::info("CHARACTER - Character is dead.");
-    Camera::GetInstance().Unfollow();
     animator->SetAnimation("dead");
     deathSound.Play(1);
     gun.lock()->RequestDelete();
+
+    if (player) Camera::GetInstance().Unfollow();
+
     return;
   }
 
@@ -173,8 +175,11 @@ void Character::NotifyCollision(GameObject &other) {
   Animator *animator = associated.GetComponent<Animator>();
   Timer *hitTimer = &animator->hitTimer;
 
-  // Log hit timer:
-  
+  if (player && IMMORTAL) {
+    Log::warning("CHARACTER - IMMORTAL mode active, no damage taken.");
+    return;
+  };
+
   if (bullet && bullet->targetsPlayer)
   {
     hp -= bullet->GetDamage();
@@ -189,7 +194,7 @@ void Character::NotifyCollision(GameObject &other) {
 
   if (zombie != nullptr && hitTimer->Get() > 2.0)
   {
-    hp -= 10;
+    hp -= zombie->GetDamage();
     Log::info("CHARACTER - Character hit! HP: " + std::to_string(hp));
     hitSound.Play(1);
     hitTimer->Restart();
