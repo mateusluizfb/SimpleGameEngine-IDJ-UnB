@@ -14,3 +14,4 @@
 2. Implement the Z/Y Sorting from the 5th lesson.
 3. Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
 4. Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.
+5. Fix collider delay

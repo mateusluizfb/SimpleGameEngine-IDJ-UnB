@@ -16,6 +16,8 @@ Collider::Collider(GameObject &associated, Vec2 scale, Vec2 offset)
 {}
 
 void Collider::Update(float dt) {
+  // TODO: For some reason, collider has a delay
+
   box = Rect(associated.box.x + offset.x,
              associated.box.y + offset.y,
              associated.box.w * scale.x,
