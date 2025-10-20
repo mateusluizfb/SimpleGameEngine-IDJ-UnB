@@ -67,7 +67,7 @@ void Zombie::Update(float dt) {
   Timer *hitTimer = &animator->hitTimer;
   Timer *deathTimer = &animator->deathTimer;
 
-  State &state = Game::GetInstance().GetState();
+  State &state = Game::GetInstance().GetCurrentState();
 
   // Hit Update
   if (hit && hitPoints != 0 && hitTimer->Get() >= 0.5)

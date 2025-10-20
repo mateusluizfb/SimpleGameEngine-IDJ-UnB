@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "State.h"
+#include "StageState.h"
 #include "Log.h"
 
 TEST(StateTest, Start)
@@ -10,7 +11,8 @@ TEST(StateTest, Start)
 
   Log::debug(" --- AddObjectAndComponent Logs ----");
 
-  State *state = new State();
+  State *state = new StageState();
+  game->StateStackPush(new StageState());
   std::vector<std::shared_ptr<GameObject>> objectArray = state->GetObjectArray();
 
   EXPECT_EQ(objectArray.size(), 0);
@@ -31,7 +33,8 @@ TEST(StateTest, GetObjectPtr)
 
   Log::debug(" --- AddObjectAndComponent Logs ----");
 
-  State *state = new State();
+  State *state = new StageState();
+  game->StateStackPush(new StageState());
   std::vector<std::shared_ptr<GameObject>> objectArray = state->GetObjectArray();
 
   state->Start();

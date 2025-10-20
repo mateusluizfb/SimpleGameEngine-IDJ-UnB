@@ -9,7 +9,6 @@
 AIController::AIController(GameObject &associated)
   : Component(associated),
     state(MOVING),
-    npcCounter(0),
     restTimer(),
     destination(0, 0)
 {}
@@ -17,7 +16,7 @@ AIController::AIController(GameObject &associated)
 void AIController::Update(float dt) {
   switch (state) {
       case MOVING: {
-        State &gameState = Game::GetInstance().GetState();
+        State &gameState = Game::GetInstance().GetCurrentState();
         std::weak_ptr<GameObject> player = gameState.GetPlayerPtr();
         Character *self = associated.GetComponent<Character>();
 

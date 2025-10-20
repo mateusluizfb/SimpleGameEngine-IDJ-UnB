@@ -3,19 +3,21 @@
 #include "Log.h"
 #include "Game.h"
 #include "State.h"
+#include "StageState.h"
 
 TEST(TestGame, CalculateDeltaTime)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
-  State *state = &game->GetState();
+  StageState *stageState = new StageState();
+  game->Push(stageState);
 
   Log::debug(" --- TestGame Logs ----");
 
   std::thread quitThread(
-      [state]()
+      [stageState]()
       {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        state->RequestQuit();
+        stageState->RequestQuit();
       });
 
   game->Run();

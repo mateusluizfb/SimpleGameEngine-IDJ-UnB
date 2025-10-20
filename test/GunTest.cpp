@@ -4,10 +4,12 @@
 #include "Character.h"
 #include "Gun.h"
 #include "Bullet.h"
+#include "StageState.h"
 
 TEST(GunTest, GunCharacterWeakPtrExpiredAfterDelete)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- GunTest Logs ----");
 
@@ -33,7 +35,8 @@ TEST(GunTest, GunCharacterWeakPtrExpiredAfterDelete)
 TEST(GunTest, GunShootCreatesBullet)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
-  State &state = game->GetState();
+  game->StateStackPush(new StageState());
+  State &state = game->GetCurrentState();
 
   auto characterPtr = std::make_shared<GameObject>();
   auto characterComponent = new Character(*characterPtr, "assets/img/Player.png");

@@ -54,7 +54,7 @@ void Gun::Shoot(Vec2 target) {
 
   Vec2 projectileDirection = (target - associated.box.GetCenter()).Normalize();
   Game &game = Game::GetInstance();
-  State &currentState = game.GetState();
+  State &currentState = game.GetCurrentState();
 
   CreateBullet(associated, currentState, associated.box.GetCenter(), projectileDirection, 0.0);
   CreateBullet(associated, currentState, associated.box.GetCenter(), projectileDirection, 0.3);

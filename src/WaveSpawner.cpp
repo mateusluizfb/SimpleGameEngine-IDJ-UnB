@@ -69,7 +69,7 @@ WaveSpawner::WaveSpawner(GameObject &associated)
 }
 
 void WaveSpawner::Update(float dt) {
-  State &state = Game::GetInstance().GetState();
+  State &state = Game::GetInstance().GetCurrentState();
   std::weak_ptr<GameObject> player = state.GetPlayerPtr();
 
   if (player.expired()) return;

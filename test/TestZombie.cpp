@@ -6,11 +6,13 @@
 #include "Log.h"
 #include "Bullet.h"
 #include "Character.h"
+#include "StageState.h"
 
 TEST(TestZombie, InitZombie)
 {
   // Needed so it inits the renderer used by SpriteRenderer's Sprite
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- TestZombie Logs ----");
 
@@ -34,6 +36,7 @@ TEST(TestZombie, InitZombie)
 TEST(TestZombie, DamageZombie)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- TestZombie Logs ----");
 
@@ -59,6 +62,7 @@ TEST(TestZombie, DamageZombie)
 TEST(TestZombie, NotifyCollisionWithBullet)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- TestZombie NotifyCollision Logs ----");
 
@@ -91,10 +95,12 @@ TEST(TestZombie, NotifyCollisionWithBullet)
 TEST(TestZombie, ZombieMovesTowardsPlayer)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
+
   Log::debug(" --- TestZombie Movement Logs ----");
 
-  Game::GetInstance().GetState().Start();
-  std::weak_ptr<GameObject> playerPtr = Game::GetInstance().GetState().GetPlayerPtr();
+  Game::GetInstance().GetCurrentState().Start();
+  std::weak_ptr<GameObject> playerPtr = Game::GetInstance().GetCurrentState().GetPlayerPtr();
   ASSERT_FALSE(playerPtr.expired());
   GameObject* playerObj = playerPtr.lock().get();
 
