@@ -73,11 +73,13 @@ void Character::Update(float dt) {
     }
   }
 
-  if (animator->GetCurrent() == "dead") {
+  if (animator->GetCurrent() == "dead" && deathTimer.Get() < 1)
+  {
     deathTimer.Update(dt);
+    return;
   }
 
-  if (animator->GetCurrent() == "dead" && deathTimer.Get() > 1)
+  if (animator->GetCurrent() == "dead" && deathTimer.Get() >= 1)
   {
     Log::info("CHARACTER - Character removal after death animation.");
     associated.RequestDelete();
