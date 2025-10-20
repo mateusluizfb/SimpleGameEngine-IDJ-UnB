@@ -25,11 +25,6 @@ public:
   void Resume() override;
   void Update(float dt) override;
   void Render() override;
-
-  void RequestQuit()
-  {
-    quitRequested = true;
-  };
 };
 
 #endif

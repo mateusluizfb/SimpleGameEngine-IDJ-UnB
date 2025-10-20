@@ -98,6 +98,13 @@ void StageState::Update(float dt)
     this->RequestQuit();
   }
 
+  if (inputManager.KeyPress(ESCAPE_KEY))
+  {
+    Log::info("STATE - Escape key pressed, popping state");
+    music.Stop();
+    this->RequestPop();
+  }
+
   for (size_t i = 0; i < objectArray.size(); i++)
   {
     objectArray[i]->Update(dt);
@@ -144,10 +151,7 @@ void StageState::Update(float dt)
 
 void StageState::Render()
 { 
-  for (size_t i = 0; i < objectArray.size(); i++)
-  {
-    objectArray[i]->Render();
-  }
+  RenderArray();
 }
 
 void StageState::Pause ()

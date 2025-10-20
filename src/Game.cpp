@@ -206,10 +206,8 @@ void Game::Run()
       Log::info("GAME - Popping current state");
 
       stateStack.pop();
-      Resources::ClearImages();
-      Resources::ClearSounds();
-      Resources::ClearMusics();
       if (!stateStack.empty()) {
+        Log::info("GAME - Resuming previous state");
         stateStack.top()->Resume();
       }
       continue;

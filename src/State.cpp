@@ -51,6 +51,16 @@ bool State::QuitRequested()
   return quitRequested;
 }
 
+void State::RequestQuit()
+{
+  quitRequested = true;
+}
+
+void State::RequestPop()
+{
+  popRequested = true;
+}
+
 bool State::PopRequested()
 {
   return popRequested;

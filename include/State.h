@@ -26,6 +26,9 @@ public:
   bool PopRequested();
   bool QuitRequested();
 
+  void RequestPop();
+  void RequestQuit();
+
   // TODO: This shouln't be here
   std::weak_ptr<GameObject> GetPlayerPtr()
   {
