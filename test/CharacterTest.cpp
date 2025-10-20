@@ -4,22 +4,25 @@
 #include "Character.h"
 #include "Animator.h"
 #include "Bullet.h"
+#include "Zombie.h"
+#include "StageState.h"
 
 TEST(CharacterTest, Start)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
   GameObject go;
   Character character(go, "assets/img/Player.png");
-
-  State& previousState = game->GetState();
+  
+  State& previousState = game->GetCurrentState();
   int previousObjectsSize = previousState.GetObjectArray().size();
-
+  
   EXPECT_NO_THROW(character.Start());
 
-  State& currentState = game->GetState();
+  State& currentState = game->GetCurrentState();
   int currentObjectsSize = currentState.GetObjectArray().size();
 
   EXPECT_EQ(currentObjectsSize, previousObjectsSize + 1);
@@ -29,6 +32,7 @@ TEST(CharacterTest, Start)
 
 TEST(CharacterTest, Issue) {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
@@ -51,6 +55,7 @@ TEST(CharacterTest, Issue) {
 
 TEST(CharacterTest, UpdateIdle) {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
@@ -71,6 +76,7 @@ TEST(CharacterTest, UpdateIdle) {
 TEST(CharacterTest, UpdateShoot)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
@@ -89,6 +95,7 @@ TEST(CharacterTest, UpdateShoot)
 TEST(CharacterTest, UpdateMove)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
@@ -116,6 +123,7 @@ TEST(CharacterTest, UpdateMove)
 
 TEST(CharacterTest, NotifyCollision) {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest Logs ----");
 
@@ -149,6 +157,7 @@ TEST(CharacterTest, NotifyCollision) {
 TEST(CharacterTest, NotifyCollisionWithBullet)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
+  game->StateStackPush(new StageState());
 
   Log::debug(" --- CharacterTest NotifyCollisionWithBullet Logs ----");
 

@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "State.h"
+#include "StageState.h"
 #include "SpriteRenderer.h"
 #include "Log.h"
 
@@ -28,7 +29,9 @@ TEST(GameObjectTest, AddObjectAndComponent)
 
   Log::debug(" --- AddObjectAndComponent Logs ----");
 
-  State *state = new State();
+  State *state = new StageState();
+  game->StateStackPush(new StageState());
+
   GameObject *obj = new GameObject();
   SpriteRenderer *spriteRenderer = new SpriteRenderer(*obj, "assets/img/Background.png");
 

@@ -10,7 +10,6 @@
 Game* Game::instance = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Window* Game::window = nullptr;
-State* Game::state = nullptr;
 
 SDL_Window* init_window(const std::string &title, int width, int height)
 {
@@ -76,7 +75,10 @@ void init_sdl_libs()
   Log::info("GAME - SDL and its dependencies initialized successfully.");
 }
 
-Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(0.0)
+Game::Game(const std::string &title, int width, int height)
+  : frameStart(0),
+    dt(0.0),
+    storedState(nullptr)
 {
   Log::info("GAME - Initializing game: " + title + " (" + std::to_string(width) + "x" + std::to_string(height) + ")");
   if (instance != nullptr)
@@ -90,8 +92,8 @@ Game::Game(const std::string &title, int width, int height) : frameStart(0), dt(
   window = init_window(title, width, height);
   renderer = init_renderer(window);
 
-  Log::warning("GAME - Starting temporary state.");
-  state = new State();
+  // Log::warning("GAME - Starting storedState array.");
+  // storedState->StartArray();
 
   srand(time(NULL));
 }
@@ -111,13 +113,21 @@ Game::~Game()
 {
   Log::info("GAME - Cleaning up game resources");
 
+  if (storedState != nullptr) {
+    delete storedState;
+    storedState = nullptr;
+  }
+
+  while (!stateStack.empty()) {
+    stateStack.pop();
+  }
+
   Resources::ClearImages();
   Resources::ClearSounds();
   Resources::ClearMusics();
 
   instance = nullptr;
-  delete state;
-  state = nullptr;
+
   Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
@@ -139,9 +149,9 @@ Game& Game::GetInstance(const std::string &title, int width, int height)
   return *instance;
 }
 
-State& Game::GetState()
+State &Game::GetCurrentState()
 {
-  return *state;
+  return *stateStack.top().get();
 }
 
 SDL_Renderer *Game::GetRenderer()
@@ -163,24 +173,62 @@ int Game::GetWindowHeight()
   return h;
 }
 
+void Game::Push(State* state)
+{
+  Log::info("GAME - Storing new state to be pushed next frame");
+  storedState = state;
+}
+
+void Game::StateStackPush(State* state)
+{
+  stateStack.push(std::unique_ptr<State>(state));
+  stateStack.top()->Start();
+  storedState = nullptr;
+}
+
 void Game::Run()
 {
   Log::info("GAME - Starting game loop");
-  State& state = GetState();
   InputManager& inputManager = InputManager::GetInstance();
 
-  state.Start();
+  if (storedState != nullptr) {
+    this->StateStackPush(storedState);
+  } else {
+    Log::error("GAME - No initial state provided. Exiting.");
+    return;
+  }
 
-  while (!state.QuitRequested())
-  {
-    Game::CalculateDeltaTime();
+  while (!stateStack.empty() && !stateStack.top()->QuitRequested()) {
+    CalculateDeltaTime();
     inputManager.Update();
-    state.Update(Game::GetDeltaTime());
-    state.Render();
+
+    if (stateStack.top()->PopRequested()) {
+      Log::info("GAME - Popping current state");
+
+      stateStack.pop();
+      Resources::ClearImages();
+      Resources::ClearSounds();
+      Resources::ClearMusics();
+      if (!stateStack.empty()) {
+        stateStack.top()->Resume();
+      }
+      continue;
+    }
+\
+    if (storedState != nullptr) {
+      Log::info("GAME - Pushing new state");
+
+      stateStack.top()->Pause();
+      stateStack.push(std::unique_ptr<State>(storedState));
+      stateStack.top()->Start();
+      storedState = nullptr;
+    }
+
+    stateStack.top()->Update(dt);
+    stateStack.top()->Render();
     SDL_RenderPresent(renderer);
     SDL_Delay(33); // Force ~30 FPS
   }
 
   Log::info("GAME - Exiting game loop");
-  Game::~Game();
 }

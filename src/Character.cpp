@@ -7,6 +7,7 @@
 #include "Collider.h"
 #include "Camera.h"
 #include "Bullet.h"
+#include "Zombie.h"
 
 Character::Command::Command(CommandType type, float x, float y)
   : type(type), pos(x, y) {}
@@ -48,7 +49,7 @@ void Character::Start() {
   Log::info("CHARACTER - Starting character component");
 
   Game& game = Game::GetInstance();
-  State& currentState= game.GetState();
+  State& currentState= game.GetCurrentState();
   
   GameObject *gunGO = new GameObject();
   gun = currentState.AddObject(gunGO);
@@ -133,7 +134,8 @@ void Character::Update(float dt) {
 
         case CommandType::SHOOT:
         {
-          if (gun.expired()) {
+          if (gun.expired())
+          {
             Log::warning("CHARACTER - Character's gun is expired");
             return;
           }

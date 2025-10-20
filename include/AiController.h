@@ -11,7 +11,6 @@ class AIController : public Component {
 private:
     enum AIState { MOVING, RESTING };
     AIState state;
-    int npcCounter;
     Timer restTimer;
     Vec2 destination;
 
