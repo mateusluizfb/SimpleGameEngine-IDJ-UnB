@@ -5,6 +5,7 @@
 std::unordered_map<std::string, SDL_Texture *> Resources::imageTable;
 std::unordered_map<std::string, Mix_Music *> Resources::musicTable;
 std::unordered_map<std::string, Mix_Chunk *> Resources::soundTable;
+std::unordered_map<std::string, TTF_Font *> Resources::fontTable;
 
 SDL_Texture* Resources::GetImage(const std::string &file)
 {
@@ -91,4 +92,38 @@ void Resources::ClearSounds()
   }
 
   soundTable.clear();
+}
+
+TTF_Font* Resources::GetFont(const std::string &file, int fontSize)
+{
+  std::string key = file + std::to_string(fontSize);
+  Log::info("RESOURCES - Getting font: " + key);
+
+  auto it = fontTable.find(key);
+
+  if (it != fontTable.end()) return it->second;
+
+  Log::info("RESOURCES - Font not found, loading font: " + key);
+
+  TTF_Font *font = TTF_OpenFont(file.c_str(), fontSize);
+  if (font == nullptr)
+  {
+    Log::error("RESOURCES - Failed to load font: " + key + " Error: " + TTF_GetError());
+  }
+
+  fontTable.emplace(key, font);
+
+  return font;
+}
+
+void Resources::ClearFonts()
+{
+  Log::info("RESOURCES - Clearing fonts");
+
+  for (const std::pair<const std::string, TTF_Font *> &pair : fontTable)
+  {
+    TTF_CloseFont(pair.second);
+  }
+
+  fontTable.clear();
 }

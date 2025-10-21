@@ -41,8 +41,6 @@ void StageState::Start()
 {
   Log::info("STATE - Starting state");
 
-  LoadAssets();
-
   GameObject *waveSpawnerGameObject = new GameObject();
   waveSpawnerGameObject->AddComponent(new WaveSpawner(*waveSpawnerGameObject));
   this->AddObject(waveSpawnerGameObject);

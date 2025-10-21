@@ -72,6 +72,12 @@ void init_sdl_libs()
     throw std::runtime_error("GAME - Failed to allocate mixing channels: " + std::string(Mix_GetError()));
   }
 
+  int ttfInitResult = TTF_Init();
+  if (ttfInitResult != 0)
+  {
+    throw std::runtime_error("GAME - Failed to initialize SDL_ttf: " + std::string(TTF_GetError()));
+  }
+
   Log::info("GAME - SDL and its dependencies initialized successfully.");
 }
 
@@ -91,9 +97,6 @@ Game::Game(const std::string &title, int width, int height)
   init_sdl_libs();
   window = init_window(title, width, height);
   renderer = init_renderer(window);
-
-  // Log::warning("GAME - Starting storedState array.");
-  // storedState->StartArray();
 
   srand(time(NULL));
 }
@@ -128,6 +131,7 @@ Game::~Game()
 
   instance = nullptr;
 
+  TTF_Quit();
   Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
@@ -183,6 +187,7 @@ void Game::StateStackPush(State* state)
 {
   stateStack.push(std::unique_ptr<State>(state));
   stateStack.top()->Start();
+  stateStack.top()->LoadAssets();
   storedState = nullptr;
 }
 
@@ -217,9 +222,7 @@ void Game::Run()
       Log::info("GAME - Pushing new state");
 
       stateStack.top()->Pause();
-      stateStack.push(std::unique_ptr<State>(storedState));
-      stateStack.top()->Start();
-      storedState = nullptr;
+      this->StateStackPush(storedState);
     }
 
     stateStack.top()->Update(dt);
