@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "StageState.h"
 #include "Camera.h"
+#include "Text.h"
 
 TitleState::TitleState() : State() {
   Log::info("TITLE_STATE - Initializing TitleState");
@@ -23,6 +24,14 @@ TitleState::~TitleState() {
 
 void TitleState::LoadAssets() {
   Log::info("TITLE_STATE - Loading assets for TitleState");
+
+  GameObject *textGameObject = new GameObject();
+  SDL_Color white = {255, 255, 255, 255};
+  Text *text = new Text(*textGameObject, "assets/font/neodgm.ttf", 32, Text::BLENDED, "Press SPACE to start", white);
+  textGameObject->box.x = (Game::GetInstance().GetWindowWidth() / 2) - 150;
+  textGameObject->box.y = (Game::GetInstance().GetWindowHeight() - 100);
+  textGameObject->AddComponent(text);
+  this->AddObject(textGameObject);
 }
 
 void TitleState::Update(float dt) {
@@ -44,8 +53,6 @@ void TitleState::Update(float dt) {
 
 void TitleState::Render()
 {
-  Log::info("TITLE_STATE - Rendering TitleState");
-
   RenderArray();
 }
 

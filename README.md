@@ -16,3 +16,4 @@
 4. Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.
 5. Fix collider delay
 6. Clear only the current state's resources on pop
+7. Make the title screen text blink
