@@ -10,10 +10,12 @@
 
 ### Possible Improvements:
 
-1. Move the parallax factor out of the TileMap. Maybe it's possible to create a WorldMap/Background object that encapsulates the parallax factor, and which layer it corresponds.
-2. Implement the Z/Y Sorting from the 5th lesson.
-3. Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
-4. Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.
-5. Fix collider delay
-6. Clear only the current state's resources on pop
-7. Make the title screen text blink
+- Implement a way to count if the player has killed all zombies/npcs to trigger the end of the game.
+- Block player from going out the tile map boundaries.
+- Implement the Z/Y Sorting from the 5th lesson.
+- Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
+- Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.
+- Fix collider delay
+- Clear only the current state's resources on pop
+- Make the title screen text blink
+- Move assets loading to LoadAssets

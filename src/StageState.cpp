@@ -13,6 +13,8 @@
 #include "Collision.h"
 #include "Camera.h"
 #include "WaveSpawner.h"
+#include "EndState.h"
+#include "Game.h"
 
 #ifdef DEBUG
   #define PLAY_MUSIC false
@@ -88,6 +90,15 @@ void StageState::LoadAssets()
 void StageState::Update(float dt)
 {
   InputManager& inputManager = InputManager::GetInstance();
+
+  std::weak_ptr<GameObject> playerPtr = this->GetPlayerPtr();
+  if (playerPtr.expired())
+  {
+    Log::info("STATE - Player is dead, switching to EndState");
+    music.Stop();
+    popRequested = true;
+    Game::GetInstance().Push(new EndState());
+  }
 
   if (inputManager.QuitRequested())
   {
