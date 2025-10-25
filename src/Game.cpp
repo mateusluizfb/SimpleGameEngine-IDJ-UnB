@@ -6,10 +6,12 @@
 #include "GameObject.h"
 #include "Resources.h"
 #include "InputManager.h"
+#include "GameData.h"
 
 Game* Game::instance = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Window* Game::window = nullptr;
+bool GameData::playerVictory = false;
 
 SDL_Window* init_window(const std::string &title, int width, int height)
 {
