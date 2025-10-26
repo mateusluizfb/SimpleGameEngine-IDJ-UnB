@@ -82,15 +82,15 @@ void Zombie::Update(float dt) {
     hitTimer->Update(dt);
   }
 
-  if (hitPoints == 0) {
-    deathTimer->Update(dt);
-    return;
-  }
-
-  if (deathTimer->Get() >= 5)
+  if (hitPoints == 0 && deathTimer->Get() >= 5)
   {
     Log::debug("ZOMBIE - Deleting game object");
     this->associated.RequestDelete();
+  }
+
+  if (hitPoints == 0) {
+    deathTimer->Update(dt);
+    return;
   }
 
   std::weak_ptr<GameObject> player = state.GetPlayerPtr();

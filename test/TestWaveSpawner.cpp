@@ -55,3 +55,33 @@ TEST(TestWaveSpawner, NextWaveTriggered) {
 
 	delete game;
 }
+
+TEST(TestWaveSpawner, AllWavesCompleted) {
+	Game *game = &Game::GetInstance("Test Game", 800, 600);
+	game->StateStackPush(new StageState());
+
+	State &state = game->GetCurrentState();
+	state.Start();
+
+	WaveSpawner *spawner = nullptr;
+	for (auto &obj : state.GetObjectArray()) {
+		spawner = obj->GetComponent<WaveSpawner>();
+		if (spawner) break;
+	}
+	ASSERT_NE(spawner, nullptr) << "No WaveSpawner found in object array";
+
+	// Simulate enough updates to complete all waves
+	int totalWaves = 0;
+	if (spawner) {
+		// Access private/protected if needed, otherwise use public interface
+		// We'll simulate updates until AllWavesCompleted returns true
+		int safety = 1000; // prevent infinite loop
+		while (!spawner->AllWavesCompleted() && safety-- > 0) {
+			spawner->Update(10.0f); // Large dt to speed up wave progression
+			totalWaves++;
+		}
+	}
+	EXPECT_TRUE(spawner->AllWavesCompleted()) << "AllWavesCompleted should return true after all waves are done.";
+
+	delete game;
+}

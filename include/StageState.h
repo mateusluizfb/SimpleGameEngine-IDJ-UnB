@@ -12,7 +12,6 @@
 class StageState : public State
 {
 private:
-  TileSet* tileSet;
   Music music;
 
 public:

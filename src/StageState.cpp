@@ -15,12 +15,59 @@
 #include "WaveSpawner.h"
 #include "EndState.h"
 #include "Game.h"
+#include "GameData.h"
 
 #ifdef DEBUG
   #define PLAY_MUSIC false
 #else
   #define PLAY_MUSIC true
 #endif
+
+static bool AllEnemiesDead(State &state)
+{
+  auto objectArray = state.GetObjectArray();
+
+  for (const auto &obj : objectArray)
+  {
+    Zombie* zombie = obj->GetComponent<Zombie>(); 
+    Character *character = obj->GetComponent<Character>();
+
+    if (zombie != nullptr)
+    {
+      Log::debug("STATE - Found a zombie with " + std::to_string(zombie->GetHitPoints()) + " HP");
+      return false;
+    }
+
+    if (character != nullptr && character->player == nullptr)
+    {
+      Log::debug("STATE - Found an NPC character");
+      return false;
+    }
+  }
+
+  Log::debug("STATE - All enemies dead!");
+
+  return true;
+}
+
+static bool AllWavesCompleted(State &state)
+{
+  auto objectArray = state.GetObjectArray();
+
+  for (const auto &obj : objectArray)
+  {
+    WaveSpawner *waveSpawner = obj->GetComponent<WaveSpawner>();
+
+    if (waveSpawner != nullptr)
+    {
+      Log::debug("STATE - Checking if all waves are completed");
+      return waveSpawner->AllWavesCompleted();
+    }
+  }
+
+  Log::debug("STATE - No WaveSpawner found in state");
+  return false;
+}
 
 StageState::StageState(): State(), music("audio/BGM.wav")
 {
@@ -97,6 +144,16 @@ void StageState::Update(float dt)
     Log::info("STATE - Player is dead, switching to EndState");
     music.Stop();
     popRequested = true;
+    GameData::playerVictory = false;
+    Game::GetInstance().Push(new EndState());
+  }
+
+  if (AllWavesCompleted(*this) && AllEnemiesDead(*this))
+  {
+    Log::info("STATE - All waves completed and all enemies dead, switching to EndState");
+    music.Stop();
+    popRequested = true;
+    GameData::playerVictory = true;
     Game::GetInstance().Push(new EndState());
   }
 
