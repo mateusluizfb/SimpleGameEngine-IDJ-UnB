@@ -12,6 +12,7 @@
 #include "Game.h"
 #include "SpriteRenderer.h"
 #include "AiController.h"
+#include "GameData.h"
 
 static float RandomFloat(float lower, float upper)
 {
@@ -27,7 +28,7 @@ static Vec2 GetRandomSpawnPosition(const Vec2& playerPos, float distance) {
 }
 
 static void SpawnNpc(State& state, const Vec2& npcSpawnPos) {
-  Log::debug("WAVE_SPAWNER - Starting enemy character object");
+  Log::debug("WAVE_SPAWNER - NPC enemy character object");
   GameObject *enemyCharacterObject = new GameObject();
   Character *enemyCharacter = new Character(*enemyCharacterObject, "assets/img/NPC.png");
   AIController *aiController = new AIController(*enemyCharacterObject);
@@ -36,7 +37,7 @@ static void SpawnNpc(State& state, const Vec2& npcSpawnPos) {
   SpriteRenderer *spriteRenderer1 = enemyCharacterObject->GetComponent<SpriteRenderer>();
   spriteRenderer1->SetPosition(npcSpawnPos.x, npcSpawnPos.y);
   state.AddObject(enemyCharacterObject);
-  Log::debug("WAVE_SPAWNER - Starting enemy character loaded");
+  Log::debug("WAVE_SPAWNER - NPC enemy character loaded");
 }
 
 static void SpawnZombie(State& state, const Vec2& zombieSpawnPos) {
@@ -63,9 +64,17 @@ WaveSpawner::WaveSpawner(GameObject &associated)
   for (int i = 0; i < wavesCount; i++) {
     Wave wave;
     wave.zombies = WAVE_ZOMBIES_COUNT;
+    wave.npcs = WAVE_NPCS_COUNT;
     wave.cooldown = ZOMBIE_SPAWN_COOLDOWN;
     waves.push_back(wave);
   }
+}
+
+bool WaveSpawner::AllWavesCompleted()
+{
+  Log::debug("WAVE_SPAWNER - Current wave: " + std::to_string(currentWave) + " / " + std::to_string(waves.size()));
+
+  return currentWave == static_cast<int>(waves.size());
 }
 
 void WaveSpawner::Update(float dt) {
@@ -79,11 +88,13 @@ void WaveSpawner::Update(float dt) {
 
   Vec2 playerPos = player.lock()->box.GetCenter();
 
-  if (npcsCooldownTimer.Get() >= NPC_SPAWN_COOLDOWN)
+  if (npcCounter < waves[currentWave].npcs &&
+      npcsCooldownTimer.Get() >= NPC_SPAWN_COOLDOWN)
   {
     Vec2 npcSpawnPos = GetRandomSpawnPosition(playerPos, DEFAULT_DISTANCE);
     SpawnNpc(state, npcSpawnPos);
 
+    npcCounter++;
     npcsCooldownTimer.Restart();
   }
 
@@ -95,14 +106,15 @@ void WaveSpawner::Update(float dt) {
 
     zombieCounter++;
     zombieCooldownTimer.Restart();
-    return;
   }
 
-  if (currentWave + 1 < static_cast<int>(waves.size()))
+  if (zombieCooldownTimer.Get() >= waves[currentWave].cooldown &&
+      currentWave < static_cast<int>(waves.size()))
   {
     Log::info("WAVE_SPAWNER - Next wave!");
     currentWave++;
     zombieCounter = 0;
+    npcCounter = 0;
     zombieCooldownTimer.Restart();
   }
 }

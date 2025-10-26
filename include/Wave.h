@@ -6,6 +6,7 @@ public:
     Wave();
 
     int zombies;
+    int npcs;
     float cooldown;
 };
 
