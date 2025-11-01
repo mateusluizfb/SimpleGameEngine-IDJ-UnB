@@ -72,8 +72,6 @@ WaveSpawner::WaveSpawner(GameObject &associated)
 
 bool WaveSpawner::AllWavesCompleted()
 {
-  Log::debug("WAVE_SPAWNER - Current wave: " + std::to_string(currentWave) + " / " + std::to_string(waves.size()));
-
   return currentWave == static_cast<int>(waves.size());
 }
 
@@ -82,6 +80,7 @@ void WaveSpawner::Update(float dt) {
   std::weak_ptr<GameObject> player = state.GetPlayerPtr();
 
   if (player.expired()) return;
+  if (AllWavesCompleted()) return;
 
   zombieCooldownTimer.Update(dt);
   npcsCooldownTimer.Update(dt);
