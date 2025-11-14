@@ -77,17 +77,17 @@ TEST(CharacterTest, UpdateShoot)
 {
   Game *game = &Game::GetInstance("Test Game", 800, 600);
   game->StateStackPush(new StageState());
+  State &currentState = game->GetCurrentState();
+  std::weak_ptr<GameObject> player = currentState.GetPlayerPtr();
+  Character* character = player.lock()->GetComponent<Character>();
 
   Log::debug(" --- CharacterTest Logs ----");
 
-  GameObject go;
-  Character character(go, "assets/img/Player.png");
   Character::Command command(CommandType::SHOOT, 0, 0);
 
-  character.Start();
-  character.Issue(command);
+  character->Issue(command);
 
-  EXPECT_NO_THROW(character.Update(0));
+  EXPECT_NO_THROW(character->Update(0));
 
   delete game;
 }

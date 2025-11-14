@@ -52,13 +52,17 @@ void Gun::Shoot(Vec2 target) {
   shootSound.Play();
   cooldownState = 1;
 
-  Vec2 projectileDirection = (target - associated.box.GetCenter()).Normalize();
+  std::shared_ptr<GameObject> characterPtr = character.lock();
+
+  Vec2 characterCenter = characterPtr->box.GetCenter();
+
+  Vec2 projectileDirection = (target - characterCenter).Normalize();
   Game &game = Game::GetInstance();
   State &currentState = game.GetCurrentState();
 
-  CreateBullet(associated, currentState, associated.box.GetCenter(), projectileDirection, 0.0);
-  CreateBullet(associated, currentState, associated.box.GetCenter(), projectileDirection, 0.3);
-  CreateBullet(associated, currentState, associated.box.GetCenter(), projectileDirection, -0.3);
+  CreateBullet(associated, currentState, characterCenter, projectileDirection, 0.0);
+  CreateBullet(associated, currentState, characterCenter, projectileDirection, 0.3);
+  CreateBullet(associated, currentState, characterCenter, projectileDirection, -0.3);
 
   angle = std::atan2(projectileDirection.y, projectileDirection.x);;
 }
