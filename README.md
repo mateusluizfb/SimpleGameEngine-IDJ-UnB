@@ -10,7 +10,6 @@
 
 ### Possible Improvements:
 
-- Block player from going out the tile map boundaries.
 - Implement the Z/Y Sorting from the 5th lesson.
 - Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
 - Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.

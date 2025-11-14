@@ -34,13 +34,11 @@ static bool AllEnemiesDead(State &state)
 
     if (zombie != nullptr)
     {
-      Log::debug("STATE - Found a zombie with " + std::to_string(zombie->GetHitPoints()) + " HP");
       return false;
     }
 
     if (character != nullptr && character->player == nullptr)
     {
-      Log::debug("STATE - Found an NPC character");
       return false;
     }
   }
@@ -60,7 +58,6 @@ static bool AllWavesCompleted(State &state)
 
     if (waveSpawner != nullptr)
     {
-      Log::debug("STATE - Checking if all waves are completed");
       return waveSpawner->AllWavesCompleted();
     }
   }
