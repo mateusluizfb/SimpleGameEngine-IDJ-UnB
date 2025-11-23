@@ -26,7 +26,7 @@
   #define WAVE_NPCS_COUNT 1
 
   #undef NPC_SPAWN_COOLDOWN
-  #define NPC_SPAWN_COOLDOWN 10.0f
+  #define NPC_SPAWN_COOLDOWN 1.0f
 #else
   #define WAVES_COUNT 2
   #define WAVE_ZOMBIES_COUNT 2
