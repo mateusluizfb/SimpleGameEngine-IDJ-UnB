@@ -43,7 +43,7 @@ Gun::Gun(GameObject &associated, std::weak_ptr<GameObject> character)
   associated.AddComponent(animator);
 
   animator->AddAnimation("idle", Animation(0, 0, 0));
-  animator->AddAnimation("reloading", Animation(1, 5, 0.5));
+  animator->AddAnimation("reloading", Animation(1, 5, 0.2));
 }
 
 void Gun::Shoot(Vec2 target) {
@@ -111,21 +111,16 @@ void Gun::Update(float dt)
     case 0:
         break;
     case 1:
-        if (cdTimer.Get() > 0.5) {
-          cooldownState = 2;
-          cdTimer.Restart();
-        }
+        cooldownState = 2;
+        cdTimer.Restart();
         break;
     case 2:
-        if (cdTimer.Get() > 0.5) {
-          cooldownState = 3;
-          cdTimer.Restart();
-          reloadSound.Play();
-          animator->SetAnimation("reloading");
-        }
+        cooldownState = 3;
+        reloadSound.Play();
+        animator->SetAnimation("reloading");
         break;
     case 3:
-        if (cdTimer.Get() > 0.5) {
+        if (cdTimer.Get() > 1.2) {
           animator->SetAnimation("idle");
           cooldownState = 0;
         }
