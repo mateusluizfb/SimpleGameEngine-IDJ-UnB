@@ -51,9 +51,23 @@ static void SpawnZombie(State& state, const Vec2& zombieSpawnPos) {
   Log::debug("WAVE_SPAWNER - Zombie game object loaded at: " + std::to_string(zombieSpawnPos.x) + "x" + std::to_string(zombieSpawnPos.y));
 }
 
+static bool HasRemainingEnemies(State &s) {
+  std::vector<std::shared_ptr<GameObject>> objs = s.GetObjectArray();
+  for (auto &obj : objs) {
+    if (!obj) continue;
+    if (obj->IsDead()) continue;
+    if (obj->GetComponent<Zombie>() != nullptr) return true;
+    Character *c = obj->GetComponent<Character>();
+    if (c != nullptr && c->player == nullptr) return true; // NPC or non-player character
+  }
+
+  return false;
+}
+
 WaveSpawner::WaveSpawner(GameObject &associated)
   : Component(associated),
     zombieCounter(0),
+    npcCounter(0),
     waves(),
     zombieCooldownTimer(),
     npcsCooldownTimer(),
@@ -107,14 +121,17 @@ void WaveSpawner::Update(float dt) {
     zombieCooldownTimer.Restart();
   }
 
-  if (zombieCooldownTimer.Get() >= waves[currentWave].cooldown &&
-      currentWave < static_cast<int>(waves.size()))
-  {
-    Log::info("WAVE_SPAWNER - Next wave!");
-    currentWave++;
-    zombieCounter = 0;
-    npcCounter = 0;
-    zombieCooldownTimer.Restart();
+  if (currentWave < static_cast<int>(waves.size())) {
+    bool allSpawned = (zombieCounter >= waves[currentWave].zombies) &&
+                      (npcCounter >= waves[currentWave].npcs);
+
+    if (allSpawned && !HasRemainingEnemies(state)) {
+      Log::info("WAVE_SPAWNER - Next wave!");
+      currentWave++;
+      zombieCounter = 0;
+      npcCounter = 0;
+      zombieCooldownTimer.Restart();
+    }
   }
 }
 
