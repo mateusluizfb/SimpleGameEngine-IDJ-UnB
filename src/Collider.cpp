@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "Game.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #endif // DEBUG
 
 #include "Collider.h"
