@@ -13,7 +13,6 @@
 - Implement the Z/Y Sorting from the 5th lesson.
 - Find a better place for collision detection, currently is all in the State class. Hard to test in isolation.
 - Implement Wave Spawner Command Queue, for waiting, spawn zombie or spawn npc.
-- Fix collider delay
 - Clear only the current state's resources on pop
 - Make the title screen text blink
 - Move assets loading to LoadAssets
