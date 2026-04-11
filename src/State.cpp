@@ -41,6 +41,19 @@ std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go)
   return std::weak_ptr<GameObject>();
 }
 
+std::weak_ptr<GameObject> State::GetObjectByTag(const std::string& tag)
+{
+  for (size_t i = 0; i < objectArray.size(); i++)
+  {
+    if (objectArray[i]->tag == tag)
+    {
+      return objectArray[i];
+    }
+  }
+
+  return std::weak_ptr<GameObject>();
+}
+
 std::vector<std::shared_ptr<GameObject>> State::GetObjectArray()
 {
   return objectArray;

@@ -91,7 +91,7 @@ bool WaveSpawner::AllWavesCompleted()
 
 void WaveSpawner::Update(float dt) {
   State &state = Game::GetInstance().GetCurrentState();
-  std::weak_ptr<GameObject> player = state.GetPlayerPtr();
+  std::weak_ptr<GameObject> player = state.GetObjectByTag("player");
 
   if (player.expired()) return;
   if (AllWavesCompleted()) return;

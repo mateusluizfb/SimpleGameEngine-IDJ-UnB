@@ -17,7 +17,7 @@ void AIController::Update(float dt) {
   switch (state) {
       case MOVING: {
         State &gameState = Game::GetInstance().GetCurrentState();
-        std::weak_ptr<GameObject> player = gameState.GetPlayerPtr();
+        std::weak_ptr<GameObject> player = gameState.GetObjectByTag("player");
         Character *self = associated.GetComponent<Character>();
 
         if (player.expired()) return;

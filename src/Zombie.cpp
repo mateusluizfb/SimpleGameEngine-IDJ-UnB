@@ -93,7 +93,7 @@ void Zombie::Update(float dt) {
     return;
   }
 
-  std::weak_ptr<GameObject> player = state.GetPlayerPtr();
+  std::weak_ptr<GameObject> player = state.GetObjectByTag("player");
 
   if (player.expired()) { return; }
 

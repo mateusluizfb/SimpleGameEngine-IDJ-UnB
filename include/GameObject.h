@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "Rect.h"
 #include <vector>
+#include <string>
 
 class GameObject {
 private:
@@ -14,6 +15,7 @@ private:
 public:
   Rect box;
   double angleDeg;
+  std::string tag;
 
   GameObject();
   ~GameObject();

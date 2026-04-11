@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 #include "GameObject.h"
-#include "Character.h"
 
 class State {
 public:
@@ -21,6 +20,7 @@ public:
 
   virtual std::weak_ptr<GameObject> AddObject(GameObject* go);
   virtual std::weak_ptr<GameObject> GetObjectPtr(GameObject* go);
+  std::weak_ptr<GameObject> GetObjectByTag(const std::string& tag);
   std::vector<std::shared_ptr<GameObject>> GetObjectArray();
   
   bool PopRequested();
@@ -28,22 +28,6 @@ public:
 
   void RequestPop();
   void RequestQuit();
-
-  // TODO: This shouln't be here
-  std::weak_ptr<GameObject> GetPlayerPtr()
-  {
-    for (size_t i = 0; i < objectArray.size(); i++)
-    {
-      Character *characterComponent = objectArray[i]->GetComponent<Character>();
-
-      if (characterComponent != nullptr && characterComponent->player != nullptr)
-      {
-        return objectArray[i];
-      }
-    }
-
-    return std::weak_ptr<GameObject>();
-  };
 
 protected:
   bool popRequested;

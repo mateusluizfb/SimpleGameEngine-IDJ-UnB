@@ -5,7 +5,7 @@
 #include "Log.h"
 #include "GameObject.h"
 
-GameObject::GameObject() : started(false), isDead(false), angleDeg(0) {}
+GameObject::GameObject() : started(false), isDead(false), angleDeg(0), tag("") {}
 
 /*
 Notes:

@@ -125,6 +125,7 @@ void StageState::LoadAssets()
   characterGameObject->AddComponent(character);
   characterGameObject->AddComponent(collider);
   characterGameObject->AddComponent(playerController);
+  characterGameObject->tag = "player";
   this->AddObject(characterGameObject);
   SpriteRenderer *spriteRenderer1 = characterGameObject->GetComponent<SpriteRenderer>();
   spriteRenderer1->SetPosition(1253, 901);
@@ -137,7 +138,7 @@ void StageState::Update(float dt)
 {
   InputManager& inputManager = InputManager::GetInstance();
 
-  std::weak_ptr<GameObject> playerPtr = this->GetPlayerPtr();
+  std::weak_ptr<GameObject> playerPtr = this->GetObjectByTag("player");
   if (playerPtr.expired())
   {
     Log::info("STATE - Player is dead, switching to EndState");
@@ -175,32 +176,7 @@ void StageState::Update(float dt)
     objectArray[i]->Update(dt);
   }
 
-  std::vector<std::shared_ptr<GameObject>> colliderGameObjects;
-  std::copy_if(objectArray.begin(), objectArray.end(), std::back_inserter(colliderGameObjects),
-               [](const std::shared_ptr<GameObject>& go) { return go->GetComponent<Collider>() != nullptr; });
-
-  for (size_t i = 0; i < colliderGameObjects.size(); i++)
-  {
-    Collider* colliderA = colliderGameObjects[i]->GetComponent<Collider>();
-    if (colliderA == nullptr) continue;
-
-    for (size_t j = i + 1; j < colliderGameObjects.size(); j++)
-    {
-      Collider* colliderB = colliderGameObjects[j]->GetComponent<Collider>();
-      if (colliderB == nullptr) continue;
-
-      if (Collision::IsColliding(
-        colliderA->GetBox(),
-        colliderB->GetBox(),
-        colliderGameObjects[i]->GetAngleRad(),
-        colliderGameObjects[j]->GetAngleRad()
-      ))
-      {
-        colliderGameObjects[i]->NotifyCollision(*colliderGameObjects[j]);
-        colliderGameObjects[j]->NotifyCollision(*colliderGameObjects[i]);
-      }
-    } 
-  }
+  collisionSystem.Update(objectArray);
 
   for (size_t i = 0; i < objectArray.size(); i++)
   {

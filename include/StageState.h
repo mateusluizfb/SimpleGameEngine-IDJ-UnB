@@ -8,11 +8,13 @@
 #include "TileMap.h"
 #include "Zombie.h"
 #include "State.h"
+#include "CollisionSystem.h"
 
 class StageState : public State
 {
 private:
   Music music;
+  CollisionSystem collisionSystem;
 
 public:
   StageState();
