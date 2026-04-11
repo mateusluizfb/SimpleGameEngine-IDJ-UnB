@@ -5,7 +5,11 @@ RM = rm -f
 DEP_FLAGS = -M -MT $@ -MT $(BIN_PATH)/$(*F).o -MP -MF $@ -Wall
 LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
-INC_PATHS = -I$(INC_PATH) $(addprefix -I,$(SDL_INC_PATH))
+# Include paths for engine and game
+ENGINE_INC = engine/include/core engine/include/math engine/include/rendering engine/include/physics engine/include/input engine/include/audio engine/include/tiles engine/include/camera engine/include/utils
+GAME_INC = game/include/entities game/include/controllers game/include/states game/include/systems
+
+INC_PATHS = $(addprefix -I,$(ENGINE_INC)) $(addprefix -I,$(GAME_INC)) $(addprefix -I,$(SDL_INC_PATH))
 
 FLAGS = -std=c++11 -Wall -pedantic -Wextra -Wno-unused-parameter -Werror=init-self
 
@@ -13,16 +17,22 @@ DFLAGS = -ggdb -O0 -DDEBUG
 
 RFLAGS = -O3 -mtune=native
 
-INC_PATH = include
-SRC_PATH = src
 BIN_PATH = bin
 DEP_PATH = dep
 
-CPP_FILES = $(wildcard $(SRC_PATH)/*.cpp)
-INC_FILES = $(wildcard $(SRC_PATH)/*.hpp)
-FILE_NAMES = $(sort $(notdir $(CPP_FILES:.cpp=)) $(notdir $(INC_FILES:.h=)))
-DEP_FILES = $(addprefix $(DEP_PATH)/,$(addsuffix .d,$(FILE_NAMES)))
-OBJ_FILES = $(addprefix $(BIN_PATH)/,$(notdir $(CPP_FILES:.cpp=.o)))
+# Find all source files in engine and game
+ENGINE_CPP_FILES = $(wildcard engine/src/*/*.cpp)
+GAME_CPP_FILES = $(wildcard game/src/*/*.cpp) game/src/Main.cpp
+CPP_FILES = $(ENGINE_CPP_FILES) $(GAME_CPP_FILES)
+
+# Create flattened object file names (replacing / with _)
+OBJ_FILES = $(patsubst engine/src/%.cpp,$(BIN_PATH)/engine_%.o,$(subst /,_,$(ENGINE_CPP_FILES))) \
+            $(patsubst game/src/%.cpp,$(BIN_PATH)/game_%.o,$(subst /,_,$(GAME_CPP_FILES)))
+
+# Actually, let's use simpler naming
+ENGINE_OBJ_FILES = $(foreach file,$(ENGINE_CPP_FILES),$(BIN_PATH)/$(subst /,_,$(patsubst engine/src/%.cpp,%.o,$(file))))
+GAME_OBJ_FILES = $(foreach file,$(GAME_CPP_FILES),$(BIN_PATH)/$(subst /,_,$(patsubst game/src/%.cpp,%.o,$(file))))
+ALL_OBJ_FILES = $(ENGINE_OBJ_FILES) $(GAME_OBJ_FILES)
 
 EXEC = JOGO
 
@@ -60,19 +70,57 @@ else
 endif
 endif
 
-.PRECIOUS: $(DEP_FILES)
-.PHONY: release debug clean folders help
+.PHONY: all release debug clean folders help
 
 all: $(EXEC)
 
-$(EXEC): $(OBJ_FILES)
+$(EXEC): $(ALL_OBJ_FILES) | folders
 	$(COMPILER) -o $@ $^ $(LINK_PATH) $(LIBS) $(FLAGS)
 
-$(BIN_PATH)/%.o: $(DEP_PATH)/%.d | folders
-	$(COMPILER) $(INC_PATHS) $(addprefix $(SRC_PATH)/,$(notdir $(<:.d=.cpp))) -c $(FLAGS) -o $@
+# Pattern rule for engine object files
+$(BIN_PATH)/%_cpp.o: engine/src/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
 
-$(DEP_PATH)/%.d: $(SRC_PATH)/%.cpp | folders
-	$(COMPILER) $(INC_PATHS) $< $(DEP_FLAGS) $(FLAGS)
+# Specific rules for each subdirectory in engine
+$(BIN_PATH)/core_%.o: engine/src/core/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/math_%.o: engine/src/math/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/rendering_%.o: engine/src/rendering/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/physics_%.o: engine/src/physics/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/input_%.o: engine/src/input/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/audio_%.o: engine/src/audio/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/tiles_%.o: engine/src/tiles/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/camera_%.o: engine/src/camera/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+# Game object files
+$(BIN_PATH)/entities_%.o: game/src/entities/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/controllers_%.o: game/src/controllers/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/states_%.o: game/src/states/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/systems_%.o: game/src/systems/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/Main.o: game/src/Main.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
 
 clean:
 	$(RMDIR) $(DEP_PATH)
@@ -89,10 +137,8 @@ folders:
 ifeq ($(OS), Windows_NT)
 	@if NOT exist $(DEP_PATH) (mkdir $(DEP_PATH))
 	@if NOT exist $(BIN_PATH) (mkdir $(BIN_PATH))
-	@if NOT exist $(INC_PATH) (mkdir $(INC_PATH))
-	@if NOT exist $(SRC_PATH) (mkdir $(SRC_PATH))
 else
-	@mkdir -p $(DEP_PATH) $(BIN_PATH) $(INC_PATH) $(SRC_PATH)
+	@mkdir -p $(DEP_PATH) $(BIN_PATH)
 endif
 
 print-% : ; echo $* = $($*)
@@ -102,6 +148,7 @@ ifeq ($(OS), Windows_NT)
 	echo.
 endif
 	@echo Available targets:
+	@echo - all: Builds the game
 	@echo - release: Builds the release version
 	@echo - debug: Builds the debug version
 	@echo - clean: Cleans generated files
@@ -110,6 +157,3 @@ endif
 ifeq ($(OS), Windows_NT)
 	echo.
 endif
-
-.SECONDEXPANSION:
--include $$(DEP_FILES)

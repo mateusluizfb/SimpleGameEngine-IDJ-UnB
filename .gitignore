@@ -1,9 +1,9 @@
 /**/.vscode
 /**/.github
-/**/game
 /**/JOGO
 /**/*.*/
 /**/**.o
 /**/.DS_Store
 docs/
 dep/**
+/**/test_runner

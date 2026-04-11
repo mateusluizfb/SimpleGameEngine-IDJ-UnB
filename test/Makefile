@@ -1,20 +1,33 @@
 CXX = g++
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-	CXXFLAGS = -g -Wall -std=c++17 -I/usr/include/SDL2 -I../include
+	CXXFLAGS = -g -Wall -std=c++17 -I/usr/include/SDL2 \
+		-I../engine/include -I../engine/include/core -I../engine/include/math \
+		-I../engine/include/rendering -I../engine/include/physics -I../engine/include/input \
+		-I../engine/include/audio -I../engine/include/tiles -I../engine/include/camera \
+		-I../engine/include/utils \
+		-I../game/include -I../game/include/entities -I../game/include/controllers \
+		-I../game/include/states -I../game/include/systems
 	LDFLAGS = -L/usr/lib/x86_64-linux-gnu -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lgtest -lgtest_main -pthread
 else
 	BREW_PREFIX := $(shell brew --prefix)
 
-	CXXFLAGS = -g -Wall -std=c++17 -I$(BREW_PREFIX)/include/SDL2 -I../include
+	CXXFLAGS = -g -Wall -std=c++17 -I$(BREW_PREFIX)/include/SDL2 \
+		-I../engine/include -I../engine/include/core -I../engine/include/math \
+		-I../engine/include/rendering -I../engine/include/physics -I../engine/include/input \
+		-I../engine/include/audio -I../engine/include/tiles -I../engine/include/camera \
+		-I../engine/include/utils \
+		-I../game/include -I../game/include/entities -I../game/include/controllers \
+		-I../game/include/states -I../game/include/systems
 	LDFLAGS = -L$(BREW_PREFIX)/lib -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lgtest -lgtest_main -pthread
 endif
 
-main ?= $(wildcard ../src/*.cpp)
-test ?= $(wildcard ../test/*.cpp)
-test_sources = $(filter-out ../src/Main.cpp, $(main)) $(wildcard ../test/*.cpp)
+# Collect all engine and game source files
+engine_sources = $(wildcard ../engine/src/*/*.cpp)
+game_sources = $(wildcard ../game/src/*/*.cpp)
+test_sources = $(engine_sources) $(game_sources) $(wildcard ../test/*.cpp) $(wildcard ../test/engine/*.cpp) $(wildcard ../test/game/*.cpp)
 
-BIN = game
+BIN = test_runner
 
 clean:
 	rm -f $(BIN)
