@@ -119,9 +119,11 @@ void StageState::LoadAssets()
   Log::debug("STATE - Starting Character game object");
   GameObject *characterGameObject = new GameObject();
   Character *character = new Character(*characterGameObject, "assets/img/Player.png");
-  character->player = character; // Is it correct to set itself as player?
+  character->player = character;
+  Collider *collider = new Collider(*characterGameObject, Vec2(1, 1), Vec2(1, 1));
   PlayerController *playerController = new PlayerController(*characterGameObject);
   characterGameObject->AddComponent(character);
+  characterGameObject->AddComponent(collider);
   characterGameObject->AddComponent(playerController);
   this->AddObject(characterGameObject);
   SpriteRenderer *spriteRenderer1 = characterGameObject->GetComponent<SpriteRenderer>();

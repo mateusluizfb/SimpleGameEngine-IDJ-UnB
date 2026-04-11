@@ -26,11 +26,9 @@ Character::Character(GameObject &associated, std::string sprite)
 {
   SpriteRenderer *spriteRenderer = new SpriteRenderer(associated, sprite, 3, 4);
   Animator *animator = new Animator(associated);
-  Collider *collider = new Collider(associated, Vec2(1, 1), Vec2(1, 1));
 
   associated.AddComponent(spriteRenderer);
   associated.AddComponent(animator);
-  associated.AddComponent(collider);
 
   animator->AddAnimation("walking", Animation(0, 5, 0.2));
   animator->AddAnimation("idle", Animation(6, 9, 0.5));
