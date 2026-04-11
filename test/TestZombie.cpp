@@ -100,7 +100,7 @@ TEST(TestZombie, ZombieMovesTowardsPlayer)
   Log::debug(" --- TestZombie Movement Logs ----");
 
   Game::GetInstance().GetCurrentState().Start();
-  std::weak_ptr<GameObject> playerPtr = Game::GetInstance().GetCurrentState().GetPlayerPtr();
+  std::weak_ptr<GameObject> playerPtr = Game::GetInstance().GetCurrentState().GetObjectByTag("player");
   ASSERT_FALSE(playerPtr.expired());
   GameObject* playerObj = playerPtr.lock().get();
 

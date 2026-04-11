@@ -78,7 +78,7 @@ TEST(CharacterTest, UpdateShoot)
   Game *game = &Game::GetInstance("Test Game", 800, 600);
   game->StateStackPush(new StageState());
   State &currentState = game->GetCurrentState();
-  std::weak_ptr<GameObject> player = currentState.GetPlayerPtr();
+  std::weak_ptr<GameObject> player = currentState.GetObjectByTag("player");
   Character* character = player.lock()->GetComponent<Character>();
 
   Log::debug(" --- CharacterTest Logs ----");

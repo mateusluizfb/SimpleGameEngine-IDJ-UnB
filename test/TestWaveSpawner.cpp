@@ -78,6 +78,16 @@ TEST(TestWaveSpawner, AllWavesCompleted) {
 		int safety = 1000; // prevent infinite loop
 		while (!spawner->AllWavesCompleted() && safety-- > 0) {
 			spawner->Update(10.0f); // Large dt to speed up wave progression
+			
+			// Kill all spawned enemies so waves can progress
+			auto objects = state.GetObjectArray();
+			for (auto &obj : objects) {
+				if (obj->GetComponent<Zombie>() || 
+				    (obj->GetComponent<Character>() && obj->GetComponent<Character>()->player == nullptr)) {
+					obj->RequestDelete();
+				}
+			}
+			
 			totalWaves++;
 		}
 	}
