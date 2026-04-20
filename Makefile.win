@@ -1,0 +1,82 @@
+# Windows build Makefile — cross-compiles on Linux using MinGW-w64
+# Usage:
+#   make -f Makefile.win          -> release build
+#   make -f Makefile.win all      -> release build
+#   make -f Makefile.win debug    -> debug build (console window visible)
+#   make -f Makefile.win package  -> build + bundle dist_win/ folder
+#   make -f Makefile.win clean    -> remove generated files
+#
+# Prerequisites (Linux):
+#   sudo apt install mingw-w64     # or: pacman -S mingw-w64-gcc
+#   (the compiler used is x86_64-w64-mingw32-g++)
+#
+# SDL2 dev libraries must be placed under libs/windows/SDL2/ with the layout:
+#   libs/windows/SDL2/include/SDL2/  <- headers
+#   libs/windows/SDL2/lib/           <- *.a import libraries
+#   libs/windows/SDL2/bin/           <- *.dll runtime files
+# Download the MinGW variants from:
+#   https://github.com/libsdl-org/SDL/releases
+#   https://github.com/libsdl-org/SDL_image/releases
+#   https://github.com/libsdl-org/SDL_mixer/releases
+#   https://github.com/libsdl-org/SDL_ttf/releases
+# From each archive, merge x86_64-w64-mingw32/{include,lib,bin}/ into libs/windows/SDL2/.
+
+COMPILER = x86_64-w64-mingw32-g++
+
+# ---------------------------------------------------------------------------
+# SDL2 local libraries
+# ---------------------------------------------------------------------------
+SDL_ROOT = libs/windows/SDL2
+SDL_INC  = $(SDL_ROOT)/include/SDL2
+SDL_LIB  = $(SDL_ROOT)/lib
+SDL_BIN  = $(SDL_ROOT)/bin
+
+# ---------------------------------------------------------------------------
+# Include / link paths
+# ---------------------------------------------------------------------------
+SDL_CFLAGS = -I$(SDL_INC)
+LINK_PATH  = -L$(SDL_LIB)
+
+# ---------------------------------------------------------------------------
+# Libraries  (mingw32 + SDL2main must come before SDL2)
+# ---------------------------------------------------------------------------
+LIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
+
+# ---------------------------------------------------------------------------
+# Compiler flags
+# ---------------------------------------------------------------------------
+FLAGS  = -std=c++11 -Wall -pedantic -Wextra -Wno-unused-parameter -Werror=init-self \
+         -DM_PI=3.14159265358979323846 -include cmath \
+         -mwindows
+DFLAGS = -ggdb -O0 -DDEBUG -mconsole
+RFLAGS = -O3 -mtune=native
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+BIN_PATH  = bin_win
+DIST_PATH = dist_win
+EXEC      = JOGO.exe
+
+# ---------------------------------------------------------------------------
+# Shared rules
+# ---------------------------------------------------------------------------
+include Makefile.rules
+
+# Windows debug needs -mconsole and must drop -mwindows
+debug: FLAGS := $(filter-out -mwindows,$(FLAGS))
+
+# ---------------------------------------------------------------------------
+# Package: bundle exe + DLLs + assets into dist_win/
+# ---------------------------------------------------------------------------
+MINGW_BIN = /usr/x86_64-w64-mingw32/sys-root/mingw/bin
+
+.PHONY: package
+package: $(EXEC_BIN)
+	mkdir -p $(DIST_PATH)/game
+	cp $(SDL_BIN)/*.dll $(DIST_PATH)/
+	cp $(MINGW_BIN)/libgcc_s_seh-1.dll $(DIST_PATH)/
+	cp $(MINGW_BIN)/libstdc++-6.dll $(DIST_PATH)/
+	cp $(MINGW_BIN)/libwinpthread-1.dll $(DIST_PATH)/
+	cp -r game/assets $(DIST_PATH)/game/assets
+	cp -r game/audio  $(DIST_PATH)/game/audio

@@ -1,9 +1,12 @@
 /**/.vscode
 /**/.github
 /**/JOGO
+/**/JOGO.exe
 /**/*.*/
 /**/**.o
 /**/.DS_Store
 docs/
 dep/**
 /**/test_runner
+/**/dist_*
+/**/bin_*

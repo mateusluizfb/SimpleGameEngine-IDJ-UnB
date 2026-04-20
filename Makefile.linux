@@ -1,0 +1,51 @@
+# Linux build Makefile
+# Usage:
+#   make -f Makefile.linux          -> release build
+#   make -f Makefile.linux all      -> release build
+#   make -f Makefile.linux debug    -> debug build
+#   make -f Makefile.linux package  -> build + bundle dist_linux/ folder
+#   make -f Makefile.linux clean    -> remove generated files
+#
+# Prerequisites:
+#   g++ (GCC C++ compiler)
+#   SDL2 dev libraries installed via your package manager:
+#     Fedora:        sudo dnf install SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
+#     Ubuntu/Debian: sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+#     Arch:          sudo pacman -S sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+COMPILER = g++
+
+# ---------------------------------------------------------------------------
+# Include / link paths
+# ---------------------------------------------------------------------------
+SDL_CFLAGS = $(shell pkg-config --cflags sdl2 SDL2_image SDL2_mixer SDL2_ttf)
+SDL_LIBS   = $(shell pkg-config --libs   sdl2 SDL2_image SDL2_mixer SDL2_ttf)
+LIBS       = $(SDL_LIBS) -lm
+
+# ---------------------------------------------------------------------------
+# Compiler flags
+# ---------------------------------------------------------------------------
+FLAGS  = -std=c++11 -Wall -pedantic -Wextra -Wno-unused-parameter -Werror=init-self
+DFLAGS = -ggdb -O0 -DDEBUG
+RFLAGS = -O3 -mtune=native
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+BIN_PATH  = bin_linux
+DIST_PATH = dist_linux
+EXEC      = JOGO
+
+# ---------------------------------------------------------------------------
+# Shared rules
+# ---------------------------------------------------------------------------
+include Makefile.rules
+
+# ---------------------------------------------------------------------------
+# Package: bundle binary + assets into dist_linux/
+# ---------------------------------------------------------------------------
+.PHONY: package
+package: $(EXEC_BIN)
+	mkdir -p $(DIST_PATH)/game
+	cp -r game/assets $(DIST_PATH)/game/assets
+	cp -r game/audio  $(DIST_PATH)/game/audio

@@ -1,0 +1,51 @@
+# macOS build Makefile
+# Usage:
+#   make -f Makefile.macos          -> release build
+#   make -f Makefile.macos all      -> release build
+#   make -f Makefile.macos debug    -> debug build
+#   make -f Makefile.macos package  -> build + bundle dist_macos/ folder
+#   make -f Makefile.macos clean    -> remove generated files
+#
+# Prerequisites:
+#   clang++ (Xcode Command Line Tools: xcode-select --install)
+#   brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+COMPILER = clang++
+
+# ---------------------------------------------------------------------------
+# Include / link paths
+# ---------------------------------------------------------------------------
+BREW_PREFIX = $(shell brew --prefix)
+PKG_CONFIG  = PKG_CONFIG_PATH="$(BREW_PREFIX)/lib/pkgconfig"
+
+SDL_CFLAGS  = $(shell $(PKG_CONFIG) pkg-config --cflags sdl2 SDL2_image SDL2_mixer SDL2_ttf)
+SDL_LIBS    = $(shell $(PKG_CONFIG) pkg-config --libs   sdl2 SDL2_image SDL2_mixer SDL2_ttf)
+LIBS       = $(SDL_LIBS) -lm
+
+# ---------------------------------------------------------------------------
+# Compiler flags
+# ---------------------------------------------------------------------------
+FLAGS  = -std=c++11 -Wall -pedantic -Wextra -Wno-unused-parameter -Werror=init-self
+DFLAGS = -ggdb -O0 -DDEBUG
+RFLAGS = -O3 -mtune=native
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+BIN_PATH  = bin_macos
+DIST_PATH = dist_macos
+EXEC      = JOGO
+
+# ---------------------------------------------------------------------------
+# Shared rules
+# ---------------------------------------------------------------------------
+include Makefile.rules
+
+# ---------------------------------------------------------------------------
+# Package: bundle binary + assets into dist_macos/
+# ---------------------------------------------------------------------------
+.PHONY: package
+package: $(EXEC_BIN)
+	mkdir -p $(DIST_PATH)/game
+	cp -r game/assets $(DIST_PATH)/game/assets
+	cp -r game/audio  $(DIST_PATH)/game/audio

@@ -1,0 +1,114 @@
+# ---------------------------------------------------------------------------
+# Makefile.rules — shared rules included by all platform Makefiles
+# ---------------------------------------------------------------------------
+# Expected variables set by the including Makefile:
+#   COMPILER   — compiler binary
+#   FLAGS      — base compiler flags
+#   DFLAGS     — extra debug flags
+#   RFLAGS     — extra release flags
+#   LIBS       — libraries to link
+#   LINK_PATH  — -L paths for the linker
+#   SDL_CFLAGS — SDL2 include flags (e.g. from pkg-config or -I path)
+#   BIN_PATH   — directory for object files
+#   DIST_PATH  — directory for packaged output
+#   EXEC       — output binary name
+
+# ---------------------------------------------------------------------------
+# Include paths (common to all platforms)
+# ---------------------------------------------------------------------------
+ENGINE_INC = engine/include/core engine/include/math engine/include/rendering \
+             engine/include/physics engine/include/input engine/include/audio \
+             engine/include/tiles engine/include/camera engine/include/utils
+GAME_INC   = game/include/entities game/include/controllers \
+             game/include/states game/include/systems
+
+INC_PATHS  = $(addprefix -I,$(ENGINE_INC)) $(addprefix -I,$(GAME_INC)) $(SDL_CFLAGS)
+
+# ---------------------------------------------------------------------------
+# Source files
+# ---------------------------------------------------------------------------
+ENGINE_CPP_FILES = $(wildcard engine/src/*/*.cpp)
+GAME_CPP_FILES   = $(wildcard game/src/*/*.cpp) game/src/Main.cpp
+
+ENGINE_OBJ_FILES = $(foreach f,$(ENGINE_CPP_FILES),$(BIN_PATH)/$(subst /,_,$(patsubst engine/src/%.cpp,%.o,$(f))))
+GAME_OBJ_FILES   = $(foreach f,$(GAME_CPP_FILES),$(BIN_PATH)/$(subst /,_,$(patsubst game/src/%.cpp,%.o,$(f))))
+ALL_OBJ_FILES    = $(ENGINE_OBJ_FILES) $(GAME_OBJ_FILES)
+
+# Binary is compiled directly into the dist folder
+EXEC_BIN = $(DIST_PATH)/$(EXEC)
+
+# ---------------------------------------------------------------------------
+# Targets
+# ---------------------------------------------------------------------------
+.PHONY: all release debug clean folders help
+
+all: package
+
+release: FLAGS += $(RFLAGS)
+release: package
+
+debug: FLAGS += $(DFLAGS)
+debug: package
+
+$(EXEC_BIN): $(ALL_OBJ_FILES) | folders
+	$(COMPILER) -o $@ $^ $(LINK_PATH) $(LIBS) $(FLAGS)
+
+# ---------------------------------------------------------------------------
+# Compilation rules
+# ---------------------------------------------------------------------------
+$(BIN_PATH)/core_%.o: engine/src/core/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/math_%.o: engine/src/math/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/rendering_%.o: engine/src/rendering/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/physics_%.o: engine/src/physics/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/input_%.o: engine/src/input/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/audio_%.o: engine/src/audio/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/tiles_%.o: engine/src/tiles/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/camera_%.o: engine/src/camera/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/entities_%.o: game/src/entities/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/controllers_%.o: game/src/controllers/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/states_%.o: game/src/states/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/systems_%.o: game/src/systems/%.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+$(BIN_PATH)/Main.o: game/src/Main.cpp | folders
+	$(COMPILER) $(INC_PATHS) $< -c $(FLAGS) -o $@
+
+# ---------------------------------------------------------------------------
+# Utilities
+# ---------------------------------------------------------------------------
+folders:
+	@mkdir -p $(BIN_PATH) $(DIST_PATH)
+
+clean:
+	rm -rf $(BIN_PATH) $(DIST_PATH)
+
+help:
+	@echo ''
+	@echo 'Targets:'
+	@echo '  all / release  - Build optimised $(EXEC) into $(DIST_PATH)/'
+	@echo '  debug          - Build with debug symbols into $(DIST_PATH)/'
+	@echo '  clean          - Remove generated files'
+	@echo '  help           - Show this message'
+	@echo ''
