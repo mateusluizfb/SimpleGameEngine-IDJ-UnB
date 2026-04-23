@@ -78,5 +78,5 @@ package: $(EXEC_BIN)
 	cp $(MINGW_BIN)/libgcc_s_seh-1.dll $(DIST_PATH)/
 	cp $(MINGW_BIN)/libstdc++-6.dll $(DIST_PATH)/
 	cp $(MINGW_BIN)/libwinpthread-1.dll $(DIST_PATH)/
-	cp -r game/assets $(DIST_PATH)/game/assets
-	cp -r game/audio  $(DIST_PATH)/game/audio
+	cp -rf game/assets $(DIST_PATH)/game/assets
+	cp -rf game/audio  $(DIST_PATH)/game/audio

@@ -40,7 +40,7 @@ EXEC_BIN = $(DIST_PATH)/$(EXEC)
 # ---------------------------------------------------------------------------
 # Targets
 # ---------------------------------------------------------------------------
-.PHONY: all release debug clean folders help
+.PHONY: all release debug clean package folders help
 
 all: package
 
@@ -103,6 +103,14 @@ folders:
 
 clean:
 	rm -rf $(BIN_PATH) $(DIST_PATH)
+
+# ---------------------------------------------------------------------------
+# Package: bundle binary + assets into $(DIST_PATH)/
+# ---------------------------------------------------------------------------
+package: $(EXEC_BIN)
+	mkdir -p $(DIST_PATH)/game
+	cp -rf game/assets $(DIST_PATH)/game/assets
+	cp -rf game/audio  $(DIST_PATH)/game/audio
 
 help:
 	@echo ''

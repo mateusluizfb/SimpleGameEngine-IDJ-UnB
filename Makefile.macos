@@ -41,11 +41,4 @@ EXEC      = JOGO
 # ---------------------------------------------------------------------------
 include Makefile.rules
 
-# ---------------------------------------------------------------------------
-# Package: bundle binary + assets into dist_macos/
-# ---------------------------------------------------------------------------
-.PHONY: package
-package: $(EXEC_BIN)
-	mkdir -p $(DIST_PATH)/game
-	cp -r game/assets $(DIST_PATH)/game/assets
-	cp -r game/audio  $(DIST_PATH)/game/audio
+
